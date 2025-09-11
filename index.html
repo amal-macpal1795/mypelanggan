@@ -1,124 +1,70 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login Admin - MyRepublic Wifi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: linear-gradient(135deg, #6F2DA8, #9B59B6); /* Perbaiki gradient */
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Poppins', sans-serif;
-    }
-    .login-box {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      width: 100%;
-      max-width: 400px;
-    }
-    .title {
-      color: #6F2DA8;
-    }
-    .button.is-primary {
-      background-color: #6F2DA8;
-      border-color: #6F2DA8;
-    }
-    .button.is-primary:hover {
-      background-color: #5c2491;
-      border-color: #5c2491;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Food</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
+  
 </head>
-<script>
-  // Cek jika sudah login, jangan bisa akses halaman login
-  if (sessionStorage.getItem("isLoggedIn")) {
-    window.location.replace("dashboard.html");
-  }
-</script>
-
 <body>
+  <div class="app-container">
+    <header>
+      <h2>Add Food</h2>
+      <div class="profile-icon"><i class="fa-solid fa-user"></i></div>
+    </header>
 
-  <div class="login-box">
-    <h1 class="title has-text-centered">Login Admin</h1>
-    <form id="loginForm">
-      <div class="field">
-        <label class="label">Username</label>
-        <div class="control">
-          <input class="input" type="text" id="username" placeholder="Masukkan username" required>
+    <main>
+      <section class="food-info">
+        <h3>Chicken breast (grilled)</h3>
+        <p class="subtitle">1.0 serving large (150g)</p>
+        <div class="nutrition-grid">
+          <div><strong>226</strong><span>calories</span></div>
+          <div><strong>41g</strong><span>protein</span></div>
+          <div><strong>0g</strong><span>carbs</span></div>
+          <div><strong>4.5g</strong><span>fat</span></div>
         </div>
-      </div>
+      </section>
 
-      <div class="field">
-        <label class="label">Password</label>
-        <div class="control">
-          <input class="input" type="password" id="password" placeholder="Masukkan password" required>
+      <form id="foodForm">
+        <label for="meal">To which meal?</label>
+        <select id="meal" name="meal">
+          <option>Breakfast 1</option>
+          <option>Lunch</option>
+          <option>Dinner</option>
+        </select>
+
+        <label for="search">Search our database by name</label>
+        <input type="text" id="search" name="search" placeholder="Chicken">
+        <select id="foodName" name="foodName">
+          <option>Chicken breast (grilled)</option>
+          <option>Chicken thigh (fried)</option>
+        </select>
+
+        <label for="portion">How much?</label>
+        <div class="portion-group">
+          <input type="number" step="0.1" value="1.0" id="amount" name="amount">
+          <select id="portion" name="portion">
+            <option>Large portion</option>
+            <option>Medium portion</option>
+            <option>Small portion</option>
+          </select>
+          <span class="portion-weight">(150g)</span>
         </div>
-      </div>
 
-      <div class="field mt-5">
-        <button class="button is-primary is-fullwidth" type="submit">Login</button>
-      </div>
+        <button type="submit">ADD TO JOURNAL</button>
+      </form>
+    </main>
 
-      <p id="errorMsg" class="has-text-danger has-text-centered mt-3" style="display: none;"></p>
-    </form>
+    <nav class="bottom-nav">
+      <button><i class="fa-solid fa-person"></i></button>
+      <button><i class="fa-solid fa-book"></i></button>
+      <button class="main-btn"><i class="fa-solid fa-plus"></i></button>
+      <button><i class="fa-solid fa-gear"></i></button>
+      
+    </nav>
   </div>
-
-  <script>
-    
-    // Login dummy
-    const form = document.getElementById("loginForm");
-    const errorMsg = document.getElementById("errorMsg");
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
-
-      if (username === "admin" && password === "pass") {
-        sessionStorage.setItem("isLoggedIn", "true");
-        window.location.href = "dashboard.html";
-      } else {
-        errorMsg.style.display = "block";
-        errorMsg.textContent = "Username atau password salah!";
-      }
-    });
-  </script>
-  <script type="module">
-import { auth } from './firebase-init.js';
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
-
-const form = document.getElementById('loginForm');
-const errorMsg = document.getElementById('errorMsg');
-
-// Jika sudah login, langsung ke dashboard (hindari back ke login)
-onAuthStateChanged(auth, user => {
-  if (user) {
-    window.location.replace('dashboard.html');
-  }
-});
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value;
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    // replace supaya halaman login tidak tersimpan di history
-    window.location.replace('dashboard.html');
-  } catch (err) {
-    errorMsg.style.display = 'block';
-    errorMsg.textContent = err.message || 'Login gagal';
-  }
-});
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
