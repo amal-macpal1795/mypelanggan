@@ -1,91 +1,71 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Daftar Pelanggan</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: linear-gradient(135deg, #6F2DA8, #9B59B6);
-      padding: 2rem;
-      font-family: 'Poppins', sans-serif;
-    }
-    .card {
-      cursor: pointer;
-      border: 1px solid #6F2DA8;
-      border-radius: 10px;
-    }
-    .input-btn {
-      margin-top: 2rem;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Food</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
+  
 </head>
 <body>
+  <div class="app-container">
+    <header>
+      <h2>Add Food</h2>
+      <div class="profile-icon"><i class="fa-solid fa-user"></i></div>
+    </header>
 
-  <script type="module">
-import { auth } from './firebase-init.js';
-import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
-
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    window.location.replace('index.html');
-  } else {
-    // user terautentikasi — lanjut render
-  }
-});
-</script>
-
-  <section class="section">
-    <div class="container">
-      <h1 class="title has-text-centered has-text-white">Data Pelanggan Wifi</h1>
-      <div class="columns is-multiline" id="daftarPelanggan">
-        <!-- Card pelanggan akan ditampilkan di sini -->
-      </div>
-
-      <!-- Tombol Input Data -->
-      <div class="input-btn">
-        <a href="input.html" class="button is-primary is-fullwidth" style="background-color:#6F2DA8;border-color:#6F2DA8;">
-          + Tambah Data Pelanggan
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    // Proteksi agar tidak bisa kembali ke halaman login
-    if (!sessionStorage.getItem("isLoggedIn")) {
-      window.location.href = "index.html";
-    }
-    history.pushState(null, "", location.href);
-    window.onpopstate = function () {
-      history.go(1);
-    };
-
-    // Dummy data pelanggan
-    const pelanggan = [
-      { id: "1", nama: "Budi Santoso" },
-      { id: "2", nama: "Siti Aminah" },
-      { id: "3", nama: "Agus Saputra" }
-    ];
-
-    const container = document.getElementById('daftarPelanggan');
-    pelanggan.forEach(p => {
-      const col = document.createElement('div');
-      col.className = 'column is-one-third';
-      col.innerHTML = `
-        <div class="card" onclick="bukaDetail('${p.id}')">
-          <div class="card-content">
-            <p class="is-size-6">${p.nama}</p>
-          </div>
+    <main>
+      <section class="food-info">
+        <h3>Chicken breast (grilled)</h3>
+        <p class="subtitle">1.0 serving large (150g)</p>
+        <div class="nutrition-grid">
+          <div><strong>226</strong><span>calories</span></div>
+          <div><strong>41g</strong><span>protein</span></div>
+          <div><strong>0g</strong><span>carbs</span></div>
+          <div><strong>4.5g</strong><span>fat</span></div>
         </div>
-      `;
-      container.appendChild(col);
-    });
+      </section>
 
-    function bukaDetail(id) {
-      window.location.href = `detail.html?id=${id}`;
-    }
-  </script>
+      <form id="foodForm">
+        <label for="meal">To which meal?</label>
+        <select id="meal" name="meal">
+          <option>Breakfast 1</option>
+          <option>Lunch</option>
+          <option>Dinner</option>
+        </select>
+
+        <label for="search">Search our database by name</label>
+        <input type="text" id="search" name="search" placeholder="Chicken">
+        <select id="foodName" name="foodName">
+          <option>Chicken breast (grilled)</option>
+          <option>Chicken thigh (fried)</option>
+        </select>
+
+        <label for="portion">How much?</label>
+        <div class="portion-group">
+          <input type="number" step="0.1" value="1.0" id="amount" name="amount">
+          <select id="portion" name="portion">
+            <option>Large portion</option>
+            <option>Medium portion</option>
+            <option>Small portion</option>
+          </select>
+          <span class="portion-weight">(150g)</span>
+        </div>
+
+        <button type="submit">ADD TO JOURNAL</button>
+      </form>
+    </main>
+
+    <nav class="bottom-nav">
+      <button><i class="fa-solid fa-person"></i></button>
+      <button><i class="fa-solid fa-book"></i></button>
+      <button class="main-btn"><i class="fa-solid fa-plus"></i></button>
+      <button><i class="fa-solid fa-gear"></i></button>
+      
+    </nav>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
+
