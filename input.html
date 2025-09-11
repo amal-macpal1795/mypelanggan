@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Pelanggan Wifi</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #6F2DA8, #9B59B6);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
+    }
+    .box {
+      width: 100%;
+      max-width: 480px;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .button.is-primary {
+      background-color: #6F2DA8;
+      border-color: #6F2DA8;
+    }
+    .button.is-primary:hover {
+      background-color: #5c2491;
+      border-color: #5c2491;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1 class="title is-4 has-text-centered">Form Pendaftaran Pelanggan<br>MyRepublic</h1>
+    <form id="formPelanggan">
+      <div class="field">
+        <label class="label">Nama Lengkap</label>
+        <div class="control">
+          <input class="input" type="text" id="nama" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Nomor KTP</label>
+        <div class="control">
+          <input class="input" type="text" id="ktp" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Nomor HP</label>
+        <div class="control">
+          <input class="input" type="text" id="hp" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+          <input class="input" type="email" id="email" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Homepass</label>
+        <div class="control">
+          <input class="input" type="text" id="homepass" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Alamat Pemasangan</label>
+        <div class="control">
+          <textarea class="textarea" id="alamat" required></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Foto KTP</label>
+        <div class="file has-name is-fullwidth">
+          <label class="file-label">
+            <input class="file-input" type="file" id="foto_ktp" accept="image/*" required>
+            <span class="file-cta">
+              <span class="file-icon">📷</span>
+              <span class="file-label">Pilih Foto</span>
+            </span>
+            <span class="file-name" id="nama_ktp">Belum ada file</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Foto Meteran</label>
+        <div class="file has-name is-fullwidth">
+          <label class="file-label">
+            <input class="file-input" type="file" id="foto_meteran" accept="image/*" required>
+            <span class="file-cta">
+              <span class="file-icon">📷</span>
+              <span class="file-label">Pilih Foto</span>
+            </span>
+            <span class="file-name" id="nama_meteran">Belum ada file</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Foto Rumah Tampak Depan</label>
+        <div class="file has-name is-fullwidth">
+          <label class="file-label">
+            <input class="file-input" type="file" id="foto_rumah" accept="image/*" required>
+            <span class="file-cta">
+              <span class="file-icon">📷</span>
+              <span class="file-label">Pilih Foto</span>
+            </span>
+            <span class="file-name" id="nama_rumah">Belum ada file</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field mt-5">
+        <button class="button is-primary is-fullwidth" type="submit">
+          Kirim Data
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Tampilkan nama file yang dipilih
+    document.getElementById("foto_ktp").addEventListener("change", function() {
+      document.getElementById("nama_ktp").textContent = this.files[0]?.name || "Belum ada file";
+    });
+    document.getElementById("foto_meteran").addEventListener("change", function() {
+      document.getElementById("nama_meteran").textContent = this.files[0]?.name || "Belum ada file";
+    });
+    document.getElementById("foto_rumah").addEventListener("change", function() {
+      document.getElementById("nama_rumah").textContent = this.files[0]?.name || "Belum ada file";
+    });
+  </script>
+
+  <!-- Script Firebase -->
+  <script type="module">
+    import { db, storage } from 'firebase-init.js';
+    import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+
+    const form = document.getElementById("formPelanggan");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // ambil data text input
+      const nama = document.getElementById("nama").value;
+      const ktp = document.getElementById("ktp").value;
+      const hp = document.getElementById("hp").value;
+      const email = document.getElementById("email").value;
+      const homepass = document.getElementById("homepass").value;
+      const alamat = document.getElementById("alamat").value;
+
+      // fungsi upload satu file
+      async function uploadFile(inputId) {
+        const file = document.getElementById(inputId).files[0];
+        if (!file) return "";
+        const storageRef = ref(storage, `pelanggan/${Date.now()}_${file.name}`);
+        await uploadBytes(storageRef, file);
+        return await getDownloadURL(storageRef);
+      }
+
+      try {
+        // upload foto dan ambil URL
+        const fotoKtpURL = await uploadFile("foto_ktp");
+        const fotoMeteranURL = await uploadFile("foto_meteran");
+        const fotoRumahURL = await uploadFile("foto_rumah");
+
+        // simpan ke Firestore
+        await addDoc(collection(db, "pelanggan"), {
+          nama, ktp, hp, email, homepass, alamat,
+          fotoKtpURL, fotoMeteranURL, fotoRumahURL,
+          createdAt: serverTimestamp()
+        });
+
+        alert("✅ Data berhasil disimpan ke Firebase!");
+        form.reset(); // kosongkan form setelah berhasil
+      } catch (err) {
+        console.error(err);
+        alert("❌ Gagal menyimpan: " + err.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

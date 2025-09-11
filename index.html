@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Admin - MyRepublic Wifi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #6F2DA8, #9B59B6); /* Perbaiki gradient */
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+    }
+    .login-box {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+    .title {
+      color: #6F2DA8;
+    }
+    .button.is-primary {
+      background-color: #6F2DA8;
+      border-color: #6F2DA8;
+    }
+    .button.is-primary:hover {
+      background-color: #5c2491;
+      border-color: #5c2491;
+    }
+  </style>
+</head>
+<script>
+  // Cek jika sudah login, jangan bisa akses halaman login
+  if (sessionStorage.getItem("isLoggedIn")) {
+    window.location.replace("dashboard.html");
+  }
+</script>
+
+<body>
+
+  <div class="login-box">
+    <h1 class="title has-text-centered">Login Admin</h1>
+    <form id="loginForm">
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control">
+          <input class="input" type="text" id="username" placeholder="Masukkan username" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input class="input" type="password" id="password" placeholder="Masukkan password" required>
+        </div>
+      </div>
+
+      <div class="field mt-5">
+        <button class="button is-primary is-fullwidth" type="submit">Login</button>
+      </div>
+
+      <p id="errorMsg" class="has-text-danger has-text-centered mt-3" style="display: none;"></p>
+    </form>
+  </div>
+
+  <script>
+    
+    // Login dummy
+    const form = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (username === "admin" && password === "pass") {
+        sessionStorage.setItem("isLoggedIn", "true");
+        window.location.href = "dashboard.html";
+      } else {
+        errorMsg.style.display = "block";
+        errorMsg.textContent = "Username atau password salah!";
+      }
+    });
+  </script>
+  <script type="module">
+import { auth } from './firebase-init.js';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
+
+const form = document.getElementById('loginForm');
+const errorMsg = document.getElementById('errorMsg');
+
+// Jika sudah login, langsung ke dashboard (hindari back ke login)
+onAuthStateChanged(auth, user => {
+  if (user) {
+    window.location.replace('dashboard.html');
+  }
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    // replace supaya halaman login tidak tersimpan di history
+    window.location.replace('dashboard.html');
+  } catch (err) {
+    errorMsg.style.display = 'block';
+    errorMsg.textContent = err.message || 'Login gagal';
+  }
+});
+</script>
+
+</body>
+</html>

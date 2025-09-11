@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Pelanggan</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #6F2DA8, #9B59B6);
+      padding: 2rem;
+      font-family: 'Poppins', sans-serif;
+    }
+    .card {
+      cursor: pointer;
+      border: 1px solid #6F2DA8;
+      border-radius: 10px;
+    }
+    .input-btn {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <script type="module">
+import { auth } from './firebase-init.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js';
+
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    window.location.replace('index.html');
+  } else {
+    // user terautentikasi — lanjut render
+  }
+});
+</script>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title has-text-centered has-text-white">Data Pelanggan Wifi</h1>
+      <div class="columns is-multiline" id="daftarPelanggan">
+        <!-- Card pelanggan akan ditampilkan di sini -->
+      </div>
+
+      <!-- Tombol Input Data -->
+      <div class="input-btn">
+        <a href="input.html" class="button is-primary is-fullwidth" style="background-color:#6F2DA8;border-color:#6F2DA8;">
+          + Tambah Data Pelanggan
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Proteksi agar tidak bisa kembali ke halaman login
+    if (!sessionStorage.getItem("isLoggedIn")) {
+      window.location.href = "index.html";
+    }
+    history.pushState(null, "", location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    };
+
+    // Dummy data pelanggan
+    const pelanggan = [
+      { id: "1", nama: "Budi Santoso" },
+      { id: "2", nama: "Siti Aminah" },
+      { id: "3", nama: "Agus Saputra" }
+    ];
+
+    const container = document.getElementById('daftarPelanggan');
+    pelanggan.forEach(p => {
+      const col = document.createElement('div');
+      col.className = 'column is-one-third';
+      col.innerHTML = `
+        <div class="card" onclick="bukaDetail('${p.id}')">
+          <div class="card-content">
+            <p class="is-size-6">${p.nama}</p>
+          </div>
+        </div>
+      `;
+      container.appendChild(col);
+    });
+
+    function bukaDetail(id) {
+      window.location.href = `detail.html?id=${id}`;
+    }
+  </script>
+</body>
+</html>
