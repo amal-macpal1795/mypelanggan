@@ -1,121 +1,223 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>Detail Pelanggan</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <!-- Google Font Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- ICONS -->
+  <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
     body {
-      background: linear-gradient(135deg, #6F2DA8, #9B59B6);
-      padding: 2rem;
+      margin: 0;
       font-family: 'Poppins', sans-serif;
-    }
-    .copy-btn {
-      margin-left: 1rem;
-      background-color: #6F2DA8 !important;
-      color: white;
-      border: none;
-    }
-    .label-row {
+      background: #fafafa;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      padding: 20px;
     }
-    img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 5px;
-      margin-bottom: 1rem;
+
+    .container {
+      width: 100%;
+      max-width: 500px;
     }
-    .box {
-      border: 1px solid #6F2DA8;
-      border-radius: 10px;
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    .card {
       background: #fff;
-      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #222;
+    }
+
+    .info-item {
+      margin-bottom: 12px;
+    }
+
+    .copy-btn {
+      cursor: pointer;
+      font-size: 14px;
+      color: #4f46e5;
+      user-select: none;
+    }
+
+    .label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .value {
+      font-size: 13px;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    .divider {
+      border-top: 1px solid #e5e5e5;
+      margin: 20px 0;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Detail Pelanggan</h1>
 
+    <div class="card">
+      <!-- Info Pelanggan -->
+      <div class="section">
+        <div class="section-title">Info Pelanggan</div>
 
-  <section class="section">
-    <div class="container">
-      <h1 class="title has-text-white">Detail Pelanggan</h1>
-
-      <div class="box">
-        <div class="field">
-          <div class="label-row">
-            <label class="label">Nama Lengkap:</label>
-            <button class="button is-small copy-btn" onclick="copyText('nama')">Copy</button>
+        <div class="info-item">
+          <div class="label">Tanggal Pemesanan</div>
+          <div class="value">
+            <span style="text-decoration: underline;">12 September 2025</span>
+          
           </div>
-          <p id="nama">Budi Santoso</p>
         </div>
 
-        <div class="field">
-          <div class="label-row">
-            <label class="label">Nomor KTP:</label>
-            <button class="button is-small copy-btn" onclick="copyText('ktp')">Copy</button>
+        <div class="info-item">
+          <div class="label">NIK</div>
+          <div class="value">
+            <span>1324567686543</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
-          <p id="ktp">1234567890123456</p>
         </div>
 
-        <div class="field">
-          <div class="label-row">
-            <label class="label">Nomor HP:</label>
-            <button class="button is-small copy-btn" onclick="copyText('hp')">Copy</button>
+        <div class="info-item">
+          <div class="label">Nama Lengkap</div>
+          <div class="value">
+            <span>Amaludin Macaduno Macpal</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
-          <p id="hp">081234567890</p>
         </div>
 
-        <div class="field">
-          <div class="label-row">
-            <label class="label">Email:</label>
-            <button class="button is-small copy-btn" onclick="copyText('email')">Copy</button>
+        <div class="info-item">
+          <div class="label">Email</div>
+          <div class="value">
+            <span>amal@lna.cu</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
-          <p id="email">budi@example.com</p>
         </div>
 
-        <div class="field">
-          <label class="label">Homepass:</label>
-          <p id="homepass">HP12345</p>
+        <div class="info-item">
+          <div class="label">Tanggal Lahir</div>
+          <div class="value">
+            <span>17 September 1995</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;&emsp;<i class="fa-solid fa-copy"></i></span>
+          </div>
         </div>
 
-        <div class="field">
-          <label class="label">Alamat Pemasangan:</label>
-          <p id="alamat">Jl. Melati No. 12, Jakarta Selatan</p>
+        <div class="info-item">
+          <div class="label">Nomor Handphone (WA/SMS)</div>
+          <div class="value">
+            <span>0812-3456-7890</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+          </div>
         </div>
 
-        <hr>
-
-        <div class="field">
-          <label class="label">Foto KTP</label>
-          <img id="fotoKtp" src="https://via.placeholder.com/400x250?text=Foto+KTP" alt="Foto KTP">
+        <div class="info-item">
+          <div class="label">Nomor Handphone (Dial Phone)</div>
+          <div class="value">
+            <span>0812-3456-7890</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+          </div>
         </div>
 
-        <div class="field">
-          <label class="label">Foto Meteran</label>
-          <img id="fotoMeteran" src="https://via.placeholder.com/400x250?text=Foto+Meteran" alt="Foto Meteran">
+        <div class="info-item">
+          <div class="label">Kota</div>
+          <div class="value">
+            <span>Manado</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+          </div>
         </div>
 
-        <div class="field">
-          <label class="label">Foto Rumah Tampak Depan</label>
-          <img id="fotoRumah" src="https://via.placeholder.com/400x250?text=Foto+Rumah" alt="Foto Rumah">
+        <div class="info-item">
+          <div class="label">Perumahan/Cluster/Apartment</div>
+          <div class="value">
+            <span>Pandu</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="label">Homepass</div>
+          <div class="value">
+            <span>HP-23546</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="label">Alamat Pemasangan</div>
+          <div class="value">
+            <span>Manado</span>
+          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+          </div>
+        </div>
+
+      <div class="divider"></div>
+
+      <!-- Info Produk -->
+      <div class="section">
+        <div class="section-title">Info Produk</div>
+
+        <div class="info-item">
+          <div class="label">Paket</div>
+          <div class="value">(109) Fast50 Mbps</div>
+        </div>
+
+        <div class="info-item">
+          <div class="label">Paket TV</div>
+          <div class="value">Tanpa paket TV</div>
+        </div>
+
+        <div class="info-item">
+          <div class="label">Add On</div>
+          <div class="value">Tidak ada</div>
+        </div>
+
+        <div class="info-item">
+          <div class="label">Metode Pembayaran</div>
+          <div class="value">Tunai Bulanan</div>
+        </div>
+
+        <div class="info-item">
+          <div class="label">Promo</div>
+          <div class="value">-</div>
         </div>
       </div>
     </div>
-  </section>
-
-
-
-
+  </div>
   <script>
-    function copyText(id) {
-      const text = document.getElementById(id).innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Teks berhasil dicopy!");
-      });
-    }
-  </script>
+  function copyText(el) {
+    const text = el.previousElementSibling.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const icon = el.querySelector("i");
+      icon.classList.remove("fa-copy");
+      icon.classList.add("fa-check");
+      setTimeout(() => {
+        icon.classList.remove("fa-check");
+        icon.classList.add("fa-copy");
+      }, 1200);
+    });
+  }
+</script>
+
 </body>
 </html>
