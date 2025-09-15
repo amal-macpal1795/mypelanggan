@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Akun</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+    }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e7e34;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    .link {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Daftar Akun</h2>
+    <div class="form-group">
+      <label for="name">Nama</label>
+      <input type="text" id="name" placeholder="Masukkan nama lengkap">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Masukkan email">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Masukkan password">
+    </div>
+    <div class="form-group">
+      <label for="repassword">Re-enter Password</label>
+      <input type="password" id="repassword" placeholder="Ulangi password">
+    </div>
+    <button id="registerBtn">Daftar</button>
+    <div class="error" id="error"></div>
+    <div class="link">Sudah punya akun? <a href="index.html">Login disini</a></div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCO7GjWsAmMKlqrkb1oFPYEx8qUVwYCACk",
+      authDomain: "mypelanggan.firebaseapp.com",
+      projectId: "mypelanggan",
+      storageBucket: "mypelanggan.firebasestorage.app",
+      messagingSenderId: "1087396305114",
+      appId: "1:1087396305114:web:c6302f37a3b84590726de3",
+      measurementId: "G-TS55VFLYL0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    document.getElementById("registerBtn").addEventListener("click", async () => {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const repassword = document.getElementById("repassword").value;
+      const errorDiv = document.getElementById("error");
+
+      if (!name || !email || !password || !repassword) {
+        errorDiv.textContent = "Semua field harus diisi!";
+        return;
+      }
+      if (password !== repassword) {
+        errorDiv.textContent = "Password tidak sama!";
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // simpan data user ke Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          name: name,
+          email: email,
+          createdAt: new Date()
+        });
+
+        // redirect ke dashboard
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        errorDiv.textContent = "Pendaftaran gagal: " + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
