@@ -1,72 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Food</title>
-  <link rel="stylesheet" href="dashboard.css">
+  <meta charset="utf-8" />
+  <title>Daftar Pelanggan</title>
+  <!-- Google Font Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- ICONS -->
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
-  
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #fafafa;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .stats {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    a.card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-decoration: none;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      color: inherit;
+      height: 70px;
+      transition: background 0.2s;
+    }
+
+    a.card:hover {
+      background: #f5f5f5;
+    }
+
+    .text-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #222;
+    }
+
+    .address {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .arrow {
+      font-size: 20px;
+      color: #888;
+      margin-left: 10px;
+    }
+
+    /* Floating Add Button */
+    .fab {
+      position: fixed;
+      bottom: 32px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      background: #8119b5;
+      border-radius: 50%;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+    }
+
+    .fab:hover {
+      background: #550a7a;
+    }
+  </style>
 </head>
 <body>
-  <div class="app-container">
-    <header>
-      <h2>Add Food</h2>
-      <div class="profile-icon"><i class="fa-solid fa-user"></i></div>
-    </header>
+  <div class="container">
+    <div class="stats">
+      Bulan Ini: <strong>34</strong> <br>
+      Hari Ini: <strong>3</strong> <br>
+    </div>
+    <h1>Daftar Pelanggan</h1>
+    
 
-    <main>
-      <section class="food-info">
-        <h3>Chicken breast (grilled)</h3>
-        <p class="subtitle">1.0 serving large (150g)</p>
-        <div class="nutrition-grid">
-          <div><strong>226</strong><span>calories</span></div>
-          <div><strong>41g</strong><span>protein</span></div>
-          <div><strong>0g</strong><span>carbs</span></div>
-          <div><strong>4.5g</strong><span>fat</span></div>
-        </div>
-      </section>
+    <a href="#" class="card">
+      <div class="text-group">
+        <div class="name">Andi Saputra</div>
+        <div class="address">Jl. Merpati No. 12, Jakarta</div>
+      </div>
+      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </a>
 
-      <form id="foodForm">
-        <label for="meal">To which meal?</label>
-        <select id="meal" name="meal">
-          <option>Breakfast 1</option>
-          <option>Lunch</option>
-          <option>Dinner</option>
-        </select>
+    <a href="#" class="card">
+      <div class="text-group">
+        <div class="name">Budi Santoso</div>
+        <div class="address">Jl. Kenanga No. 5, Bandung</div>
+      </div>
+      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </a>
 
-        <label for="search">Search our database by name</label>
-        <input type="text" id="search" name="search" placeholder="Chicken">
-        <select id="foodName" name="foodName">
-          <option>Chicken breast (grilled)</option>
-          <option>Chicken thigh (fried)</option>
-        </select>
+    <a href="#" class="card">
+      <div class="text-group">
+        <div class="name">Citra Dewi</div>
+        <div class="address">Jl. Anggrek No. 45, Surabaya</div>
+      </div>
+      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </a>
 
-        <label for="portion">How much?</label>
-        <div class="portion-group">
-          <input type="number" step="0.1" value="1.0" id="amount" name="amount">
-          <select id="portion" name="portion">
-            <option>Large portion</option>
-            <option>Medium portion</option>
-            <option>Small portion</option>
-          </select>
-          <span class="portion-weight">(150g)</span>
-        </div>
+    <a href="#" class="card">
+      <div class="text-group">
+        <div class="name">Doni Pratama</div>
+        <div class="address">Jl. Melati No. 21, Yogyakarta</div>
+      </div>
+      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </a>
 
-        <button type="submit">ADD TO JOURNAL</button>
-      </form>
-    </main>
-
-    <nav class="bottom-nav">
-      <button><i class="fa-solid fa-person"></i></button>
-      <button><i class="fa-solid fa-book"></i></button>
-      <button class="main-btn"><i class="fa-solid fa-plus"></i></button>
-      <button><i class="fa-solid fa-gear"></i></button>
-      
-    </nav>
+    <a href="#" class="card">
+      <div class="text-group">
+        <div class="name">Eka Lestari</div>
+        <div class="address">Jl. Mawar No. 9, Medan</div>
+      </div>
+      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </a>
   </div>
-  <script src="dashboard.js"></script>
+
+  <!-- Floating Add Button -->
+  <div class="fab"><i class="fa-solid fa-plus"></i></div>
 </body>
 </html>
-
-
