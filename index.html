@@ -130,8 +130,14 @@
       }
 
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          window.location.href = "dashboard.html"; // login sukses
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          // Simpan UID ke localStorage
+          localStorage.setItem("userUID", user.uid);
+
+          // Redirect ke dashboard
+          window.location.href = "dashboard.html";
         })
         .catch((error) => {
           errorDiv.textContent = "Login gagal: " + error.message;
@@ -140,3 +146,4 @@
   </script>
 </body>
 </html>
+
