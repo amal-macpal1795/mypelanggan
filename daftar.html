@@ -102,59 +102,62 @@
     <div class="link">Sudah punya akun? <a href="index.html">Login disini</a></div>
   </div>
 
-  <!-- Firebase -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCO7GjWsAmMKlqrkb1oFPYEx8qUVwYCACk",
-      authDomain: "mypelanggan.firebaseapp.com",
-      projectId: "mypelanggan",
-      storageBucket: "mypelanggan.firebasestorage.app",
-      messagingSenderId: "1087396305114",
-      appId: "1:1087396305114:web:c6302f37a3b84590726de3",
-      measurementId: "G-TS55VFLYL0"
-    };
+  // Konfigurasi Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCO7GjWsAmMKlqrkb1oFPYEx8qUVwYCACk",
+    authDomain: "mypelanggan.firebaseapp.com",
+    projectId: "mypelanggan",
+    storageBucket: "mypelanggan.appspot.com",
+    messagingSenderId: "1087396305114",
+    appId: "1:1087396305114:web:c6302f37a3b84590726de3",
+    measurementId: "G-TS55VFLYL0"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    document.getElementById("registerBtn").addEventListener("click", async () => {
-      const name = document.getElementById("name").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const repassword = document.getElementById("repassword").value;
-      const errorDiv = document.getElementById("error");
+  document.getElementById("registerBtn").addEventListener("click", async () => {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const repassword = document.getElementById("repassword").value;
+    const errorDiv = document.getElementById("error");
 
-      if (!name || !email || !password || !repassword) {
-        errorDiv.textContent = "Semua field harus diisi!";
-        return;
-      }
-      if (password !== repassword) {
-        errorDiv.textContent = "Password tidak sama!";
-        return;
-      }
+    errorDiv.textContent = ""; // reset error
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+    if (!name || !email || !password || !repassword) {
+      errorDiv.textContent = "Semua field harus diisi!";
+      return;
+    }
+    if (password !== repassword) {
+      errorDiv.textContent = "Password tidak sama!";
+      return;
+    }
 
-        // simpan data user ke Firestore
-        await setDoc(doc(db, "users", user.uid), {
-          name: name,
-          email: email,
-          createdAt: new Date()
-        });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-        // redirect ke dashboard
-        window.location.href = "https://mypelanggan.vercel.app/dashboard.html";
-      } catch (error) {
-        errorDiv.textContent = "Pendaftaran gagal: " + error.message;
-      }
-    });
-  </script>
+      // Simpan data user ke Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+        email: email,
+        createdAt: serverTimestamp()
+      });
+
+      // Redirect ke dashboard (pakai relative path supaya aman di localhost dan hosting)
+      window.location.href = "dashboard.html";
+    } catch (error) {
+      console.error("Firebase error:", error);
+      errorDiv.textContent = "Pendaftaran gagal: " + error.message;
+    }
+  });
+</script>
 </body>
 </html>
