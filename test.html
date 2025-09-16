@@ -8,14 +8,16 @@
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "API_KEY_YANG_TEPAT",
-      authDomain: "mypelanggan.firebaseapp.com",
-      projectId: "mypelanggan",
-      storageBucket: "mypelanggan.appspot.com",
-      messagingSenderId: "1087396305114",
-      appId: "1:1087396305114:web:c6302f37a3b84590726de3"
-    };
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCO7GjWsAmMKlqrkb1oFPYEx8qUVwYCACk",
+  authDomain: "mypelanggan.firebaseapp.com",
+  projectId: "mypelanggan",
+  storageBucket: "mypelanggan.firebasestorage.app",
+  messagingSenderId: "1087396305114",
+  appId: "1:1087396305114:web:c6302f37a3b84590726de3",
+  measurementId: "G-TS55VFLYL0"
+};
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
