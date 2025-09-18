@@ -79,6 +79,16 @@
     const textarea = document.getElementById("perumahan");
     textarea.addEventListener("input", () => { textarea.value = textarea.value.toUpperCase(); });
 
+    // cek user sebelum insert
+    const { data: getUser } = await client.auth.getUser();
+    const user = getUser?.user;
+    
+    if (!user) {
+      errorDiv.textContent = "Silakan login dulu sebelum menambah data.";
+      return;
+    }
+
+    // lanjut insert...
     // Tambah data kota dan cluster
     document.getElementById("addBtn").addEventListener("click", async () => {
       const kotaNama = document.getElementById("kota").value;
