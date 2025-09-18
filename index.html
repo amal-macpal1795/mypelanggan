@@ -48,16 +48,16 @@
     }
 
     .link {
-  margin-top: 15px;
-  font-size: 14px;
-}
-.link a {
-  color: #007bff;
-  text-decoration: none;
-}
-.link a:hover {
-  text-decoration: underline;
-}
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .link a:hover {
+      text-decoration: underline;
+    }
 
     button {
       width: 100%;
@@ -91,35 +91,24 @@
       <label for="password">Password</label>
       <input type="password" id="password" placeholder="Masukkan password">
     </div>
-    <!-- Perbaikan: HAPUS onclick -->
     <button id="loginBtn">Login</button>
     <div class="error" id="error"></div>
     <div class="link">Belum punya akun? <a href="daftar.html">Daftar disini</a></div>
-
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  <!-- Supabase CDN -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const { createClient } = supabase;
 
-    // Konfigurasi Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCO7GjWsAmMKlqrkb1oFPYEx8qUVwYCACk",
-      authDomain: "mypelanggan.firebaseapp.com",
-      projectId: "mypelanggan",
-      storageBucket: "mypelanggan.firebasestorage.app",
-      messagingSenderId: "1087396305114",
-      appId: "1:1087396305114:web:c6302f37a3b84590726de3",
-      measurementId: "G-TS55VFLYL0"
-    };
+    // Ganti dengan Project URL dan anon public key dari Supabase kamu
+    // Bisa ditemukan di: Dashboard → Project Settings → API
+    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
 
-    // Inisialisasi Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const client = createClient(supabaseUrl, supabaseKey);
 
-    // Event listener login
-    document.getElementById("loginBtn").addEventListener("click", () => {
+    document.getElementById("loginBtn").addEventListener("click", async () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       const errorDiv = document.getElementById("error");
@@ -129,21 +118,20 @@
         return;
       }
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const user = userCredential.user;
+      const { data, error } = await client.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
-          // Simpan UID ke localStorage
-          localStorage.setItem("userUID", user.uid);
-
-          // Redirect ke dashboard
-          window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-          errorDiv.textContent = "Login gagal: " + error.message;
-        });
+      if (error) {
+        errorDiv.textContent = "Login gagal: " + error.message;
+      } else {
+        // Simpan UID ke localStorage
+        localStorage.setItem("userUID", data.user.id);
+        // Redirect ke dashboard
+        window.location.href = "dashboard.html";
+      }
     });
   </script>
 </body>
 </html>
-
