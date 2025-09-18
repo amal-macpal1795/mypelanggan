@@ -91,53 +91,62 @@
     // lanjut insert...
     // Tambah data kota dan cluster
     document.getElementById("addBtn").addEventListener("click", async () => {
-      const kotaNama = document.getElementById("kota").value;
-      const perumahan = document.getElementById("perumahan").value.trim();
-      const successDiv = document.getElementById("success");
-      const errorDiv = document.getElementById("error");
-      successDiv.textContent = "";
-      errorDiv.textContent = "";
+  const kotaNama = document.getElementById("kota").value;
+  const perumahan = document.getElementById("perumahan").value.trim();
+  const successDiv = document.getElementById("success");
+  const errorDiv = document.getElementById("error");
+  successDiv.textContent = "";
+  errorDiv.textContent = "";
 
-      if (!kotaNama || !perumahan) {
-        errorDiv.textContent = "Kota dan nama perumahan harus diisi!";
-        return;
-      }
+  if (!kotaNama || !perumahan) {
+    errorDiv.textContent = "Kota dan nama perumahan harus diisi!";
+    return;
+  }
 
-      try {
-        // Insert kota jika belum ada
-        let { data: kotaData, error: kotaError } = await client
-          .from("kota")
-          .select("id")
-          .eq("nama", kotaNama)
-          .single();
+  try {
+    // Pastikan user login
+    const { data: getUser } = await client.auth.getUser();
+    if (!getUser.user) {
+      errorDiv.textContent = "Anda harus login terlebih dahulu!";
+      return;
+    }
 
-        if (kotaError && kotaError.code === "PGRST116") {
-          // kota belum ada, insert baru
-          const { data: insertKota, error: insertKotaError } = await client
-            .from("kota")
-            .insert([{ nama: kotaNama }])
-            .select()
-            .single();
-          if (insertKotaError) throw insertKotaError;
-          kotaData = insertKota;
-        } else if (kotaError) {
-          throw kotaError;
-        }
+    // Insert kota jika belum ada
+    let { data: kotaData, error: kotaError } = await client
+      .from("kota")
+      .select("id")
+      .eq("nama", kotaNama)
+      .maybeSingle(); // biar kalau gak ada datanya, hasilnya null, bukan error
 
-        // Insert cluster dengan kota_id
-        const { error: clusterError } = await client
-          .from("cluster")
-          .insert([{ nama: perumahan, kota_id: kotaData.id }]);
-        if (clusterError) throw clusterError;
+    if (!kotaData) {
+      const { data: insertKota, error: insertKotaError } = await client
+        .from("kota")
+        .insert([{ nama: kotaNama }])
+        .select()
+        .single();
+      if (insertKotaError) throw insertKotaError;
+      kotaData = insertKota;
+    } else if (kotaError) {
+      throw kotaError;
+    }
 
-        successDiv.textContent = "Berhasil menambahkan data kota dan cluster!";
-        document.getElementById("perumahan").value = "";
-        document.getElementById("kota").selectedIndex = 0;
-      } catch (err) {
-        console.error(err);
-        errorDiv.textContent = "Gagal menambahkan: " + err.message;
-      }
-    });
+    // Insert cluster
+    const { error: clusterError } = await client
+      .from("cluster")
+      .insert([{ nama: perumahan, kota_id: kotaData.id }]);
+
+    if (clusterError) throw clusterError;
+
+    // Jika berhasil
+    successDiv.textContent = "Berhasil menambahkan data kota & cluster!";
+    document.getElementById("perumahan").value = "";
+    document.getElementById("kota").selectedIndex = 0;
+  } catch (err) {
+    console.error(err);
+    errorDiv.textContent = "Gagal menambahkan: " + err.message;
+  }
+});
+
   </script>
 </body>
 </html>
