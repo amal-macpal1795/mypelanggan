@@ -3,109 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Input Data Cluster</title>
+  <title>Input Data Kota & Cluster</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-      font-family: 'Poppins', sans-serif;
-    }
-
-    body {
-      background: #f4f6f9; 
-      display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      min-height: 100vh; 
-      padding: 20px;
-    }
-    .container {
-      width: 100%; 
-      max-width: 480px;
-    }
-    .header {
-      text-align: center; 
-      margin-bottom: 20px;
-    }
-    .header h2 {
-      font-size: 20px; 
-      font-weight: 600; 
-      color: #333;
-    }
-    .header .datetime {
-      margin-top: 6px; 
-      font-size: 14px; 
-      color: #666;
-    }
-    .card {
-      background: #fff; 
-      padding: 20px; 
-      border-radius: 16px; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    label {
-      display: block; 
-      margin-bottom: 6px; 
-      font-weight: 500; 
-      font-size: 14px; 
-      color: #333;
-    }
-    select, textarea {
-      width: 100%; 
-      padding: 12px; 
-      border-radius: 10px; 
-      border: 1px solid #ddd; 
-      font-size: 14px; 
-      outline: none; 
-      transition: border 0.2s; 
-      box-sizing: border-box;
-    }
-    textarea {
-      resize: vertical; 
-      min-height: 80px; 
-      text-transform: uppercase;
-    }
-    select:focus, textarea:focus {
-      border-color: #007bff;
-    }
-    button {
-      width: 100%; 
-      padding: 12px; 
-      background: #8119b5; 
-      color: white; 
-      border: none; 
-      border-radius: 10px; 
-      font-size: 16px; 
-      font-weight: 500; 
-      cursor: pointer; 
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #550a7a;
-    }
-    .success {
-      color: green; 
-      font-size: 14px; 
-      margin-top: 10px; 
-      text-align:center;
-    }
-    .error {
-      color: red; 
-      font-size: 14px; 
-      margin-top: 10px; 
-      text-align:center;
-    }
+    * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif;}
+    body {background: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px;}
+    .container {width: 100%; max-width: 480px;}
+    .header {text-align: center; margin-bottom: 20px;}
+    .header h2 {font-size: 20px; font-weight: 600; color: #333;}
+    .header .datetime {margin-top: 6px; font-size: 14px; color: #666;}
+    .card {background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);}
+    .form-group {margin-bottom: 16px;}
+    label {display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: #333;}
+    select, textarea, input {width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-size: 14px; outline: none; transition: border 0.2s; box-sizing: border-box;}
+    textarea {resize: vertical; min-height: 80px; text-transform: uppercase;}
+    select:focus, textarea:focus, input:focus {border-color: #007bff;}
+    button {width: 100%; padding: 12px; background: #8119b5; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 500; cursor: pointer; transition: background 0.2s;}
+    button:hover {background: #550a7a;}
+    .success {color: green; font-size: 14px; margin-top: 10px; text-align:center;}
+    .error {color: red; font-size: 14px; margin-top: 10px; text-align:center;}
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h2>Input Data Cluster</h2>
+      <h2>Input Data Kota & Cluster</h2>
       <div class="datetime" id="datetime">--:--:--</div>
     </div>
 
@@ -115,8 +37,8 @@
         <select id="kota">
           <option value="" disabled selected>Pilih kota...</option>
           <option value="Manado">Manado</option>
-          <option value="Bitung">Bitung</option>
           <option value="Tomohon">Tomohon</option>
+          <option value="Bitung">Bitung</option>
           <option value="Minahasa">Minahasa</option>
           <option value="Minahasa Utara">Minahasa Utara</option>
           <option value="Minahasa Selatan">Minahasa Selatan</option>
@@ -157,44 +79,53 @@
     const textarea = document.getElementById("perumahan");
     textarea.addEventListener("input", () => { textarea.value = textarea.value.toUpperCase(); });
 
-    // Load data kota dari tabel Supabase
-    async function loadKota() {
-      const { data, error } = await client.from("kota").select("id, nama");
-      if (error) { console.error(error); return; }
-
-      const kotaSelect = document.getElementById("kota");
-      kotaSelect.innerHTML = '<option value="" disabled selected>Pilih kota...</option>';
-      data.forEach(kota => {
-        const option = document.createElement("option");
-        option.value = kota.id;
-        option.textContent = kota.nama;
-        kotaSelect.appendChild(option);
-      });
-    }
-    loadKota();
-
-    // Tambah data cluster
+    // Tambah data kota dan cluster
     document.getElementById("addBtn").addEventListener("click", async () => {
-      const kotaId = document.getElementById("kota").value;
+      const kotaNama = document.getElementById("kota").value;
       const perumahan = document.getElementById("perumahan").value.trim();
       const successDiv = document.getElementById("success");
       const errorDiv = document.getElementById("error");
       successDiv.textContent = "";
       errorDiv.textContent = "";
 
-      if (!kotaId || !perumahan) {
+      if (!kotaNama || !perumahan) {
         errorDiv.textContent = "Kota dan nama perumahan harus diisi!";
         return;
       }
 
-      const { data, error } = await client.from("cluster").insert([{ nama: perumahan, kota_id: kotaId }]);
+      try {
+        // Insert kota jika belum ada
+        let { data: kotaData, error: kotaError } = await client
+          .from("kota")
+          .select("id")
+          .eq("nama", kotaNama)
+          .single();
 
-      if (error) {
-        errorDiv.textContent = "Gagal menambahkan: " + error.message;
-      } else {
-        successDiv.textContent = "Berhasil menambahkan cluster!";
+        if (kotaError && kotaError.code === "PGRST116") {
+          // kota belum ada, insert baru
+          const { data: insertKota, error: insertKotaError } = await client
+            .from("kota")
+            .insert([{ nama: kotaNama }])
+            .select()
+            .single();
+          if (insertKotaError) throw insertKotaError;
+          kotaData = insertKota;
+        } else if (kotaError) {
+          throw kotaError;
+        }
+
+        // Insert cluster dengan kota_id
+        const { error: clusterError } = await client
+          .from("cluster")
+          .insert([{ nama: perumahan, kota_id: kotaData.id }]);
+        if (clusterError) throw clusterError;
+
+        successDiv.textContent = "Berhasil menambahkan data kota dan cluster!";
         document.getElementById("perumahan").value = "";
         document.getElementById("kota").selectedIndex = 0;
+      } catch (err) {
+        console.error(err);
+        errorDiv.textContent = "Gagal menambahkan: " + err.message;
       }
     });
   </script>
