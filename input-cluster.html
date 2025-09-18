@@ -59,94 +59,82 @@
 
   <!-- Supabase -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script type="module">
-    const { createClient } = supabase;
-    // Ganti dengan URL dan anon key dari Supabase kamu (Settings → API)
-    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
-    const client = createClient(supabaseUrl, supabaseKey);
+<script type="module">
+  const { createClient } = supabase;
+  const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
+  const client = createClient(supabaseUrl, supabaseKey);
 
-    // Update waktu real-time dengan zona Asia/Makassar
-    function updateDateTime() {
-      const now = new Date();
-      const options = { timeZone: "Asia/Makassar", weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      document.getElementById("datetime").innerText = now.toLocaleString('id-ID', options);
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-
-    // Pastikan input textarea selalu huruf kapital
-    const textarea = document.getElementById("perumahan");
-    textarea.addEventListener("input", () => { textarea.value = textarea.value.toUpperCase(); });
-
-    // cek user sebelum insert
-    const { data: getUser } = await client.auth.getUser();
-    const user = getUser?.user;
-    
-    if (!user) {
-      errorDiv.textContent = "Silakan login dulu sebelum menambah data.";
-      return;
-    }
-
-    // lanjut insert...
-    // Tambah data kota dan cluster
-    document.getElementById("addBtn").addEventListener("click", async () => {
-  const kotaNama = document.getElementById("kota").value;
-  const perumahan = document.getElementById("perumahan").value.trim();
-  const successDiv = document.getElementById("success");
-  const errorDiv = document.getElementById("error");
-  successDiv.textContent = "";
-  errorDiv.textContent = "";
-
-  if (!kotaNama || !perumahan) {
-    errorDiv.textContent = "Kota dan nama perumahan harus diisi!";
-    return;
+  // Update waktu real-time dengan zona Asia/Makassar
+  function updateDateTime() {
+    const now = new Date();
+    const options = { timeZone: "Asia/Makassar", weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    document.getElementById("datetime").innerText = now.toLocaleString('id-ID', options);
   }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
 
-  try {
-    // Pastikan user login
-    const { data: getUser } = await client.auth.getUser();
-    if (!getUser.user) {
-      errorDiv.textContent = "Anda harus login terlebih dahulu!";
+  // Pastikan input textarea selalu huruf kapital
+  const textarea = document.getElementById("perumahan");
+  textarea.addEventListener("input", () => { textarea.value = textarea.value.toUpperCase(); });
+
+  // Tambah data kota dan cluster
+  document.getElementById("addBtn").addEventListener("click", async () => {
+    const kotaNama = document.getElementById("kota").value;
+    const perumahan = document.getElementById("perumahan").value.trim();
+    const successDiv = document.getElementById("success");
+    const errorDiv = document.getElementById("error");
+    successDiv.textContent = "";
+    errorDiv.textContent = "";
+
+    if (!kotaNama || !perumahan) {
+      errorDiv.textContent = "Kota dan nama perumahan harus diisi!";
       return;
     }
 
-    // Insert kota jika belum ada
-    let { data: kotaData, error: kotaError } = await client
-      .from("kota")
-      .select("id")
-      .eq("nama", kotaNama)
-      .maybeSingle(); // biar kalau gak ada datanya, hasilnya null, bukan error
+    try {
+      // Pastikan user login
+      const { data: getUser } = await client.auth.getUser();
+      if (!getUser.user) {
+        errorDiv.textContent = "Anda harus login terlebih dahulu!";
+        return;
+      }
 
-    if (!kotaData) {
-      const { data: insertKota, error: insertKotaError } = await client
+      // Insert kota jika belum ada
+      let { data: kotaData, error: kotaError } = await client
         .from("kota")
-        .insert([{ nama: kotaNama }])
-        .select()
-        .single();
-      if (insertKotaError) throw insertKotaError;
-      kotaData = insertKota;
-    } else if (kotaError) {
-      throw kotaError;
+        .select("id")
+        .eq("nama", kotaNama)
+        .maybeSingle();
+
+      if (!kotaData) {
+        const { data: insertKota, error: insertKotaError } = await client
+          .from("kota")
+          .insert([{ nama: kotaNama }])
+          .select()
+          .single();
+        if (insertKotaError) throw insertKotaError;
+        kotaData = insertKota;
+      } else if (kotaError) {
+        throw kotaError;
+      }
+
+      // Insert cluster
+      const { error: clusterError } = await client
+        .from("cluster")
+        .insert([{ nama: perumahan, kota_id: kotaData.id }]);
+
+      if (clusterError) throw clusterError;
+
+      // Jika berhasil
+      successDiv.textContent = "Berhasil menambahkan data kota & cluster!";
+      document.getElementById("perumahan").value = "";
+      document.getElementById("kota").selectedIndex = 0;
+    } catch (err) {
+      console.error(err);
+      errorDiv.textContent = "Gagal menambahkan: " + err.message;
     }
-
-    // Insert cluster
-    const { error: clusterError } = await client
-      .from("cluster")
-      .insert([{ nama: perumahan, kota_id: kotaData.id }]);
-
-    if (clusterError) throw clusterError;
-
-    // Jika berhasil
-    successDiv.textContent = "Berhasil menambahkan data kota & cluster!";
-    document.getElementById("perumahan").value = "";
-    document.getElementById("kota").selectedIndex = 0;
-  } catch (err) {
-    console.error(err);
-    errorDiv.textContent = "Gagal menambahkan: " + err.message;
-  }
-});
-
-  </script>
+  });
+</script>
 </body>
 </html>
