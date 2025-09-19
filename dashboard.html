@@ -165,9 +165,9 @@
         // Ambil data pelanggan yang sesuai dengan user yang login
         const { data: pelangganData, error: pelangganError } = await client
             .from('pelanggan')
-            .select('nama_lengkap, alamat, hp_wa, hp_dial, created_at')
+            .select('id, nama_lengkap, alamat, hp_wa, hp_dial, tanggal') // Tambahkan 'id' dan 'tanggal'
             .eq('sales_id', userUID) // Filter data berdasarkan user yang login
-            .order('created_at', { ascending: false });
+            .order('tanggal', { ascending: false }); // Urutkan berdasarkan tanggal
 
         loadingMessageEl.style.display = 'none';
 
@@ -192,19 +192,21 @@
             let hariIniCount = 0;
             
             pelangganData.forEach(pelanggan => {
-                const createdAt = new Date(pelanggan.created_at);
+                const pelangganDate = new Date(pelanggan.tanggal);
                 
                 // Hitung data bulan ini
-                if (createdAt >= startOfMonth) {
+                if (pelangganDate >= startOfMonth) {
                     bulanIniCount++;
                 }
                 
                 // Hitung data hari ini
-                if (createdAt.toDateString() === today.toDateString()) {
+                if (pelangganDate.toDateString() === today.toDateString()) {
                     hariIniCount++;
                 }
                 
-                const card = document.createElement('div');
+                // Gunakan <a> untuk membuat kartu dapat diklik
+                const card = document.createElement('a');
+                card.href = `detail.html?id=${pelanggan.id}`;
                 card.className = 'card';
                 card.innerHTML = `
                     <div class="text-group">
@@ -230,6 +232,3 @@
   </script>
 </body>
 </html>
-
-
-
