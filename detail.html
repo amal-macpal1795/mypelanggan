@@ -3,10 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <title>Detail Pelanggan</title>
-  <!-- Google Font Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- ICONS -->
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
     body {
@@ -72,152 +70,233 @@
       border-top: 1px solid #e5e5e5;
       margin: 20px 0;
     }
+
+    .loading-message, .error-message {
+      text-align: center;
+      color: #777;
+      margin-top: 20px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Detail Pelanggan</h1>
+    <h1 id="pageTitle">Detail Pelanggan</h1>
 
-    <div class="card">
-      <!-- Info Pelanggan -->
+    <div id="loading" class="loading-message">Memuat data...</div>
+    <div id="error" class="error-message" style="display: none;"></div>
+    
+    <div id="detailCard" class="card" style="display: none;">
       <div class="section">
         <div class="section-title">Info Pelanggan</div>
 
         <div class="info-item">
           <div class="label">Tanggal Pemesanan</div>
-          <div class="value">
-            <span style="text-decoration: underline;">12 September 2025</span>
-          
-          </div>
+          <div class="value" id="tanggal"></div>
         </div>
 
         <div class="info-item">
           <div class="label">NIK</div>
           <div class="value">
-            <span>1324567686543</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="nik"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Nama Lengkap</div>
           <div class="value">
-            <span>Amaludin Macaduno Macpal</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="nama_lengkap"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Email</div>
           <div class="value">
-            <span>amal@lna.cu</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <div class="label">Tanggal Lahir</div>
-          <div class="value">
-            <span>17 September 1995</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="email"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Nomor Handphone (WA/SMS)</div>
           <div class="value">
-            <span>0812-3456-7890</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="hp_wa"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Nomor Handphone (Dial Phone)</div>
           <div class="value">
-            <span>0812-3456-7890</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="hp_dial"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Kota</div>
           <div class="value">
-            <span>Manado</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="kota"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Perumahan/Cluster/Apartment</div>
           <div class="value">
-            <span>Pandu</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="cluster"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Homepass</div>
           <div class="value">
-            <span>HP-23546</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="homepass"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
         <div class="info-item">
           <div class="label">Alamat Pemasangan</div>
           <div class="value">
-            <span>Manado</span>
-          <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
+            <span id="alamat"></span>
+            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
           </div>
         </div>
 
       <div class="divider"></div>
 
-      <!-- Info Produk -->
       <div class="section">
         <div class="section-title">Info Produk</div>
 
         <div class="info-item">
           <div class="label">Paket</div>
-          <div class="value">(109) Fast50 Mbps</div>
+          <div class="value" id="paket_internet"></div>
         </div>
 
         <div class="info-item">
           <div class="label">Paket TV</div>
-          <div class="value">Tanpa paket TV</div>
+          <div class="value" id="paket_tv"></div>
         </div>
 
         <div class="info-item">
           <div class="label">Add On</div>
-          <div class="value">Tidak ada</div>
+          <div class="value" id="addon"></div>
         </div>
 
         <div class="info-item">
           <div class="label">Metode Pembayaran</div>
-          <div class="value">Tunai Bulanan</div>
+          <div class="value" id="metode_pembayaran"></div>
         </div>
 
         <div class="info-item">
           <div class="label">Promo</div>
-          <div class="value">-</div>
+          <div class="value" id="promo"></div>
         </div>
       </div>
     </div>
   </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-  function copyText(el) {
-    const text = el.previousElementSibling.innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      const icon = el.querySelector("i");
-      icon.classList.remove("fa-copy");
-      icon.classList.add("fa-check");
-      setTimeout(() => {
-        icon.classList.remove("fa-check");
-        icon.classList.add("fa-copy");
-      }, 1200);
-    });
-  }
-</script>
+    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+    const detailCard = document.getElementById('detailCard');
+    const loadingMessage = document.getElementById('loading');
+    const errorMessage = document.getElementById('error');
+    
+    // Fungsi untuk mendapatkan ID dari URL
+    function getCustomerIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+    }
+
+    // Fungsi untuk mendapatkan detail pelanggan dari Supabase
+    async function fetchCustomerDetails(id) {
+        loadingMessage.style.display = 'block';
+        detailCard.style.display = 'none';
+        errorMessage.style.display = 'none';
+
+        if (!id) {
+            errorMessage.textContent = "ID pelanggan tidak ditemukan di URL.";
+            errorMessage.style.display = 'block';
+            loadingMessage.style.display = 'none';
+            return;
+        }
+
+        const { data, error } = await client
+            .from('pelanggan')
+            .select('*, kota(nama), cluster(nama)')
+            .eq('id', id)
+            .single();
+
+        loadingMessage.style.display = 'none';
+
+        if (error) {
+            console.error('Error fetching data:', error);
+            errorMessage.textContent = 'Gagal memuat detail pelanggan: ' + error.message;
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        if (!data) {
+            errorMessage.textContent = 'Data pelanggan tidak ditemukan.';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Tampilkan data ke elemen HTML
+        document.getElementById('tanggal').textContent = new Date(data.tanggal).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
+        document.getElementById('nik').textContent = data.nik;
+        document.getElementById('nama_lengkap').textContent = data.nama_lengkap;
+        document.getElementById('email').textContent = data.email;
+        document.getElementById('hp_wa').textContent = data.hp_wa;
+        document.getElementById('hp_dial').textContent = data.hp_dial;
+        document.getElementById('homepass').textContent = data.homepass;
+        document.getElementById('alamat').textContent = data.alamat;
+        document.getElementById('paket_internet').textContent = data.paket_internet;
+        document.getElementById('paket_tv').textContent = data.paket_tv;
+        document.getElementById('metode_pembayaran').textContent = data.metode_pembayaran;
+        
+        // Menangani data relasi (Kota & Cluster)
+        document.getElementById('kota').textContent = data.kota?.nama || 'Tidak ada';
+        document.getElementById('cluster').textContent = data.cluster?.nama || 'Tidak ada';
+
+        // Menangani data Add On (jsonb)
+        if (data.addon && data.addon.length > 0) {
+            document.getElementById('addon').textContent = data.addon.join(', ');
+        } else {
+            document.getElementById('addon').textContent = 'Tidak ada';
+        }
+        
+        // Menangani data Promo (boolean)
+        document.getElementById('promo').textContent = data.promo ? 'Ya' : 'Tidak';
+
+        detailCard.style.display = 'block';
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    const customerId = getCustomerIdFromUrl();
+    fetchCustomerDetails(customerId);
+
+    function copyText(el) {
+        const text = el.previousElementSibling.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          const icon = el.querySelector("i");
+          icon.classList.remove("fa-copy");
+          icon.classList.add("fa-check");
+          setTimeout(() => {
+            icon.classList.remove("fa-check");
+            icon.classList.add("fa-copy");
+          }, 1200);
+        });
+    }
+  </script>
 
 </body>
 </html>
