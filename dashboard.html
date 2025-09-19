@@ -148,65 +148,88 @@
     const noDataMessageEl = pelangganList.querySelector('.no-data-message');
 
     async function fetchData() {
-      // Tampilkan pesan loading
-      loadingMessageEl.style.display = 'block';
-      errorMessageEl.style.display = 'none';
-      noDataMessageEl.style.display = 'none';
-      pelangganList.innerHTML = '';
-      pelangganList.appendChild(loadingMessageEl);
-
-      const today = new Date();
-      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString();
-      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
-      
-      const { data, count: totalCount, error } = await client
-        .from('pelanggan')
-        .select('nama_lengkap, alamat, hp_wa, hp_dial', { count: 'exact' }) // Menambahkan hp_wa dan hp_dial
-        .order('created_at', { ascending: false });
-
-      loadingMessageEl.style.display = 'none';
-
-      if (error) {
-        console.error('Error fetching data:', error);
-        errorMessageEl.textContent = 'Gagal memuat data: ' + error.message;
-        errorMessageEl.style.display = 'block';
-        return;
-      }
-
-      if (data.length === 0) {
-        noDataMessageEl.style.display = 'block';
-      } else {
-        // Hitung total data bulan ini dan hari ini
-        const { count: bulanIniCount } = await client.from('pelanggan').select('*', { count: 'exact' }).gte('tanggal', startOfMonth);
-        const { count: hariIniCount } = await client.from('pelanggan').select('*', { count: 'exact' }).gte('tanggal', today.toISOString()).lt('tanggal', endOfDay);
+        // Tampilkan pesan loading
+        loadingMessageEl.style.display = 'block';
+        errorMessageEl.style.display = 'none';
+        noDataMessageEl.style.display = 'none';
         
-        // Perbarui statistik
-        bulanIniCountEl.textContent = bulanIniCount || 0;
-        hariIniCountEl.textContent = hariIniCount || 0;
+        // Dapatkan data pengguna yang sedang login
+        const { data: getUser, error: authError } = await client.auth.getUser();
+        if (authError || !getUser.user) {
+            errorMessageEl.textContent = 'Anda harus login untuk melihat data ini.';
+            errorMessageEl.style.display = 'block';
+            return;
+        }
+        const userUID = getUser.user.id;
+        
+        // Ambil data pelanggan yang sesuai dengan user yang login
+        const { data: pelangganData, error: pelangganError } = await client
+            .from('pelanggan')
+            .select('nama_lengkap, alamat, hp_wa, hp_dial, created_at')
+            .eq('sales_id', userUID) // Filter data berdasarkan user yang login
+            .order('created_at', { ascending: false });
 
-        // Tampilkan data pelanggan sebagai kartu
-        data.forEach(pelanggan => {
-          const card = document.createElement('div'); // Menggunakan div karena <a> tidak butuh link spesifik
-          card.className = 'card';
-          card.innerHTML = `
-            <div class="text-group">
-              <div class="name">${pelanggan.nama_lengkap}</div>
-              <div class="address">${pelanggan.alamat}</div>
-              <div class="phone-group">
-                <span>WA: ${pelanggan.hp_wa || '-'}</span><br>
-                <span>Dial: ${pelanggan.hp_dial || '-'}</span>
-              </div>
-            </div>
-            <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-          `;
-          pelangganList.appendChild(card);
-        });
-      }
+        loadingMessageEl.style.display = 'none';
+
+        if (pelangganError) {
+            console.error('Error fetching data:', pelangganError);
+            errorMessageEl.textContent = 'Gagal memuat data: ' + pelangganError.message;
+            errorMessageEl.style.display = 'block';
+            return;
+        }
+
+        // Perbarui tampilan dengan data baru
+        pelangganList.innerHTML = ''; // Bersihkan konten sebelumnya
+
+        if (pelangganData.length === 0) {
+            noDataMessageEl.style.display = 'block';
+        } else {
+            // Hitung total data bulan ini dan hari ini
+            const today = new Date();
+            const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            let bulanIniCount = 0;
+            let hariIniCount = 0;
+            
+            pelangganData.forEach(pelanggan => {
+                const createdAt = new Date(pelanggan.created_at);
+                
+                // Hitung data bulan ini
+                if (createdAt >= startOfMonth) {
+                    bulanIniCount++;
+                }
+                
+                // Hitung data hari ini
+                if (createdAt.toDateString() === today.toDateString()) {
+                    hariIniCount++;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="text-group">
+                        <div class="name">${pelanggan.nama_lengkap}</div>
+                        <div class="address">${pelanggan.alamat}</div>
+                        <div class="phone-group">
+                            <span>WA: ${pelanggan.hp_wa || '-'}</span><br>
+                            <span>Dial: ${pelanggan.hp_dial || '-'}</span>
+                        </div>
+                    </div>
+                    <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                `;
+                pelangganList.appendChild(card);
+            });
+
+            // Perbarui statistik di halaman
+            bulanIniCountEl.textContent = bulanIniCount;
+            hariIniCountEl.textContent = hariIniCount;
+        }
     }
 
     fetchData();
   </script>
 </body>
 </html>
+
 
 
