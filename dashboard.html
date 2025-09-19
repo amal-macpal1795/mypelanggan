@@ -148,6 +148,25 @@
     const errorMessageEl = pelangganList.querySelector('.error-message');
     const noDataMessageEl = pelangganList.querySelector('.no-data-message');
 
+    // Tambahan: Fungsi untuk memeriksa sesi login
+    function checkSessionTimeout() {
+      const loginTimestamp = localStorage.getItem("loginTimestamp");
+      if (loginTimestamp) {
+        const currentTime = new Date().getTime();
+        const eightHoursInMs = 8 * 60 * 60 * 1000;
+        
+        // Jika waktu yang berlalu lebih dari 8 jam, log out
+        if (currentTime - loginTimestamp > eightHoursInMs) {
+          localStorage.removeItem("userUID");
+          localStorage.removeItem("loginTimestamp");
+          alert("Sesi Anda telah berakhir. Silakan login kembali.");
+          window.location.replace("index.html");
+          return false; // Sesi kadaluarsa
+        }
+      }
+      return true; // Sesi masih valid
+    }
+
     async function fetchData() {
         // Tampilkan pesan loading
         loadingMessageEl.style.display = 'block';
@@ -233,4 +252,5 @@
   </script>
 </body>
 </html>
+
 
