@@ -1,164 +1,202 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>Daftar Pelanggan</title>
-  <!-- Google Font Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- ICONS -->
-  <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #fafafa;
-      display: flex;
-      justify-content: center;
-    }
+  <meta charset="utf-8" />
+  <title>Daftar Pelanggan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #fafafa;
+      display: flex;
+      justify-content: center;
+    }
 
-    .container {
-      width: 100%;
-      max-width: 500px;
-      padding: 20px;
-    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+    }
 
-    h1 {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #333;
-    }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
 
-    .stats {
-      font-size: 13px;
-      color: #555;
-      margin-bottom: 20px;
-      line-height: 1.4;
-    }
+    .stats {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
 
-    a.card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-decoration: none;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.05);
-      padding: 14px 18px;
-      margin-bottom: 16px;
-      color: inherit;
-      height: 70px;
-      transition: background 0.2s;
-    }
+    a.card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-decoration: none;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      color: inherit;
+      height: 70px;
+      transition: background 0.2s;
+    }
 
-    a.card:hover {
-      background: #f5f5f5;
-    }
+    a.card:hover {
+      background: #f5f5f5;
+    }
 
-    .text-group {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+    .text-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-    .name {
-      font-size: 16px;
-      font-weight: 500;
-      color: #222;
-    }
+    .name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #222;
+    }
 
-    .address {
-      font-size: 13px;
+    .address {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    .arrow {
+      font-size: 20px;
+      color: #888;
+      margin-left: 10px;
+    }
+
+    /* Floating Add Button */
+    .fab {
+      position: fixed;
+      bottom: 32px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      background: #8119b5;
+      border-radius: 50%;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 32px;
+      cursor: pointer;
+    }
+
+    .fab:hover {
+      background: #550a7a;
+    }
+    .loading-message, .error-message, .no-data-message {
+      text-align: center;
       color: #777;
-      margin-top: 4px;
+      margin-top: 20px;
+      font-size: 14px;
     }
-
-    .arrow {
-      font-size: 20px;
-      color: #888;
-      margin-left: 10px;
+    .error-message {
+      color: red;
     }
-
-    /* Floating Add Button */
-    .fab {
-      position: fixed;
-      bottom: 32px;
-      right: 24px;
-      width: 60px;
-      height: 60px;
-      background: #8119b5;
-      border-radius: 50%;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 32px;
-      cursor: pointer;
+    .text-group .phone {
+      display: none; /* Sembunyikan nomor HP dari tampilan card */
     }
-
-    .fab:hover {
-      background: #550a7a;
-    }
-  </style>
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container">
     <div class="stats">
-      Bulan Ini: <strong>34</strong> <br>
-      Hari Ini: <strong>3</strong> <br>
+      Bulan Ini: <strong id="bulanIniCount">0</strong> <br>
+      Hari Ini: <strong id="hariIniCount">0</strong> <br>
     </div>
     <h1>Daftar Pelanggan</h1>
+    <div id="pelangganList">
+      <div class="loading-message">Memuat data...</div>
+      <div class="error-message" style="display: none;"></div>
+      <div class="no-data-message" style="display: none;">Belum ada data pelanggan yang tersedia.</div>
+    </div>
     
+        <div class="fab"><a href="input-data.html"><i class="fa-solid fa-plus"></i></a></div>
+    <a href="input-cluster.html">Kelola Kota & Cluster</a>
+  </div>
 
-    <a href="#" class="card">
-      <div class="text-group">
-        <div class="name">Andi Saputra</div>
-        <div class="address">Jl. Merpati No. 12, Jakarta</div>
-      </div>
-      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-    </a>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    <a href="#" class="card">
-      <div class="text-group">
-        <div class="name">Budi Santoso</div>
-        <div class="address">Jl. Kenanga No. 5, Bandung</div>
-      </div>
-      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-    </a>
+    const pelangganList = document.getElementById('pelangganList');
+    const bulanIniCountEl = document.getElementById('bulanIniCount');
+    const hariIniCountEl = document.getElementById('hariIniCount');
+    const loadingMessageEl = pelangganList.querySelector('.loading-message');
+    const errorMessageEl = pelangganList.querySelector('.error-message');
+    const noDataMessageEl = pelangganList.querySelector('.no-data-message');
 
-    <a href="#" class="card">
-      <div class="text-group">
-        <div class="name">Citra Dewi</div>
-        <div class="address">Jl. Anggrek No. 45, Surabaya</div>
-      </div>
-      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-    </a>
+    async function fetchData() {
+      // Tampilkan pesan loading
+      loadingMessageEl.style.display = 'block';
+      errorMessageEl.style.display = 'none';
+      noDataMessageEl.style.display = 'none';
+      pelangganList.innerHTML = '';
+      pelangganList.appendChild(loadingMessageEl);
 
-    <a href="#" class="card">
-      <div class="text-group">
-        <div class="name">Doni Pratama</div>
-        <div class="address">Jl. Melati No. 21, Yogyakarta</div>
-      </div>
-      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-    </a>
+      const today = new Date();
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString();
+      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+      
+      const { data, count: totalCount, error } = await client
+        .from('pelanggan')
+        .select('nama_lengkap, alamat, hp_wa, hp_dial', { count: 'exact' })
+        .order('tanggal', { ascending: false });
 
-    <a href="#" class="card">
-      <div class="text-group">
-        <div class="name">Eka Lestari</div>
-        <div class="address">Jl. Mawar No. 9, Medan</div>
-      </div>
-      <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-    </a>
-  </div>
+      loadingMessageEl.style.display = 'none';
 
-  <!-- Floating Add Button -->
-  <div class="fab"><a href="input-data.html"><i class="fa-solid fa-plus"></i></a></div>
-  <a href="input-cluster.html">Kelola Kota & Cluster</a>
+      if (error) {
+        console.error('Error fetching data:', error);
+        errorMessageEl.textContent = 'Gagal memuat data: ' + error.message;
+        errorMessageEl.style.display = 'block';
+        return;
+      }
 
+      if (data.length === 0) {
+        noDataMessageEl.style.display = 'block';
+      } else {
+        // Hitung total data bulan ini dan hari ini
+        const { count: bulanIniCount } = await client.from('pelanggan').select('*', { count: 'exact' }).gte('tanggal', startOfMonth);
+        const { count: hariIniCount } = await client.from('pelanggan').select('*', { count: 'exact' }).gte('tanggal', today.toISOString()).lt('tanggal', endOfDay);
+        
+        // Perbarui statistik
+        bulanIniCountEl.textContent = bulanIniCount || 0;
+        hariIniCountEl.textContent = hariIniCount || 0;
+
+        // Tampilkan data pelanggan sebagai kartu
+        data.forEach(pelanggan => {
+          const card = document.createElement('a');
+          card.href = '#'; // Anda bisa mengarahkan ini ke detail pelanggan jika ada
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="text-group">
+              <div class="name">${pelanggan.nama_lengkap}</div>
+              <div class="address">${pelanggan.alamat}</div>
+            </div>
+            <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+          `;
+          pelangganList.appendChild(card);
+        });
+      }
+    }
+
+    fetchData();
+  </script>
 </body>
 </html>
-
-
-
-
