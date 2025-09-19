@@ -162,7 +162,7 @@
       const { data, count: totalCount, error } = await client
         .from('pelanggan')
         .select('nama_lengkap, alamat, hp_wa, hp_dial', { count: 'exact' }) // Menambahkan hp_wa dan hp_dial
-        .order('tanggal', { ascending: false });
+        .order('tanggal', { descending: true });
 
       loadingMessageEl.style.display = 'none';
 
@@ -208,3 +208,4 @@
   </script>
 </body>
 </html>
+
