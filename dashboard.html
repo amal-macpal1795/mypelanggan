@@ -153,7 +153,7 @@
       const loginTimestamp = localStorage.getItem("loginTimestamp");
       if (loginTimestamp) {
         const currentTime = new Date().getTime();
-        const eightHoursInMs = 8 * 60 * 60 * 1000;
+        const eightHoursInMs = 3 * 60 * 60 * 1000;
         
         // Jika waktu yang berlalu lebih dari 8 jam, log out
         if (currentTime - loginTimestamp > eightHoursInMs) {
@@ -252,5 +252,6 @@
   </script>
 </body>
 </html>
+
 
 
