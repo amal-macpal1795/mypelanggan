@@ -1,279 +1,274 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <title>Input Data Pelanggan</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin:0; 
-      font-family:'Poppins',sans-serif; 
-      background:#fafafa; 
-      display:flex; 
-      justify-content:center; 
-      padding:20px;
-    }
-    .container {
-      width:100%; 
-      max-width:500px;
-    }
-    h1 {
-      font-size:22px; 
-      font-weight:600; 
-      margin-bottom:20px; 
-      color:#333; 
-      text-align:center;
-    }
-    .card {
-      background:#fff; 
-      border-radius:16px; 
-      box-shadow:0 2px 10px rgba(0,0,0,0.08); 
-      padding:20px;
-    }
-    .section-title {
-      font-size:16px; 
-      font-weight:600; 
-      margin-bottom:12px; 
-      color:#222;
-    }
-    .form-group {
-      margin-bottom:14px;
-    }
-    label {
-      font-size:14px; 
-      font-weight:500; 
-      color:#333; 
-      display:block; 
-      margin-bottom:6px;
-    }
-    input, select, textarea {
-      width:95%; 
-      padding:12px; 
-      border-radius:10px; 
-      border:1px solid #ddd; 
-      font-size:14px; 
-      font-family:'Poppins',sans-serif; 
-      outline:none; 
-      transition:border 0.2s;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color:#4f46e5;
-    }
-    .divider {
-      border-top:1px solid #e5e5e5; 
-      margin:20px 0;
-    }
-    .submit-btn {
-      width:100%; 
-      padding:14px; 
-      background:#8119b5; 
-      color:#fff; 
-      border:none; 
-      border-radius:12px; 
-      font-size:15px; 
-      font-weight:500; 
-      cursor:pointer; 
-      transition:background 0.2s;
-    }
-    .submit-btn:hover {
-      background:#550a7a;
-    }
-    .success {
-      color:green; 
-      font-size:14px; 
-      margin-top:10px; 
-      text-align:center;
-    }
-    .error {
-      color:red; 
-      font-size:14px; 
-      margin-top:10px; 
-      text-align:center;
-    }
+  <meta charset="utf-8" />
+  <title>Input Data Pelanggan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin:0; 
+      font-family:'Poppins',sans-serif; 
+      background:#fafafa; 
+      display:flex; 
+      justify-content:center; 
+      padding:20px;
+    }
+    .container {
+      width:100%; 
+      max-width:500px;
+    }
+    h1 {
+      font-size:22px; 
+      font-weight:600; 
+      margin-bottom:20px; 
+      color:#333; 
+      text-align:center;
+    }
+    .card {
+      background:#fff; 
+      border-radius:16px; 
+      box-shadow:0 2px 10px rgba(0,0,0,0.08); 
+      padding:20px;
+    }
+    .section-title {
+      font-size:16px; 
+      font-weight:600; 
+      margin-bottom:12px; 
+      color:#222;
+    }
+    .form-group {
+      margin-bottom:14px;
+    }
+    label {
+      font-size:14px; 
+      font-weight:500; 
+      color:#333; 
+      display:block; 
+      margin-bottom:6px;
+    }
+    input, select, textarea {
+      width:95%; 
+      padding:12px; 
+      border-radius:10px; 
+      border:1px solid #ddd; 
+      font-size:14px; 
+      font-family:'Poppins',sans-serif; 
+      outline:none; 
+      transition:border 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color:#4f46e5;
+    }
+    .divider {
+      border-top:1px solid #e5e5e5; 
+      margin:20px 0;
+    }
+    .submit-btn {
+      width:100%; 
+      padding:14px; 
+      background:#8119b5; 
+      color:#fff; 
+      border:none; 
+      border-radius:12px; 
+      font-size:15px; 
+      font-weight:500; 
+      cursor:pointer; 
+      transition:background 0.2s;
+    }
+    .submit-btn:hover {
+      background:#550a7a;
+    }
+    .success {
+      color:green; 
+      font-size:14px; 
+      margin-top:10px; 
+      text-align:center;
+    }
+    .error {
+      color:red; 
+      font-size:14px; 
+      margin-top:10px; 
+      text-align:center;
+    }
 
-  </style>
+  </style>
 
 </head>
 <body>
-  <div class="container">
-    <h1>Input Data Pelanggan</h1>
-    <div class="card">
-      <form id="pelangganForm">
-        <div class="section-title">Info Pelanggan</div>
-        <div class="form-group">
-          <label for="tanggal_pasang">Tanggal Pemasangan</label>
-          <input type="date" id="tanggal_pasang" required>
-        </div>
-        <div class="form-group">
-          <label for="nik">NIK</label>
-          <input type="text" id="nik" required>
-        </div>
-        <div class="form-group">
-          <label for="nama_lengkap">Nama Lengkap</label>
-          <input type="text" id="nama_lengkap" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email">
-        </div>
-        
-        <div class="form-group">
-          <label for="hp_wa">Nomor Handphone (WA/SMS)</label>
-          <input type="tel" id="hp_wa">
-        </div>
-        <div class="form-group">
-          <label for="hp_dial">Nomor Handphone (Dial Phone)</label>
-          <input type="tel" id="hp_dial">
-        </div>
-        <div class="form-group">
-          <label for="kota">Kota</label>
-          <select id="kota">
-            <option value="" disabled selected>Pilih kota...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="cluster">Perumahan/Cluster/Apartment</label>
-          <select id="cluster">
-            <option value="" disabled selected>Pilih cluster...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="homepass">Homepass</label>
-          <input type="text" id="homepass">
-        </div>
-        <div class="form-group">
-          <label for="alamat">Alamat Pemasangan</label>
-          <textarea id="alamat" rows="3"></textarea>
-        </div>
-        <div class="divider"></div>
-        <div class="section-title">Info Produk</div>
-        <div class="form-group">
-          <label for="paket_internet">Paket Internet</label>
-          <select id="paket_internet">
-            <option>(107) Jet20 Mbps</option>
-            <option>(146) Plus Value30 Mbps</option>
-            <option>(108) Value30 Mbps</option>
-            <option>((109) Fast50 Mbps</option>
-            <option>(127) Nova100 Mbps Reg</option>
-            <option>(133) MyGamers250 Mbps</option>
-            <option>(138) Prime500 Mbps</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="paket_tv">Paket TV</label>
-          <select id="paket_tv">
-            <option>Tanpa paket TV</option>
-            <option>Basic TV</option>
-            <option>Premium TV</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="addon">Add On</label>
-          <input type="text" id="addon" placeholder="Pisahkan dengan koma jika lebih dari satu">
-        </div>
-        <div class="form-group">
-          <label for="metode_bayar">Metode Pembayaran</label>
-          <select id="metode_bayar">
-            <option>Tunai Bulanan</option>
-            <option>Kartu Kredit (Auto Debit)</option>
-            
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="promo">Promo</label>
-          <input type="checkbox" id="promo"> Ikut Promo
-        </div>
-        <button type="submit" class="submit-btn">Simpan Data</button>
-        <div class="success" id="success"></div>
-        <div class="error" id="error"></div>
-      </form>
-    </div>
-  </div>
+  <div class="container">
+    <h1>Input Data Pelanggan</h1>
+    <div class="card">
+      <form id="pelangganForm">
+        <div class="section-title">Info Pelanggan</div>
+        <div class="form-group">
+          <label for="tanggal_pasang">Tanggal Pemasangan</label>
+          <input type="date" id="tanggal_pasang" required>
+        </div>
+        <div class="form-group">
+          <label for="nik">NIK</label>
+          <input type="text" id="nik" required>
+        </div>
+        <div class="form-group">
+          <label for="nama_lengkap">Nama Lengkap</label>
+          <input type="text" id="nama_lengkap" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email">
+        </div>
+        <div class="form-group">
+          <label for="hp_wa">Nomor Handphone (WA/SMS)</label>
+          <input type="tel" id="hp_wa">
+        </div>
+        <div class="form-group">
+          <label for="hp_dial">Nomor Handphone (Dial Phone)</label>
+          <input type="tel" id="hp_dial">
+        </div>
+        <div class="form-group">
+          <label for="kota">Kota</label>
+          <select id="kota">
+            <option value="" disabled selected>Pilih kota...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cluster">Perumahan/Cluster/Apartment</label>
+          <select id="cluster">
+            <option value="" disabled selected>Pilih cluster...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="homepass">Homepass</label>
+          <input type="text" id="homepass">
+        </div>
+        <div class="form-group">
+          <label for="alamat">Alamat Pemasangan</label>
+          <textarea id="alamat" rows="3"></textarea>
+        </div>
+        <div class="divider"></div>
+        <div class="section-title">Info Produk</div>
+        <div class="form-group">
+          <label for="paket_internet">Paket Internet</label>
+          <select id="paket_internet">
+            <option>(107) Jet20 Mbps</option>
+            <option>(146) Plus Value30 Mbps</option>
+            <option>(108) Value30 Mbps</option>
+            <option>(109) Fast50 Mbps</option>
+            <option>(127) Nova100 Mbps Reg</option>
+            <option>(133) MyGamers250 Mbps</option>
+            <option>(138) Prime500 Mbps</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="paket_tv">Paket TV</label>
+          <select id="paket_tv">
+            <option>Tanpa paket TV</option>
+            <option>Basic TV</option>
+            <option>Premium TV</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="addon">Add On</label>
+          <input type="text" id="addon" placeholder="Pisahkan dengan koma jika lebih dari satu">
+        </div>
+        <div class="form-group">
+          <label for="metode_bayar">Metode Pembayaran</label>
+          <select id="metode_bayar">
+            <option>Tunai Bulanan</option>
+            <option>Kartu Kredit (Auto Debit)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="promo">Promo</label>
+          <input type="checkbox" id="promo"> Ikut Promo
+        </div>
+        <button type="submit" class="submit-btn">Simpan Data</button>
+        <div class="success" id="success"></div>
+        <div class="error" id="error"></div>
+      </form>
+    </div>
+  </div>
 
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script type="module">
-    
-    // Ganti dengan URL dan Anon Key Supabase Anda
-    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
-    const client = supabase.createClient(supabaseUrl, supabaseKey);
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Load dropdown kota
-    async function loadKota() {
-      const { data, error } = await client.from("kota").select("id,nama");
-      if (error) { console.error("Error loading kota:", error.message); return; }
-      const kotaSelect = document.getElementById("kota");
-      kotaSelect.innerHTML = '<option value="" disabled selected>Pilih kota...</option>';
-      data.forEach(k => {
-        const opt = document.createElement("option");
-        opt.value = k.id;
-        opt.textContent = k.nama;
-        kotaSelect.appendChild(opt);
-      });
-    }
+    // Load dropdown kota
+    async function loadKota() {
+      const { data, error } = await client.from("kota").select("id,nama");
+      if (error) { console.error("Error loading kota:", error.message); return; }
+      const kotaSelect = document.getElementById("kota");
+      kotaSelect.innerHTML = '<option value="" disabled selected>Pilih kota...</option>';
+      data.forEach(k => {
+        const opt = document.createElement("option");
+        opt.value = k.id;
+        opt.textContent = k.nama;
+        kotaSelect.appendChild(opt);
+      });
+    }
 
-    // Load cluster berdasarkan kota
-    document.getElementById("kota").addEventListener("change", async (e) => {
-      const kotaId = e.target.value;
-      const { data, error } = await client.from("cluster").select("id,nama").eq("kota_id", kotaId);
-      const clusterSelect = document.getElementById("cluster");
-      clusterSelect.innerHTML = '<option value="" disabled selected>Pilih cluster...</option>';
-      if (error) { console.error("Error loading cluster:", error.message); return; }
-      data.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = c.nama;
-        clusterSelect.appendChild(opt);
-      });
-    });
+    // Load cluster berdasarkan kota
+    document.getElementById("kota").addEventListener("change", async (e) => {
+      const kotaId = e.target.value;
+      const { data, error } = await client.from("cluster").select("id,nama").eq("kota_id", kotaId);
+      const clusterSelect = document.getElementById("cluster");
+      clusterSelect.innerHTML = '<option value="" disabled selected>Pilih cluster...</option>';
+      if (error) { console.error("Error loading cluster:", error.message); return; }
+      data.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = c.nama;
+        clusterSelect.appendChild(opt);
+      });
+    });
 
-    loadKota();
+    loadKota();
 
-    // Submit form pelanggan
-    document.getElementById("pelangganForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const successDiv = document.getElementById("success");
-      const errorDiv = document.getElementById("error");
-      successDiv.textContent = "";
-      errorDiv.textContent = "";
+    // Submit form pelanggan
+    document.getElementById("pelangganForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const successDiv = document.getElementById("success");
+      const errorDiv = document.getElementById("error");
+      successDiv.textContent = "";
+      errorDiv.textContent = "";
 
-      const { data: getUser, error: authError } = await client.auth.getUser();
-      if (authError || !getUser.user) {
-        errorDiv.textContent = "Anda harus login terlebih dahulu!";
-        console.error("Authentication error:", authError);
-        return;
-      }
+      const { data: getUser, error: authError } = await client.auth.getUser();
+      if (authError || !getUser.user) {
+        errorDiv.textContent = "Anda harus login terlebih dahulu!";
+        console.error("Authentication error:", authError);
+        return;
+      }
 
-      // Pastikan nama-nama key objek di bawah ini sama persis dengan nama kolom di tabel "pelanggan" Supabase Anda
-      const payload = {
-        tanggal: document.getElementById("tanggal_pasang").value,
-        nik: document.getElementById("nik").value,
-        nama_lengkap: document.getElementById("nama_lengkap").value,
-        email: document.getElementById("email").value,
-        hp_wa: document.getElementById("hp_wa").value,
-        hp_dial: document.getElementById("hp_dial").value,
-        kota_id: document.getElementById("kota").value,
-        cluster_id: document.getElementById("cluster").value,
-        homepass: document.getElementById("homepass").value,
-        alamat: document.getElementById("alamat").value,
-        paket_internet: document.getElementById("paket").value,
-        paket_tv: document.getElementById("paket_tv").value,
-        addon: document.getElementById("addon").value.split(",").map(x => x.trim()).filter(Boolean),
-        metode_pembayaran: document.getElementById("metode_bayar").value,
-        promo: document.getElementById("promo").checked,
-        sales_id: getUser.user.id
-      };
-      
-      const { error } = await client.from("pelanggan").insert([payload]);
-      if (error) {
-        console.error(error);
-        errorDiv.textContent = "Gagal menyimpan: " + error.message;
-      } else {
-        successDiv.textContent = "Data berhasil disimpan!";
-        document.getElementById("pelangganForm").reset();
-      }
-    });
-  </script>
+      const payload = {
+        tanggal: document.getElementById("tanggal_pasang").value, // Perbaikan ID
+        nik: document.getElementById("nik").value,
+        nama_lengkap: document.getElementById("nama_lengkap").value, // Perbaikan ID
+        email: document.getElementById("email").value,
+        tanggal_lahir: document.getElementById("tanggal_lahir").value, // Menambahkan field yang hilang
+        hp_wa: document.getElementById("hp_wa").value,
+        hp_dial: document.getElementById("hp_dial").value,
+        kota_id: document.getElementById("kota").value,
+        cluster_id: document.getElementById("cluster").value,
+        homepass: document.getElementById("homepass").value,
+        alamat: document.getElementById("alamat").value,
+        paket_internet: document.getElementById("paket_internet").value, // Perbaikan ID
+        paket_tv: document.getElementById("paket_tv").value,
+        addon: document.getElementById("addon").value.split(",").map(x => x.trim()).filter(Boolean),
+        metode_pembayaran: document.getElementById("metode_bayar").value,
+        promo: document.getElementById("promo").checked,
+        sales_id: getUser.user.id
+      };
+      
+      const { error } = await client.from("pelanggan").insert([payload]);
+      if (error) {
+        console.error(error);
+        errorDiv.textContent = "Gagal menyimpan: " + error.message;
+      } else {
+        successDiv.textContent = "Data berhasil disimpan!";
+        document.getElementById("pelangganForm").reset();
+      }
+    });
+  </script>
 </body>
 </html>
-
