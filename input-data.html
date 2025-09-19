@@ -262,12 +262,12 @@
         console.error(error);
         errorDiv.textContent = "Gagal menyimpan: " + error.message;
       } else {
-        successDiv.textContent = "Data berhasil disimpan!";
-        document.getElementById("pelangganForm").reset();
+        window.location.href = "dashboard.html";
       }
     });
   </script>
 </body>
 </html>
+
 
 
