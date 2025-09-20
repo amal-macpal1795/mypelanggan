@@ -223,10 +223,105 @@
   </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src='https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js'></script>
   <script>
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Elemen HTML untuk OCR
+    const scanKtpBtn = document.getElementById('scanKtpBtn');
+    const video = document.getElementById('camera-view');
+    const canvas = document.getElementById('camera-canvas');
+    const ocrStatus = document.getElementById('ocr-status');
+    const nikInput = document.getElementById('nik');
+    const namaLengkapInput = document.getElementById('nama_lengkap');
+    const alamatInput = document.getElementById('alamat');
+    let stream;
+
+    // Fungsi untuk memindai KTP
+    async function scanKtp() {
+      if (!stream) {
+        // Jika kamera belum aktif, aktifkan kamera belakang
+        try {
+          ocrStatus.textContent = 'Meminta akses kamera...';
+          stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); // Perbaikan ada di sini
+          video.srcObject = stream;
+          video.style.display = 'block';
+          scanKtpBtn.textContent = 'Ambil Foto';
+          ocrStatus.textContent = '';
+        } catch (err) {
+          ocrStatus.textContent = 'Gagal mengakses kamera. Pastikan Anda memberikan izin.';
+          console.error('Error accessing camera:', err);
+        }
+      } else {
+        // Jika kamera sudah aktif, ambil foto dan proses OCR
+        video.pause();
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Hentikan stream kamera
+        stream.getTracks().forEach(track => track.stop());
+        video.style.display = 'none';
+        
+        // Mulai proses OCR
+        ocrStatus.textContent = 'Menganalisis teks dari foto... Mohon tunggu.';
+        
+        try {
+          const { data: { text } } = await Tesseract.recognize(canvas, 'ind', {
+            logger: m => console.log(m)
+          });
+          
+          if (text) {
+            const lines = text.split('\n');
+            
+            // Logika untuk mengisi form
+            let foundNik = false;
+            let foundName = false;
+            let foundAddress = false;
+            
+            for (let i = 0; i < lines.length; i++) {
+              const processedLine = lines[i].trim();
+              
+              // Cari NIK (16 digit angka)
+              const nikMatch = processedLine.match(/\b\d{16}\b/);
+              if (nikMatch && !foundNik) {
+                nikInput.value = nikMatch[0].toUpperCase();
+                foundNik = true;
+              }
+              
+              // Cari Nama Lengkap (baris setelah "Nama")
+              if (processedLine.toUpperCase().includes('NAMA') && lines[i + 1]) {
+                namaLengkapInput.value = lines[i + 1].trim().toUpperCase();
+                foundName = true;
+              }
+
+              // Cari Alamat (baris setelah "Alamat")
+              if (processedLine.toUpperCase().includes('ALAMAT') && lines[i + 1]) {
+                alamatInput.value = lines[i + 1].trim().toUpperCase();
+                foundAddress = true;
+              }
+            }
+
+            ocrStatus.textContent = 'Pemindaian selesai. Harap periksa kembali data!';
+          } else {
+            ocrStatus.textContent = 'Gagal memindai. Coba foto ulang dengan pencahayaan yang lebih baik.';
+          }
+        } catch (ocrError) {
+          ocrStatus.textContent = 'Terjadi kesalahan saat memproses OCR.';
+          console.error('OCR Error:', ocrError);
+        }
+        
+        // Kembalikan tombol ke kondisi awal
+        scanKtpBtn.textContent = 'Pindai KTP';
+        stream = null;
+      }
+    }
+
+    // Tambahkan event listener ke tombol
+    scanKtpBtn.addEventListener('click', scanKtp);
 
     // Load dropdown kota
     async function loadKota() {
@@ -288,7 +383,7 @@
         paket_internet: document.getElementById("paket_internet").value,
         paket_tv: document.getElementById("paket_tv").value,
         addon: document.getElementById("addon").value.split(",").map(x => x.trim()).filter(Boolean),
-        metode_bayar: document.getElementById("metode_bayar").value,
+        metode_pembayaran: document.getElementById("metode_bayar").value,
         promo: document.getElementById("promo").checked,
         sales_id: getUser.user.id
       };
@@ -298,12 +393,13 @@
         console.error(error);
         errorDiv.textContent = "Gagal menyimpan: " + error.message;
       } else {
-        window.location.href = "dashboard.html";
+        window.location.replace("dashboard.html");
       }
     });
   </script>
 </body>
 </html>
+
 
 
 
