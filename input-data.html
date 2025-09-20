@@ -77,7 +77,7 @@
       transition:background 0.2s;
     }
     .submit-btn:hover {
-      background:#550a7a;
+      background: #550a7a;
     }
     .success {
       color:green; 
@@ -113,8 +113,6 @@
       max-width: 500px;
       margin-bottom: 10px;
       border-radius: 10px;
-      transform: rotate(90deg); /* CSS untuk memutar kamera */
-      transform-origin: center;
       object-fit: cover;
     }
     #ocr-status {
@@ -153,6 +151,7 @@
           <label for="email">Email</label>
           <input type="email" id="email">
         </div>
+        
         <div class="form-group">
           <label for="hp_wa">Nomor Handphone (WA/SMS)</label>
           <input type="tel" id="hp_wa">
@@ -232,7 +231,7 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-   // Elemen HTML untuk OCR
+    // Elemen HTML untuk OCR
     const scanKtpBtn = document.getElementById('scanKtpBtn');
     const video = document.getElementById('camera-view');
     const canvas = document.getElementById('camera-canvas');
@@ -246,10 +245,16 @@
     // Fungsi untuk memindai KTP
     async function scanKtp() {
       if (!isCameraActive) {
-        // Jika kamera belum aktif, aktifkan kamera
+        // Jika kamera belum aktif, aktifkan kamera belakang
         try {
           ocrStatus.textContent = 'Meminta akses kamera...';
-          stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: 'environment',
+              width: { ideal: 1280 }, // Meminta lebar ideal 1280px
+              height: { ideal: 720 }  // Meminta tinggi ideal 720px
+            }
+          });
           video.srcObject = stream;
           video.style.display = 'block';
           scanKtpBtn.textContent = 'Ambil Foto';
@@ -263,9 +268,15 @@
         // Jika kamera sudah aktif, ambil foto dan proses OCR
         video.pause();
         const context = canvas.getContext('2d');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Tentukan resolusi optimal untuk OCR
+        const ocrWidth = 800;
+        const ocrHeight = (ocrWidth / video.videoWidth) * video.videoHeight;
+        canvas.width = ocrWidth;
+        canvas.height = ocrHeight;
+        
+        // Gambar ulang video ke canvas dengan resolusi yang lebih kecil
+        context.drawImage(video, 0, 0, ocrWidth, ocrHeight);
         
         // Hentikan stream kamera
         stream.getTracks().forEach(track => track.stop());
@@ -406,10 +417,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
