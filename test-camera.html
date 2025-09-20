@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Uji Kamera</title>
+  <style>
+    video { width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>Uji Kamera</h1>
+  <video id="camera-view" autoplay></video>
+  <script>
+    const video = document.getElementById('camera-view');
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error("Error: " + err);
+        document.body.innerHTML += "<p>Gagal membuka kamera: Pastikan Anda memberikan izin.</p>";
+      });
+  </script>
+</body>
+</html>
