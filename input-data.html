@@ -91,6 +91,35 @@
       margin-top:10px; 
       text-align:center;
     }
+    .scan-btn {
+      width: 100%;
+      padding: 14px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 10px;
+    }
+    .scan-btn:hover {
+      background: #0056b3;
+    }
+    #camera-view {
+      display: none;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+    #ocr-status {
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+      color: #555;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +127,12 @@
     <h1>Input Data Pelanggan</h1>
     <div class="card">
       <form id="pelangganForm">
+        <button type="button" id="scanKtpBtn" class="scan-btn">Pindai KTP</button>
+        <video id="camera-view" autoplay></video>
+        <canvas id="camera-canvas" style="display:none;"></canvas>
+        <div id="ocr-status"></div>
+
+        <div class="divider"></div>
         <div class="section-title">Info Pelanggan</div>
         <div class="form-group">
           <label for="tanggal_pasang">Tanggal Pemasangan</label>
@@ -269,6 +304,7 @@
   </script>
 </body>
 </html>
+
 
 
 
