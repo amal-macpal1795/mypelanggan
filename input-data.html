@@ -151,17 +151,20 @@
         border: 1px dashed rgba(255, 255, 255, 0.7);
         box-sizing: border-box;
     }
+    /* Posisi berdasarkan pengukuran dari user */
     .nik-frame {
-        top: 20%;
-        left: 20%;
-        width: 70%;
-        height: 10%;
+        /* Dikonversi dari cm ke persentase */
+        left: 30.37%; /* 2.6cm / 8.56cm */
+        right: 23.36%; /* 2.0cm / 8.56cm */
+        top: 14.82%; /* 0.8cm / 5.398cm */
+        bottom: 75.95%; /* 4.1cm / 5.398cm */
     }
     .nama-frame {
-        top: 35%;
-        left: 20%;
-        width: 70%;
-        height: 10%;
+        /* Dikonversi dari cm ke persentase */
+        left: 30.37%; /* 2.6cm / 8.56cm */
+        right: 23.36%; /* 2.0cm / 8.56cm */
+        top: 24.08%; /* 1.3cm / 5.398cm */
+        bottom: 68.58%; /* 3.7cm / 5.398cm */
     }
 
     #camera-capture-btn {
@@ -324,22 +327,21 @@
     const nikInput = document.getElementById('nik');
     const namaLengkapInput = document.getElementById('nama_lengkap');
     const alamatInput = document.getElementById('alamat');
+    const ktpFrame = document.querySelector('.ktp-frame');
     let stream;
-    let isCameraActive = false;
 
     // Fungsi untuk membuka kamera
     async function openCamera() {
       try {
         ocrStatus.textContent = 'Meminta akses kamera...';
         cameraContainer.style.display = 'block';
-        stream = await navigator.mediaDevices.getUserMedia({
+        video.srcObject = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: 'environment',
             width: { ideal: 1280 }, 
             height: { ideal: 720 }
           }
         });
-        video.srcObject = stream;
         captureBtn.style.display = 'block';
         ocrStatus.textContent = '';
       } catch (err) {
@@ -364,34 +366,33 @@
         context.drawImage(video, 0, 0, ocrWidth, ocrHeight);
         
         // Hentikan stream kamera
-        stream.getTracks().forEach(track => track.stop());
+        video.srcObject.getTracks().forEach(track => track.stop());
         cameraContainer.style.display = 'none';
-        stream = null;
-
+        
         // Mulai proses OCR
         ocrStatus.textContent = 'Menganalisis teks dari foto... Mohon tunggu.';
         ocrStatusOverlay.textContent = 'Menganalisis teks dari foto...';
         ocrStatusOverlay.style.display = 'block';
         
         try {
-            // Tentukan koordinat area OCR (persentase dari canvas)
-            const ktpFrameWidth = 0.9 * ocrWidth;
-            const ktpFrameHeight = ktpFrameWidth / 1.586;
-            const ktpFrameLeft = (ocrWidth - ktpFrameWidth) / 2;
-            const ktpFrameTop = (ocrHeight - ktpFrameHeight) / 2;
-
+            // Tentukan koordinat area OCR (berdasarkan persentase)
+            const ktpFrameRect = ktpFrame.getBoundingClientRect();
+            const videoRect = video.getBoundingClientRect();
+            const scaleX = ocrWidth / videoRect.width;
+            const scaleY = ocrHeight / videoRect.height;
+            
             const nikRegion = {
-                left: ktpFrameLeft + (ktpFrameWidth * 0.20),
-                top: ktpFrameTop + (ktpFrameHeight * 0.20),
-                width: ktpFrameWidth * 0.70,
-                height: ktpFrameHeight * 0.10
+                left: (ktpFrameRect.left + (ktpFrameRect.width * (2.6 / 8.56))) * scaleX,
+                top: (ktpFrameRect.top + (ktpFrameRect.height * (0.8 / 5.398))) * scaleY,
+                width: (ktpFrameRect.width * ( (8.56 - 2.0 - 2.6) / 8.56)) * scaleX,
+                height: (ktpFrameRect.height * ( (5.398 - 0.8 - 4.1) / 5.398)) * scaleY
             };
-
+            
             const namaRegion = {
-                left: ktpFrameLeft + (ktpFrameWidth * 0.20),
-                top: ktpFrameTop + (ktpFrameHeight * 0.35),
-                width: ktpFrameWidth * 0.70,
-                height: ktpFrameHeight * 0.10
+                left: (ktpFrameRect.left + (ktpFrameRect.width * (2.6 / 8.56))) * scaleX,
+                top: (ktpFrameRect.top + (ktpFrameRect.height * (1.3 / 5.398))) * scaleY,
+                width: (ktpFrameRect.width * ( (8.56 - 2.0 - 2.6) / 8.56)) * scaleX,
+                height: (ktpFrameRect.height * ( (5.398 - 1.3 - 3.7) / 5.398)) * scaleY
             };
             
             // Panggil Tesseract untuk NIK
@@ -420,7 +421,11 @@
             }
 
             ocrStatus.textContent = 'Pemindaian selesai. Harap periksa kembali data!';
+            
+            // Sembunyikan container kamera dan tombol
+            cameraContainer.style.display = 'none';
         } catch (ocrError) {
+            ocrStatusOverlay.style.display = 'none';
             ocrStatus.textContent = 'Terjadi kesalahan saat memproses OCR.';
             console.error('OCR Error:', ocrError);
         }
