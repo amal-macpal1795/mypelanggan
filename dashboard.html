@@ -508,6 +508,7 @@
           tanggal, 
           paket_internet,
           is_complete, 
+          created_at,
           kota:kota_id ( nama )
         `) // Query diubah
         .eq('sales_id', user.id) // Filter data berdasarkan user yang login
@@ -549,14 +550,14 @@
 
       allPelanggan.forEach(pelanggan => {
         const pelangganDate = new Date(pelanggan.tanggal);
+        const tanggalDibuat = new Date(pelanggan.created_at);
         
-        if (pelangganDate >= startOfQuarter) {
-          triwulanCount++;
-        }
-        if (pelangganDate >= startOfMonth) {
-          bulanIniCount++;
-        }
-        if (pelangganDate.toDateString() === today.toDateString()) {
+        // Statistik Triwulan & Bulanan tetap berdasarkan TANGGAL PEMASANGAN
+        if (tanggalPemasangan >= startOfQuarter) triwulanCount++;
+        if (tanggalPemasangan >= startOfMonth) bulanIniCount++;
+
+        // Statistik Harian sekarang berdasarkan TANGGAL DIBUAT
+        if (tanggalDibuat.toDateString() === today.toDateString()) {
           hariIniCount++;
         }
       });
@@ -606,4 +607,5 @@
   </script>
 </body>
 </html>
+
 
