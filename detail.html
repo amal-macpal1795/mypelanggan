@@ -19,17 +19,12 @@
     .container {
       width: 100%;
       max-width: 500px;
-      /* (No. 1) Padding sekarang langsung di container, karena card dihilangkan */
-      background: #fff;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      /* (REVISI No. 1) Efek card seperti background, padding, dan shadow DIHAPUS */
     }
 
-    /* (No. 2) Judul utama tidak bold */
     h1 {
       font-size: 22px;
-      font-weight: 500; /* Normal weight */
+      font-weight: 500; 
       margin-bottom: 24px;
       color: #333;
       text-align: center;
@@ -60,34 +55,32 @@
       opacity: 1;
     }
 
-    /* (No. 3) Gaya untuk label judul informasi */
     .label {
-      font-size: 12px;   /* Dikecilkan */
+      font-size: 12px;
       font-weight: 500;
-      color: #888;     /* Warna abu-abu */
+      color: #888;
       margin-bottom: 4px;
     }
 
-    /* (No. 4) Gaya untuk nilai/informasi pelanggan */
     .value {
-      font-size: 16px;  /* Lebih besar dari label */
-      font-weight: 600;
-      color: #222;     /* Warna hitam */
+      font-size: 16px;
+      /* (REVISI No. 2) Ketebalan teks informasi diubah menjadi normal/medium */
+      font-weight: 500; 
+      color: #222;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     
-    /* (No. 5) Class untuk membuat teks menjadi kapital */
     .uppercase {
       text-transform: uppercase;
     }
 
-    /* (No. 6) Class khusus untuk font NIK */
     .nik-font {
       font-family: 'OCR A Extended', 'SF Mono', 'Courier New', monospace;
-      font-weight: 700; /* Bold */
-      letter-spacing: 1.5px; /* Jarak antar huruf */
+      /* (REVISI No. 2) Ketebalan NIK juga diubah menjadi normal/medium */
+      font-weight: 500; 
+      letter-spacing: 1.5px;
       font-size: 17px;
     }
 
@@ -225,7 +218,6 @@
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     function copyText(el) {
-      // Ambil teks dari elemen span di dalam div .value
       const textToCopy = el.previousElementSibling.innerText;
       navigator.clipboard.writeText(textToCopy).then(() => {
         const icon = el.querySelector("i");
@@ -289,4 +281,3 @@
   </script>
 </body>
 </html>
-
