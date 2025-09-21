@@ -216,7 +216,7 @@
         }
 
         // Isi semua field dengan data yang ada
-        document.getElementById("tanggal_pasang").value = data.tanggal;
+        document.getElementById("tanggal_pasang").value = data.tanggal.substring(0, 10);
         document.getElementById("nik").value = data.nik;
         document.getElementById("nama_lengkap").value = data.nama_lengkap;
         document.getElementById("email").value = data.email;
@@ -361,3 +361,4 @@
   </script>
 </body>
 </html>
+
