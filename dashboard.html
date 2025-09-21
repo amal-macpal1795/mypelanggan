@@ -2,98 +2,291 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Daftar Pelanggan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>Dashboard Sales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
+    /* ------------------------------ */
+    /* == Global & Reset == */
+    /* ------------------------------ */
+    :root {
+      --myrepublic-purple: #8119b5;
+      --myrepublic-orange: #ff7f00; /* Warna untuk tombol 'Edit' */
+      --light-gray-bg: #f0f0f0;
+      --light-orange-bg: #fff4e6; /* Background 'Harap dilengkapi' */
+      --text-primary: #222;
+      --text-secondary: #666;
+    }
     body {
       margin: 0;
+      /* Tambahkan padding di atas dan bawah untuk memberi ruang bagi header & bottom-nav */
+      padding: 180px 0 100px 0; 
       font-family: 'Poppins', sans-serif;
       background: #fafafa;
-      display: flex;
-      justify-content: center;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
+    /* ------------------------------ */
+    /* == 1, 2, 3: Header & Search (Fixed) == */
+    /* ------------------------------ */
+    .header-container {
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      position: fixed; /* Header dibuat fix di atas */
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    .header-profile {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--myrepublic-purple);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .greeting {
+      margin-left: 12px;
+    }
+    .greeting-hello {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .greeting-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    
+    .search-bar {
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 12px 16px 12px 40px; /* Ruang untuk ikon */
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+    }
+    .search-bar .fa-search {
+      position: absolute;
+      left: 14px;
+      top: 13px;
+      color: #999;
+    }
+
+    /* Container untuk konten di bawah header */
     .container {
       width: 100%;
       max-width: 500px;
-      padding: 20px;
+      padding: 0 20px; /* Padding untuk konten */
+      margin: 0 auto; /* Tengahkan konten */
     }
 
-    h1 {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #333;
+    /* ------------------------------ */
+    /* == 4 & 5: Progress Card == */
+    /* ------------------------------ */
+    .progress-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      padding: 18px;
+      margin-bottom: 24px;
     }
-
-    .stats {
-      font-size: 13px;
-      color: #555;
-      margin-bottom: 20px;
-      line-height: 1.4;
+    .progress-title {
+      font-size: 15px; /* Dikecilkan */
+      font-weight: 600; /* Judul bold */
+      color: var(--text-primary);
+      margin-bottom: 16px;
     }
-
-    .card {
+    .stats-grid {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      text-decoration: none;
+      text-align: center;
+    }
+    .stats-item {
+      flex-basis: 33%; /* Dibagi 3 kolom */
+    }
+    .stats-label {
+      font-size: 11px; /* Teks kecil */
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .stats-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--myrepublic-purple);
+    }
+    /* Pemisah antar kolom stats */
+    .stats-item:nth-child(2) {
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+    }
+
+    /* ------------------------------ */
+    /* == 6: Customer Card List == */
+    /* ------------------------------ */
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #333;
+    }
+    .customer-card {
       background: #fff;
       border-radius: 16px;
       box-shadow: 0 2px 8px rgba(0,0,0,.05);
-      padding: 14px 18px;
+      padding: 16px;
       margin-bottom: 16px;
-      color: inherit;
-      min-height: 70px; /* Gunakan min-height agar konten bisa menyesuaikan */
       transition: background 0.2s;
     }
-
-    .card:hover {
-      background: #f5f5f5;
+    .customer-card:hover {
+      background: #fdfcff;
     }
 
-    .text-group {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      flex-grow: 1; /* Agar mengambil sisa ruang */
+    /* Baris 1: Nama & Kota */
+    .card-row1 {
+      margin-bottom: 12px;
     }
-
-    .name {
+    .card-row1 .name {
       font-size: 16px;
+      font-weight: 700; /* Bold */
+      color: var(--text-primary);
+      text-transform: uppercase; /* Huruf Kapital */
+      margin-bottom: 6px;
+    }
+    .city-tag {
+      display: inline-block;
+      font-size: 11px;
       font-weight: 500;
-      color: #222;
+      padding: 3px 8px;
+      background: var(--light-gray-bg);
+      color: var(--text-secondary);
+      border-radius: 6px;
     }
 
-    .address {
+    /* Baris 2: Paket, Harga, Status */
+    .card-row2 {
+      margin-bottom: 16px;
+    }
+    .card-row2 .paket {
+      font-size: 14px;
+      font-weight: 600; /* Label bold */
+      color: var(--text-primary);
+    }
+    .card-row2 .price {
       font-size: 13px;
-      color: #777;
-      margin-top: 4px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .status-box {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      background: var(--light-orange-bg);
+      color: #cc6a00;
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+
+    /* Baris 3: Tombol */
+    .card-row3 {
+      display: flex;
+      justify-content: flex-end; /* Tarik ke pojok kanan */
+    }
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn-detail {
+      background: var(--myrepublic-purple);
+      color: white;
+    }
+    .btn-edit {
+      background: var(--myrepublic-orange);
+      color: white;
     }
     
-    .phone-group {
-        font-size: 12px;
-        color: #888;
-        margin-top: 4px;
-        line-height: 1.2;
+    /* Utility & Loading Messages */
+    .loading-message, .error-message, .no-data-message {
+      text-align: center;
+      color: #777;
+      margin-top: 20px;
+      font-size: 14px;
     }
+    .error-message { color: red; }
 
-    .arrow {
-      font-size: 20px;
-      color: #888;
-      margin-left: 10px;
-    }
-
-    /* Floating Add Button */
-    .fab {
+    /* ------------------------------ */
+    /* == 7: Bottom Navigation (Fixed) == */
+    /* ------------------------------ */
+    .bottom-nav {
       position: fixed;
-      bottom: 32px;
-      right: 24px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: #fff;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 100;
+      padding: 0 10px;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 11px;
+      font-weight: 500;
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+    .nav-item.active {
+      color: var(--myrepublic-purple);
+    }
+    .nav-item i {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+    /* Tombol FAB di tengah */
+    .nav-fab {
       width: 60px;
       height: 60px;
-      background: #8119b5;
+      background: var(--myrepublic-purple);
       border-radius: 50%;
       box-shadow: 0 6px 14px rgba(0,0,0,0.25);
       display: flex;
@@ -102,37 +295,72 @@
       color: white;
       font-size: 32px;
       cursor: pointer;
+      margin-top: -30px; /* Menonjol ke atas */
+      border: 4px solid #fff; /* Efek outline putih */
+      flex-shrink: 0;
     }
-
-    .fab:hover {
+    .nav-fab:hover {
       background: #550a7a;
-    }
-    .loading-message, .error-message, .no-data-message {
-      text-align: center;
-      color: #777;
-      margin-top: 20px;
-      font-size: 14px;
-    }
-    .error-message {
-      color: red;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="stats">
-      Bulan Ini: <strong id="bulanIniCount">0</strong> <br>
-      Hari Ini: <strong id="hariIniCount">0</strong> <br>
+
+  <div class="header-container">
+    <div class="header-profile">
+      <div class="avatar" id="avatar-initials">..</div>
+      <div class="greeting">
+        <div class="greeting-hello">Halo,</div>
+        <div class="greeting-name" id="user-fullname">Memuat...</div>
+      </div>
     </div>
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" id="search-input" placeholder="Cari pelanggan...">
+    </div>
+  </div>
+
+  <div class="container">
+    
+    <div class="progress-card">
+      <div class="progress-title" id="progress-title">Progres ...</div>
+      <div class="stats-grid">
+        <div class="stats-item">
+          <div class="stats-label">Pencapaian Triwulan</div>
+          <div class="stats-value" id="triwulanCount">0</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-label">Pencapaian Bulanan</div>
+          <div class="stats-value" id="bulanIniCount">0</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-label">Pencapaian Harian</div>
+          <div class="stats-value" id="hariIniCount">0</div>
+        </div>
+      </div>
+    </div>
+
     <h1>Daftar Pelanggan</h1>
     <div id="pelangganList">
       <div class="loading-message">Memuat data...</div>
       <div class="error-message" style="display: none;"></div>
       <div class="no-data-message" style="display: none;">Belum ada data pelanggan yang tersedia.</div>
     </div>
-    
-    <div class="fab"><a href="input-data.html"><i class="fa-solid fa-plus"></i></a></div>
-    <a href="input-cluster.html">Kelola Kota & Cluster</a>
+
+    </div>
+
+  <div class="bottom-nav">
+    <a href="dashboard.html" class="nav-item active">
+      <i class="fa-solid fa-house"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="input-data.html" class="nav-fab">
+      <i class="fa-solid fa-plus"></i>
+    </a>
+    <a href="#" id="logoutBtn" class="nav-item">
+      <i class="fa-solid fa-person"></i>
+      <span>Akun</span>
+    </a>
   </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -141,117 +369,241 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
+    // --- Referensi Elemen ---
     const pelangganList = document.getElementById('pelangganList');
+    const triwulanCountEl = document.getElementById('triwulanCount');
     const bulanIniCountEl = document.getElementById('bulanIniCount');
     const hariIniCountEl = document.getElementById('hariIniCount');
+    const progressTitleEl = document.getElementById('progress-title');
+    const avatarEl = document.getElementById('avatar-initials');
+    const userFullnameEl = document.getElementById('user-fullname');
+    const searchInput = document.getElementById('search-input');
+    
     const loadingMessageEl = pelangganList.querySelector('.loading-message');
     const errorMessageEl = pelangganList.querySelector('.error-message');
     const noDataMessageEl = pelangganList.querySelector('.no-data-message');
+    
+    // Variabel global untuk menyimpan semua data (untuk pencarian)
+    let allPelanggan = [];
+    
+    // --- Fungsi Helper ---
 
-    // Tambahan: Fungsi untuk memeriksa sesi login
-    function checkSessionTimeout() {
-      const loginTimestamp = localStorage.getItem("loginTimestamp");
-      if (loginTimestamp) {
-        const currentTime = new Date().getTime();
-        const eightHoursInMs = 3 * 60 * 60 * 1000;
-        
-        // Jika waktu yang berlalu lebih dari 8 jam, log out
-        if (currentTime - loginTimestamp > eightHoursInMs) {
-          localStorage.removeItem("userUID");
-          localStorage.removeItem("loginTimestamp");
-          alert("Sesi Anda telah berakhir. Silakan login kembali.");
-          window.location.replace("index.html");
-          return false; // Sesi kadaluarsa
-        }
+    /** 1. (Req 1) Membuat inisial dari nama */
+    function getInitials(name) {
+      if (!name) return "..";
+      const parts = name.split(' ');
+      let initials = parts[0].charAt(0);
+      if (parts.length > 1) {
+        initials += parts[parts.length - 1].charAt(0);
       }
-      return true; // Sesi masih valid
+      return initials.toUpperCase();
+    }
+    
+    /** 2. (Req 6) Mendapatkan harga paket (ASUMSI) */
+    // Anda harus melengkapi daftar ini sesuai data Anda
+    function getPaketPrice(paketName) {
+        const prices = {
+            "(107) Jet20 Mbps": "Rp180.000",
+            "(146) Plus Value30 Mbps": "Rp210.000",
+            "(108) Value30 Mbps": "Rp227.550", // Sesuai contoh Anda
+            "(109) Fast50 Mbps": "Rp300.000",
+            "(127) Nova100 Mbps Reg": "Rp450.000",
+            "(133) MyGamers250 Mbps": "Rp700.000",
+            "(138) Prime500 Mbps": "Rp1.200.000"
+            // Tambahkan paket lainnya di sini
+        };
+        return prices[paketName] || "Harga tidak diatur";
     }
 
-    async function fetchData() {
-        // Tampilkan pesan loading
-        loadingMessageEl.style.display = 'block';
-        errorMessageEl.style.display = 'none';
-        noDataMessageEl.style.display = 'none';
-        
-        // Dapatkan data pengguna yang sedang login
-        const { data: getUser, error: authError } = await client.auth.getUser();
-        if (authError || !getUser.user) {
-            errorMessageEl.textContent = 'Anda harus login untuk melihat data ini.';
-            errorMessageEl.style.display = 'block';
-            return;
-        }
-        const userUID = getUser.user.id;
-        
-        // Ambil data pelanggan yang sesuai dengan user yang login
-        const { data: pelangganData, error: pelangganError } = await client
-            .from('pelanggan')
-            .select('id, nama_lengkap, alamat, hp_wa, hp_dial, tanggal') // Tambahkan 'id' dan 'tanggal'
-            .eq('sales_id', userUID) // Filter data berdasarkan user yang login
-            .order('tanggal', { ascending: false }); // Urutkan berdasarkan tanggal
+    /** 3. (Req 6) Merender daftar pelanggan ke HTML */
+    function renderList(dataToRender) {
+      // Bersihkan daftar sebelum render
+      pelangganList.innerHTML = '';
+      
+      // Sembunyikan pesan status
+      loadingMessageEl.style.display = 'none';
+      errorMessageEl.style.display = 'none';
+      noDataMessageEl.style.display = 'none';
 
-        loadingMessageEl.style.display = 'none';
-
-        if (pelangganError) {
-            console.error('Error fetching data:', pelangganError);
-            errorMessageEl.textContent = 'Gagal memuat data: ' + pelangganError.message;
-            errorMessageEl.style.display = 'block';
-            return;
-        }
-
-        // Perbarui tampilan dengan data baru
-        pelangganList.innerHTML = ''; // Bersihkan konten sebelumnya
-
-        if (pelangganData.length === 0) {
-            noDataMessageEl.style.display = 'block';
+      if (dataToRender.length === 0) {
+        // Tampilkan pesan 'tidak ada data'
+        // Jika allPelanggan > 0, berarti ini hasil filter, jika tidak, memang datanya kosong
+        if (allPelanggan.length > 0) {
+            noDataMessageEl.textContent = "Tidak ada pelanggan yang cocok dengan pencarian Anda.";
         } else {
-            // Hitung total data bulan ini dan hari ini
-            const today = new Date();
-            const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-            
-            let bulanIniCount = 0;
-            let hariIniCount = 0;
-            
-            pelangganData.forEach(pelanggan => {
-                const pelangganDate = new Date(pelanggan.tanggal);
-                
-                // Hitung data bulan ini
-                if (pelangganDate >= startOfMonth) {
-                    bulanIniCount++;
-                }
-                
-                // Hitung data hari ini
-                if (pelangganDate.toDateString() === today.toDateString()) {
-                    hariIniCount++;
-                }
-                
-                // Gunakan <a> untuk membuat kartu dapat diklik
-                const card = document.createElement('a');
-                card.href = `detail.html?id=${pelanggan.id}`;
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="text-group">
-                        <div class="name">${pelanggan.nama_lengkap}</div>
-                        <div class="address">${pelanggan.alamat}</div>
-                        <div class="phone-group">
-                            <span>WA: ${pelanggan.hp_wa || '-'}</span><br>
-                            <span>Dial: ${pelanggan.hp_dial || '-'}</span>
-                        </div>
-                    </div>
-                    <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                `;
-                pelangganList.appendChild(card);
-            });
-
-            // Perbarui statistik di halaman
-            bulanIniCountEl.textContent = bulanIniCount;
-            hariIniCountEl.textContent = hariIniCount;
+            noDataMessageEl.textContent = "Belum ada data pelanggan yang tersedia.";
         }
+        noDataMessageEl.style.display = 'block';
+      } else {
+        dataToRender.forEach(pelanggan => {
+          const card = document.createElement('div');
+          card.className = 'customer-card';
+
+          const paketPrice = getPaketPrice(pelanggan.paket_internet);
+          
+          // (Req 6) Dapatkan nama kota. Jika tidak ada, pakai alamat, jika tidak ada, 'Lokasi tidak ada'
+          // 'kota' adalah nama alias dari join tabel
+          const cityName = pelanggan.kota ? pelanggan.kota.nama : (pelanggan.alamat || 'Lokasi tidak ada');
+
+          // (Req 6) ASUMSI: Tombol Detail/Edit
+          // Saya berasumsi ada kolom 'is_complete' di tabel Anda
+          // Jika tidak ada, ganti `pelanggan.is_complete` dengan `true` agar semua tombol 'Detail'
+          const isComplete = pelanggan.is_complete === true; // Ganti ini jika perlu
+
+          const buttonHtml = isComplete
+            ? `<a href="detail.html?id=${pelanggan.id}" class="btn btn-detail">Detail</a>`
+            : `<a href="input-data.html?edit_id=${pelanggan.id}" class="btn btn-edit">Edit</a>`; // Asumsi link edit
+
+          // (Req 6) ASUMSI: Box 'Harap dilengkapi'
+          const statusBoxHtml = !isComplete
+            ? `<div class="status-box">Harap dilengkapi</div>`
+            : '';
+            
+          card.innerHTML = `
+            <div class="card-row1">
+              <div class="name">${pelanggan.nama_lengkap.toUpperCase()}</div>
+              <div class="city-tag">${cityName}</div>
+            </div>
+            <div class="card-row2">
+              <div class="paket">${pelanggan.paket_internet || 'Paket tidak diatur'}</div>
+              <div class="price">${paketPrice}</div>
+              ${statusBoxHtml}
+            </div>
+            <div class="card-row3">
+              ${buttonHtml}
+            </div>
+          `;
+          pelangganList.appendChild(card);
+        });
+      }
     }
 
+    /** 4. Fungsi utama untuk mengambil data */
+    async function fetchData() {
+      // Tampilkan pesan loading
+      loadingMessageEl.style.display = 'block';
+      
+      // (Req 1 & 2) Dapatkan data user yang sedang login
+      const { data: { user }, error: authError } = await client.auth.getUser();
+      if (authError || !user) {
+        errorMessageEl.textContent = 'Anda harus login untuk melihat data ini. Mengalihkan ke halaman login...';
+        errorMessageEl.style.display = 'block';
+        setTimeout(() => window.location.replace("index.html"), 2000);
+        return;
+      }
+      
+      // Ambil nama dari metadata (disimpan saat daftar)
+      const userName = user.user_metadata.name || 'Nama User';
+      avatarEl.textContent = getInitials(userName);
+      userFullnameEl.textContent = userName.toUpperCase();
+      
+      // (Req 6) MODIFIKASI QUERY:
+      // Kita tambahkan 'paket_internet', 'is_complete' (ASUMSI),
+      // dan join ke tabel 'kota' untuk mengambil 'nama' kota.
+      const { data: pelangganData, error: pelangganError } = await client
+        .from('pelanggan')
+        .select(`
+          id, 
+          nama_lengkap, 
+          alamat, 
+          tanggal, 
+          paket_internet,
+          is_complete, 
+          kota:kota_id ( nama )
+        `) // Query diubah
+        .eq('sales_id', user.id) // Filter data berdasarkan user yang login
+        .order('tanggal', { ascending: false }); // Urutkan berdasarkan tanggal
+
+      if (pelangganError) {
+        console.error('Error fetching data:', pelangganError);
+        errorMessageEl.textContent = 'Gagal memuat data: ' + pelangganError.message;
+        errorMessageEl.style.display = 'block';
+        loadingMessageEl.style.display = 'none';
+        return;
+      }
+      
+      // Simpan data ke variabel global
+      allPelanggan = pelangganData;
+
+      // (Req 4 & 5) Hitung Statistik
+      const today = new Date();
+      const currentMonthIndex = today.getMonth(); // 0-11
+      const currentYear = today.getFullYear();
+      
+      // Judul Progress Card
+      const monthName = today.toLocaleString('id-ID', { month: 'long' });
+      progressTitleEl.textContent = `Progres ${monthName} ${currentYear}`;
+
+      // Tentukan awal triwulan
+      let quarterMonthStart;
+      if (currentMonthIndex < 3) quarterMonthStart = 0; // Q1 (Jan)
+      else if (currentMonthIndex < 6) quarterMonthStart = 3; // Q2 (Apr)
+      else if (currentMonthIndex < 9) quarterMonthStart = 6; // Q3 (Jul)
+      else quarterMonthStart = 9; // Q4 (Oct)
+      
+      const startOfQuarter = new Date(currentYear, quarterMonthStart, 1);
+      const startOfMonth = new Date(currentYear, currentMonthIndex, 1);
+      
+      let triwulanCount = 0;
+      let bulanIniCount = 0;
+      let hariIniCount = 0;
+
+      allPelanggan.forEach(pelanggan => {
+        const pelangganDate = new Date(pelanggan.tanggal);
+        
+        if (pelangganDate >= startOfQuarter) {
+          triwulanCount++;
+        }
+        if (pelangganDate >= startOfMonth) {
+          bulanIniCount++;
+        }
+        if (pelangganDate.toDateString() === today.toDateString()) {
+          hariIniCount++;
+        }
+      });
+
+      // Perbarui statistik di halaman
+      triwulanCountEl.textContent = triwulanCount;
+      bulanIniCountEl.textContent = bulanIniCount;
+      hariIniCountEl.textContent = hariIniCount;
+
+      // Render daftar awal
+      renderList(allPelanggan);
+    }
+    
+    // --- Event Listeners ---
+
+    // (Req 3) Event listener untuk search bar
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      
+      if (searchTerm === "") {
+        renderList(allPelanggan); // Tampilkan semua jika search kosong
+        return;
+      }
+      
+      const filteredData = allPelanggan.filter(p => 
+        p.nama_lengkap.toLowerCase().includes(searchTerm) ||
+        (p.alamat && p.alamat.toLowerCase().includes(searchTerm)) ||
+        (p.kota && p.kota.nama.toLowerCase().includes(searchTerm)) ||
+        (p.paket_internet && p.paket_internet.toLowerCase().includes(searchTerm))
+      );
+      
+      renderList(filteredData);
+    });
+    
+    // (Req 7) Event listener untuk Tombol Akun/Logout
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const yakin = confirm("Apakah Anda yakin ingin keluar?");
+        if (yakin) {
+            await client.auth.signOut();
+            window.location.replace("index.html");
+        }
+    });
+
+    // --- Panggil Fungsi Utama ---
     fetchData();
   </script>
 </body>
 </html>
-
-
-
