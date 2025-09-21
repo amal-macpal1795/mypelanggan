@@ -512,8 +512,8 @@
           kota:kota_id ( nama )
         `) // Query diubah
         .eq('sales_id', user.id) // Filter data berdasarkan user yang login
-        .order('tanggal', { ascending: false }); // Urutkan berdasarkan tanggal
-
+        .order('created_at', { ascending: false }); // Urutkan berdasarkan WAKTU INPUT
+      
       if (pelangganError) {
         console.error('Error fetching data:', pelangganError);
         errorMessageEl.textContent = 'Gagal memuat data: ' + pelangganError.message;
@@ -610,6 +610,7 @@
   </script>
 </body>
 </html>
+
 
 
 
