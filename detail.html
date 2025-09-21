@@ -212,7 +212,7 @@
 
       <div class="info-item">
         <div class="label">Metode Pembayaran</div>
-        <div class="value"><span id="metode_pembayaran">Memuat...</span></div>
+        <div class="value"><span id="metode_bayar">Memuat...</span></div>
       </div>
 
       <div class="info-item">
@@ -281,7 +281,7 @@
       document.getElementById('paket_internet').textContent = data.paket_internet;
       document.getElementById('paket_tv').textContent = data.paket_tv;
       document.getElementById('addon').textContent = data.addon && data.addon.length > 0 ? data.addon.join(', ') : 'Tidak ada';
-      document.getElementById('metode_pembayaran').textContent = data.metode_bayar;
+      document.getElementById('metode_bayar').textContent = data.metode_bayar;
       document.getElementById('promo').textContent = data.promo ? 'Ikut Promo' : '-';
     }
 
@@ -289,3 +289,4 @@
   </script>
 </body>
 </html>
+
