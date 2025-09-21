@@ -3,155 +3,198 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar Akun</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>Daftar Akun Sales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
     body {
-      background: #f4f6f9;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #d88efa, #ab48d9);
+      background-attachment: fixed;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .register-container {
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      color: white;
+    }
+    .header {
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 10px 0;
+    }
+    .header p {
+      font-size: 16px;
+      font-weight: 400;
+      opacity: 0.9;
       margin: 0;
     }
     .card {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-    }
-    h2 {
-      margin-bottom: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     }
     .form-group {
-      margin-bottom: 15px;
+      position: relative;
+      margin-bottom: 20px;
       text-align: left;
     }
-    label {
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 6px;
-      display: block;
+    .form-group i {
+      position: absolute;
+      left: 15px;
+      top: 14px;
+      color: rgba(255, 255, 255, 0.7);
     }
     input {
       width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
+      padding: 12px 12px 12px 45px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       font-size: 14px;
+      font-family: 'Poppins', sans-serif;
       outline: none;
       box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #28a745;
+      background: rgba(255, 255, 255, 0.1);
       color: white;
+      transition: border 0.3s;
+    }
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    input:focus {
+      border-color: white;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: white;
+      color: #8119b5;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 16px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
+      transition: transform 0.2s;
     }
-    button:hover {
-      background: #1e7e34;
-    }
-    .error {
-      color: red;
-      margin-top: 10px;
-      font-size: 13px;
+    .submit-btn:hover {
+      transform: scale(1.03);
     }
     .link {
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 14px;
     }
     .link a {
-      color: #007bff;
+      color: white;
+      font-weight: 600;
       text-decoration: none;
     }
     .link a:hover {
       text-decoration: underline;
     }
+    .error {
+      color: #ffdddd;
+      background: rgba(255, 0, 0, 0.2);
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-size: 13px;
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Daftar Akun</h2>
-    <div class="form-group">
-      <label for="name">Nama</label>
-      <input type="text" id="name" placeholder="Masukkan nama lengkap">
+  <div class="register-container">
+    <div class="header">
+      <h1>Buat Akun Baru</h1>
+      <p>Hanya butuh beberapa detik</p>
     </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" placeholder="Masukkan email">
+    <div class="card">
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="name" placeholder="Nama Lengkap" required>
+        </div>
+        <div class="form-group">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" id="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="repassword" placeholder="Ulangi Password" required>
+        </div>
+        <button type="submit" id="registerBtn" class="submit-btn">Daftar</button>
+      </form>
+      <div class="error" id="error"></div>
+      <div class="link">Sudah punya akun? <a href="index.html">Login disini</a></div>
     </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Masukkan password">
-    </div>
-    <div class="form-group">
-      <label for="repassword">Re-enter Password</label>
-      <input type="password" id="repassword" placeholder="Ulangi password">
-    </div>
-    <button id="registerBtn">Daftar</button>
-    <div class="error" id="error"></div>
-    <div class="link">Sudah punya akun? <a href="index.html">Login disini</a></div>
   </div>
 
-  <!-- Supabase CDN -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const { createClient } = supabase;
-
-    // Ganti dengan Project URL dan anon public key dari Supabase kamu
-    // Bisa ditemukan di: Dashboard → Project Settings → API
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
-
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX-a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = createClient(supabaseUrl, supabaseKey);
 
-    document.getElementById("registerBtn").addEventListener("click", async () => {
+    const registerForm = document.getElementById("registerForm");
+    const registerBtn = document.getElementById("registerBtn");
+    const errorDiv = document.getElementById("error");
+
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
       const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
       const repassword = document.getElementById("repassword").value;
-      const errorDiv = document.getElementById("error");
 
-      errorDiv.textContent = ""; // reset error
+      errorDiv.style.display = 'none';
 
       if (!name || !email || !password || !repassword) {
         errorDiv.textContent = "Semua field harus diisi!";
+        errorDiv.style.display = 'block';
         return;
       }
       if (password !== repassword) {
         errorDiv.textContent = "Password tidak sama!";
+        errorDiv.style.display = 'block';
         return;
       }
+      
+      registerBtn.textContent = "Mendaftarkan...";
+      registerBtn.disabled = true;
 
-      try {
-        const { data, error } = await client.auth.signUp({
-          email: email,
-          password: password,
-          options: {
-            data: {
-              name: name // simpan nama user di metadata Supabase
-            }
-          }
-        });
+      const { data, error } = await client.auth.signUp({
+        email: email,
+        password: password,
+        options: { data: { name: name } }
+      });
 
-        if (error) {
-          errorDiv.textContent = "Pendaftaran gagal: " + error.message;
-        } else {
-          // Redirect ke halaman login setelah daftar berhasil
-          window.location.href = "dashboard.html";
-        }
-      } catch (err) {
-        console.error("Supabase error:", err);
-        errorDiv.textContent = "Pendaftaran gagal: " + err.message;
+      if (error) {
+        errorDiv.textContent = "Pendaftaran gagal: " + error.message;
+        errorDiv.style.display = 'block';
+        registerBtn.textContent = "Daftar";
+        registerBtn.disabled = false;
+      } else {
+        localStorage.setItem("userUID", data.user.id);
+        localStorage.setItem("loginTimestamp", new Date().getTime());
+        window.location.href = "dashboard.html";
       }
     });
   </script>
