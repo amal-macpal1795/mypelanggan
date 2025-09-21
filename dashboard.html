@@ -20,10 +20,16 @@
     }
     body {
       margin: 0;
-      /* Tambahkan padding di atas dan bawah untuk memberi ruang bagi header & bottom-nav */
       padding: 180px 0 100px 0; 
       font-family: 'Poppins', sans-serif;
-      background: background: linear-gradient(180deg, #d88efa, #ab48d9);
+  
+      /* --- BAGIAN YANG DIUBAH --- */
+      /* Warna solid sebagai fallback jika gradien gagal */
+      background-color: #ab48d9; 
+  
+      /* Terapkan gradien secara eksplisit sebagai gambar */
+      background-image: linear-gradient(180deg, #d88efa, #ab48d9);
+  
       background-attachment: fixed;
     }
     * {
@@ -611,6 +617,7 @@
   </script>
 </body>
 </html>
+
 
 
 
