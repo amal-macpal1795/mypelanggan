@@ -549,18 +549,21 @@
       let hariIniCount = 0;
 
       allPelanggan.forEach(pelanggan => {
-        const pelangganDate = new Date(pelanggan.tanggal);
+    // Variabel ini harus dibuat di paling atas agar bisa dipakai semua
+    const tanggalPemasangan = new Date(pelanggan.tanggal);
+    
+    // Kalkulasi Triwulan & Bulanan (sekarang aman)
+    if (tanggalPemasangan >= startOfQuarter) triwulanCount++;
+    if (tanggalPemasangan >= startOfMonth) bulanIniCount++;
+    
+    // Kalkulasi Harian (kode perbaikan dari sebelumnya)
+    if (pelanggan.created_at) {
         const tanggalDibuat = new Date(pelanggan.created_at);
-        
-        // Statistik Triwulan & Bulanan tetap berdasarkan TANGGAL PEMASANGAN
-        if (tanggalPemasangan >= startOfQuarter) triwulanCount++;
-        if (tanggalPemasangan >= startOfMonth) bulanIniCount++;
-
-        // Statistik Harian sekarang berdasarkan TANGGAL DIBUAT
         if (tanggalDibuat.toDateString() === today.toDateString()) {
-          hariIniCount++;
+            hariIniCount++;
         }
-      });
+    }
+});
 
       // Perbarui statistik di halaman
       triwulanCountEl.textContent = triwulanCount;
@@ -607,5 +610,6 @@
   </script>
 </body>
 </html>
+
 
 
