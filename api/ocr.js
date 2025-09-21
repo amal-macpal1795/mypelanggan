@@ -1,5 +1,16 @@
 const { ImageAnnotatorClient } = require('@google-cloud/vision').v1p3beta1;
-const client = new ImageAnnotatorClient();
+let client;
+
+// Inisialisasi client dari variabel lingkungan
+try {
+  const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+  client = new ImageAnnotatorClient({ credentials });
+} catch (error) {
+  console.error('Failed to parse Google Cloud credentials from environment variable:', error);
+  // Tangani kesalahan, misalnya keluar dari aplikasi atau inisialisasi dengan cara lain
+  // Untuk Vercel, client akan dibuat saat permintaan pertama datang
+}
+
 
 module.exports = async (req, res) => {
   try {
