@@ -8,18 +8,24 @@
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      /* Background gradien ungu yang sama dengan dashboard */
-      background: linear-gradient(180deg, #d88efa, #ab48d9);
-      background-attachment: fixed;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+
+  /* --- Tambahan untuk Logo MyRepublic --- */
+  background: 
+    /* Logo roket transparan */
+    url('URL_LOGO_MYREPUBLIC_ROCKET_DISINI') no-repeat center 20% / 200px rgba(0,0,0,0.1), /* Ganti URL ini! */
+    /* Background gradien ungu */
+    linear-gradient(180deg, #d88efa, #ab48d9);
+  /* --- Akhir Tambahan --- */
+}
     .login-container {
       width: 100%;
       max-width: 400px;
@@ -186,3 +192,4 @@
   </script>
 </body>
 </html>
+
