@@ -145,18 +145,24 @@
       position: relative;
     }
 
-    /* Kotak Patokan OCR yang digabung */
-    .ocr-region-combined {
+    /* Kotak Patokan OCR */
+    .ocr-region {
         position: absolute;
         border: 1px dashed rgba(255, 255, 255, 0.7);
         box-sizing: border-box;
-        /* Menggunakan pengukuran baru */
-        left: 23.36%; /* 2.0cm / 8.56cm */
-        right: 29.21%; /* 2.5cm / 8.56cm */
-        top: 14.82%; /* 0.8cm / 5.398cm */
-        bottom: 68.58%; /* 3.7cm / 5.398cm */
+    }
+    /* Posisi berdasarkan pengukuran dari user */
+    .nik-frame {
+        left: 23.36%;
+        top: 14.82%;
         width: 47.43%;
-        height: 16.59%;
+        height: 9.26%;
+    }
+    .nama-frame {
+        left: 23.36%;
+        top: 24.08%;
+        width: 47.43%;
+        height: 11.08%;
     }
 
     #camera-capture-btn {
@@ -292,7 +298,8 @@
     <video id="camera-view" autoplay playsinline></video>
     <div class="camera-overlay">
       <div class="ktp-frame">
-        <div class="ocr-region-combined"></div>
+        <div class="ocr-region nik-frame"></div>
+        <div class="ocr-region nama-frame"></div>
       </div>
     </div>
     <button id="camera-capture-btn" class="scan-btn">Ambil Foto</button>
@@ -320,7 +327,7 @@
     const alamatInput = document.getElementById('alamat');
     const ktpFrame = document.querySelector('.ktp-frame');
     let stream;
-
+    
     // Fungsi untuk membuka kamera
     async function openCamera() {
       try {
@@ -359,62 +366,69 @@
         video.srcObject.getTracks().forEach(track => track.stop());
         cameraContainer.style.display = 'none';
         
-        // Mulai proses OCR
         ocrStatus.textContent = 'Menganalisis teks dari foto... Mohon tunggu.';
         ocrStatusOverlay.textContent = 'Menganalisis teks dari foto...';
         ocrStatusOverlay.style.display = 'block';
         
         try {
-            // Konversi pengukuran cm ke piksel berdasarkan lebar kanvas 800px
-            const ktpWidthCm = 8.56;
-            const ktpHeightCm = 5.398;
+            // Logika pemindaian dua tahap
+            // Tahap 1: Pindai seluruh gambar untuk menemukan posisi kata kunci "NIK" dan "Nama"
+            const { data: { words } } = await Tesseract.recognize(canvas, 'ind', {
+                logger: m => console.log('Tahap 1 scan status:', m.status)
+            });
 
-            const scanRegion = {
-                left: Math.round((2.0 / ktpWidthCm) * ocrWidth),
-                top: Math.round((0.8 / ktpHeightCm) * ocrHeight),
-                width: Math.round(((ktpWidthCm - 2.0 - 2.5) / ktpWidthCm) * ocrWidth),
-                height: Math.round(((ktpHeightCm - 0.8 - 3.7) / ktpHeightCm) * ocrHeight)
+            // Temukan kata kunci
+            let nikKeyword = words.find(w => w.text.toUpperCase().includes('NIK'));
+            let namaKeyword = words.find(w => w.text.toUpperCase().includes('NAMA'));
+
+            if (!nikKeyword || !namaKeyword) {
+                ocrStatusOverlay.style.display = 'none';
+                ocrStatus.textContent = 'Kata kunci NIK atau Nama tidak ditemukan. Coba foto ulang.';
+                return;
+            }
+
+            // Tahap 2: Pindai area spesifik di sebelah kanan kata kunci
+            const nikRegion = {
+                left: nikKeyword.bbox.x1, // Mulai dari ujung kanan kata "NIK"
+                top: nikKeyword.bbox.y0,
+                width: ocrWidth - nikKeyword.bbox.x1, // Sampai ujung kanan gambar
+                height: nikKeyword.bbox.y1 - nikKeyword.bbox.y0
+            };
+
+            const namaRegion = {
+                left: namaKeyword.bbox.x1,
+                top: namaKeyword.bbox.y0,
+                width: ocrWidth - namaKeyword.bbox.x1,
+                height: namaKeyword.bbox.y1 - namaKeyword.bbox.y0
             };
             
-            // Panggil Tesseract hanya untuk satu area
-            const { data: { text } } = await Tesseract.recognize(canvas, 'ind', {
-                logger: m => console.log('OCR status:', m.status),
-                rectangle: scanRegion
+            // Pindai area NIK
+            const { data: { text: nikText } } = await Tesseract.recognize(canvas, 'ind', {
+                logger: m => console.log('Tahap 2 NIK scan status:', m.status),
+                rectangle: nikRegion
+            });
+
+            // Pindai area Nama
+            const { data: { text: namaText } } = await Tesseract.recognize(canvas, 'ind', {
+                logger: m => console.log('Tahap 2 Nama scan status:', m.status),
+                rectangle: namaRegion
             });
 
             ocrStatusOverlay.style.display = 'none';
-            
-            if (text) {
-                console.log("Hasil OCR dari area gabungan:", text);
-                const lines = text.split('\n');
 
-                let nikFound = false;
-                let namaFound = false;
-                
-                // Cari NIK dan Nama dalam satu blok teks
-                for (let i = 0; i < lines.length; i++) {
-                    const line = lines[i].trim();
-                    const nikMatch = line.replace(/[^0-9]/g, '');
-                    
-                    if (nikMatch.length === 16 && !nikFound) {
-                        nikInput.value = nikMatch;
-                        nikFound = true;
-                    }
-                    
-                    if (line.toUpperCase().includes('NAMA') && lines[i + 1] && !namaFound) {
-                        namaLengkapInput.value = lines[i + 1].trim().toUpperCase();
-                        namaFound = true;
-                    }
+            if (nikText) {
+                const cleanNik = nikText.replace(/[^0-9]/g, '');
+                if (cleanNik.length === 16) {
+                    nikInput.value = cleanNik;
                 }
-
-                if(nikFound && namaFound) {
-                    ocrStatus.textContent = 'Pemindaian NIK dan Nama selesai. Harap periksa kembali data!';
-                } else {
-                    ocrStatus.textContent = 'Beberapa data tidak ditemukan. Silakan isi manual.';
-                }
-            } else {
-                ocrStatus.textContent = 'Gagal memindai. Coba foto ulang dengan pencahayaan yang lebih baik.';
             }
+            if (namaText) {
+                namaLengkapInput.value = namaText.trim().toUpperCase();
+            }
+
+            ocrStatus.textContent = 'Pemindaian selesai. Harap periksa kembali data!';
+            
+            cameraContainer.style.display = 'none';
         } catch (ocrError) {
             ocrStatusOverlay.style.display = 'none';
             ocrStatus.textContent = 'Terjadi kesalahan saat memproses OCR.';
@@ -422,7 +436,6 @@
         }
     }
 
-    // Event listener untuk tombol utama
     scanKtpBtn.addEventListener('click', openCamera);
     captureBtn.addEventListener('click', captureAndRecognize);
 
