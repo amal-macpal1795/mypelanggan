@@ -23,12 +23,18 @@
       padding: 180px 0 100px 0; 
       font-family: 'Poppins', sans-serif;
   
-      /* --- BAGIAN YANG DIUBAH --- */
-      /* Warna solid sebagai fallback jika gradien gagal */
-      background-color: #ab48d9; 
+      /* --- Background Abstrak Geometris --- */
   
-      /* Terapkan gradien secara eksplisit sebagai gambar */
-      background-image: linear-gradient(180deg, #d88efa, #ab48d9);
+      /* Warna dasar */
+      background-color: #1a092a;
+  
+      /* Tumpukan beberapa gradien lingkaran (radial) */
+      background-image: 
+      /* Lingkaran besar di kiri atas */
+      radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%),
+    
+      /* Lingkaran besar di kanan bawah */
+      radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
   
       background-attachment: fixed;
     }
@@ -617,6 +623,7 @@
   </script>
 </body>
 </html>
+
 
 
 
