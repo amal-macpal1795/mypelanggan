@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <title>Detail Pelanggan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
     body {
@@ -20,285 +19,273 @@
     .container {
       width: 100%;
       max-width: 500px;
-    }
-
-    h1 {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: #333;
-      text-align: center;
-    }
-
-    .card {
+      /* (No. 1) Padding sekarang langsung di container, karena card dihilangkan */
       background: #fff;
       border-radius: 16px;
+      padding: 24px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      padding: 20px;
+    }
+
+    /* (No. 2) Judul utama tidak bold */
+    h1 {
+      font-size: 22px;
+      font-weight: 500; /* Normal weight */
+      margin-bottom: 24px;
+      color: #333;
+      text-align: center;
     }
 
     .section-title {
       font-size: 16px;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       color: #222;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
     }
 
     .info-item {
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .copy-btn {
       cursor: pointer;
       font-size: 14px;
-      color: #4f46e5;
+      color: #8119b5;
       user-select: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .copy-btn:hover {
+      opacity: 1;
     }
 
+    /* (No. 3) Gaya untuk label judul informasi */
     .label {
-      font-size: 14px;
+      font-size: 12px;   /* Dikecilkan */
       font-weight: 500;
-      color: #333;
+      color: #888;     /* Warna abu-abu */
+      margin-bottom: 4px;
     }
 
+    /* (No. 4) Gaya untuk nilai/informasi pelanggan */
     .value {
-      font-size: 13px;
-      color: #666;
-      margin-top: 3px;
+      font-size: 16px;  /* Lebih besar dari label */
+      font-weight: 600;
+      color: #222;     /* Warna hitam */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* (No. 5) Class untuk membuat teks menjadi kapital */
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    /* (No. 6) Class khusus untuk font NIK */
+    .nik-font {
+      font-family: 'OCR A Extended', 'SF Mono', 'Courier New', monospace;
+      font-weight: 700; /* Bold */
+      letter-spacing: 1.5px; /* Jarak antar huruf */
+      font-size: 17px;
     }
 
     .divider {
       border-top: 1px solid #e5e5e5;
-      margin: 20px 0;
-    }
-
-    .loading-message, .error-message {
-      text-align: center;
-      color: #777;
-      margin-top: 20px;
-      font-size: 14px;
+      margin: 24px 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 id="pageTitle">Detail Pelanggan</h1>
+    <h1>Detail Pelanggan</h1>
 
-    <div id="loading" class="loading-message">Memuat data...</div>
-    <div id="error" class="error-message" style="display: none;"></div>
+    <div class="section">
+      <div class="section-title">Info Pelanggan</div>
+
+      <div class="info-item">
+        <div class="label">Tanggal Pemesanan</div>
+        <div class="value">
+          <span id="tanggal_pemesanan">Memuat...</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="label">NIK</div>
+        <div class="value">
+          <span id="nik" class="nik-font">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="label">Nama Lengkap</div>
+        <div class="value">
+          <span id="nama_lengkap" class="uppercase">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="label">Email</div>
+        <div class="value">
+          <span id="email">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <div class="label">Nomor Handphone (WA/SMS)</div>
+        <div class="value">
+          <span id="hp_wa">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <div class="label">Nomor Handphone (Dial Phone)</div>
+        <div class="value">
+          <span id="hp_dial">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
+        </div>
+      </div>
+    </div>
     
-    <div id="detailCard" class="card" style="display: none;">
-      <div class="section">
-        <div class="section-title">Info Pelanggan</div>
+    <div class="divider"></div>
 
-        <div class="info-item">
-          <div class="label">Tanggal Pemesanan</div>
-          <div class="value" id="tanggal"></div>
+    <div class="section">
+      <div class="section-title">Info Alamat</div>
+
+      <div class="info-item">
+        <div class="label">Kota</div>
+        <div class="value">
+          <span id="kota" class="uppercase">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
         </div>
+      </div>
 
-        <div class="info-item">
-          <div class="label">NIK</div>
-          <div class="value">
-            <span id="nik"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
+      <div class="info-item">
+        <div class="label">Perumahan/Cluster/Apartment</div>
+        <div class="value">
+          <span id="cluster">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
         </div>
+      </div>
 
-        <div class="info-item">
-          <div class="label">Nama Lengkap</div>
-          <div class="value">
-            <span id="nama_lengkap"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
+      <div class="info-item">
+        <div class="label">Homepass</div>
+        <div class="value">
+          <span id="homepass" class="uppercase">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
         </div>
+      </div>
 
-        <div class="info-item">
-          <div class="label">Email</div>
-          <div class="value">
-            <span id="email"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
+      <div class="info-item">
+        <div class="label">Alamat Pemasangan</div>
+        <div class="value">
+          <span id="alamat" class="uppercase">Memuat...</span>
+          <span class="copy-btn" onclick="copyText(this)"><i class="fa-solid fa-copy"></i></span>
         </div>
+      </div>
+    </div>
 
-        <div class="info-item">
-          <div class="label">Nomor Handphone (WA/SMS)</div>
-          <div class="value">
-            <span id="hp_wa"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
-        </div>
+    <div class="divider"></div>
 
-        <div class="info-item">
-          <div class="label">Nomor Handphone (Dial Phone)</div>
-          <div class="value">
-            <span id="hp_dial"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
-        </div>
+    <div class="section">
+      <div class="section-title">Info Produk</div>
 
-        <div class="info-item">
-          <div class="label">Kota</div>
-          <div class="value">
-            <span id="kota"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
-        </div>
+      <div class="info-item">
+        <div class="label">Paket Internet</div>
+        <div class="value"><span id="paket_internet">Memuat...</span></div>
+      </div>
 
-        <div class="info-item">
-          <div class="label">Perumahan/Cluster/Apartment</div>
-          <div class="value">
-            <span id="cluster"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
-        </div>
+      <div class="info-item">
+        <div class="label">Paket TV</div>
+        <div class="value"><span id="paket_tv">Memuat...</span></div>
+      </div>
 
-        <div class="info-item">
-          <div class="label">Homepass</div>
-          <div class="value">
-            <span id="homepass"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
-        </div>
+      <div class="info-item">
+        <div class="label">Add On</div>
+        <div class="value"><span id="addon">Memuat...</span></div>
+      </div>
 
-        <div class="info-item">
-          <div class="label">Alamat Pemasangan</div>
-          <div class="value">
-            <span id="alamat"></span>
-            <span class="copy-btn" onclick="copyText(this)">&emsp;<i class="fa-solid fa-copy"></i></span>
-          </div>
-        </div>
+      <div class="info-item">
+        <div class="label">Metode Pembayaran</div>
+        <div class="value"><span id="metode_pembayaran">Memuat...</span></div>
+      </div>
 
-      <div class="divider"></div>
-
-      <div class="section">
-        <div class="section-title">Info Produk</div>
-
-        <div class="info-item">
-          <div class="label">Paket</div>
-          <div class="value" id="paket_internet"></div>
-        </div>
-
-        <div class="info-item">
-          <div class="label">Paket TV</div>
-          <div class="value" id="paket_tv"></div>
-        </div>
-
-        <div class="info-item">
-          <div class="label">Add On</div>
-          <div class="value" id="addon"></div>
-        </div>
-
-        <div class="info-item">
-          <div class="label">Metode Pembayaran</div>
-          <div class="value" id="metode_pembayaran"></div>
-        </div>
-
-        <div class="info-item">
-          <div class="label">Promo</div>
-          <div class="value" id="promo"></div>
-        </div>
+      <div class="info-item">
+        <div class="label">Promo</div>
+        <div class="value"><span id="promo">Memuat...</span></div>
       </div>
     </div>
   </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
+    function copyText(el) {
+      // Ambil teks dari elemen span di dalam div .value
+      const textToCopy = el.previousElementSibling.innerText;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const icon = el.querySelector("i");
+        icon.classList.remove("fa-copy");
+        icon.classList.add("fa-check");
+        setTimeout(() => {
+          icon.classList.remove("fa-check");
+          icon.classList.add("fa-copy");
+        }, 1200);
+      });
+    }
+    
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const detailCard = document.getElementById('detailCard');
-    const loadingMessage = document.getElementById('loading');
-    const errorMessage = document.getElementById('error');
-    
-    // Fungsi untuk mendapatkan ID dari URL
-    function getCustomerIdFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get('id');
+    async function loadCustomerDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const customerId = params.get('id');
+
+      if (!customerId) {
+        document.querySelector('.container').innerHTML = "<h1>ID Pelanggan tidak ditemukan.</h1>";
+        return;
+      }
+
+      const { data, error } = await client
+        .from('pelanggan')
+        .select(`
+          *,
+          kota:kota_id ( nama ),
+          cluster:cluster_id ( nama )
+        `)
+        .eq('id', customerId)
+        .single();
+
+      if (error) {
+        console.error("Gagal mengambil data:", error);
+        document.querySelector('.container').innerHTML = "<h1>Gagal memuat data pelanggan.</h1>";
+        return;
+      }
+
+      // Populate data
+      document.getElementById('tanggal_pemesanan').textContent = new Date(data.tanggal).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('nik').textContent = data.nik;
+      document.getElementById('nama_lengkap').textContent = data.nama_lengkap;
+      document.getElementById('email').textContent = data.email || '-';
+      document.getElementById('hp_wa').textContent = data.hp_wa || '-';
+      document.getElementById('hp_dial').textContent = data.hp_dial || '-';
+      document.getElementById('kota').textContent = data.kota ? data.kota.nama : 'Tidak diketahui';
+      document.getElementById('cluster').textContent = data.cluster ? data.cluster.nama : 'Tidak diketahui';
+      document.getElementById('homepass').textContent = data.homepass || '-';
+      document.getElementById('alamat').textContent = data.alamat || '-';
+      document.getElementById('paket_internet').textContent = data.paket_internet;
+      document.getElementById('paket_tv').textContent = data.paket_tv;
+      document.getElementById('addon').textContent = data.addon && data.addon.length > 0 ? data.addon.join(', ') : 'Tidak ada';
+      document.getElementById('metode_pembayaran').textContent = data.metode_bayar;
+      document.getElementById('promo').textContent = data.promo ? 'Ikut Promo' : '-';
     }
 
-    // Fungsi untuk mendapatkan detail pelanggan dari Supabase
-    async function fetchCustomerDetails(id) {
-        loadingMessage.style.display = 'block';
-        detailCard.style.display = 'none';
-        errorMessage.style.display = 'none';
-
-        if (!id) {
-            errorMessage.textContent = "ID pelanggan tidak ditemukan di URL.";
-            errorMessage.style.display = 'block';
-            loadingMessage.style.display = 'none';
-            return;
-        }
-
-        const { data, error } = await client
-            .from('pelanggan')
-            .select('*, kota(nama), cluster(nama)')
-            .eq('id', id)
-            .single();
-
-        loadingMessage.style.display = 'none';
-
-        if (error) {
-            console.error('Error fetching data:', error);
-            errorMessage.textContent = 'Gagal memuat detail pelanggan: ' + error.message;
-            errorMessage.style.display = 'block';
-            return;
-        }
-
-        if (!data) {
-            errorMessage.textContent = 'Data pelanggan tidak ditemukan.';
-            errorMessage.style.display = 'block';
-            return;
-        }
-
-        // Tampilkan data ke elemen HTML
-        document.getElementById('tanggal').textContent = new Date(data.tanggal).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
-        document.getElementById('nik').textContent = data.nik;
-        document.getElementById('nama_lengkap').textContent = data.nama_lengkap;
-        document.getElementById('email').textContent = data.email;
-        document.getElementById('hp_wa').textContent = data.hp_wa;
-        document.getElementById('hp_dial').textContent = data.hp_dial;
-        document.getElementById('homepass').textContent = data.homepass;
-        document.getElementById('alamat').textContent = data.alamat;
-        document.getElementById('paket_internet').textContent = data.paket_internet;
-        document.getElementById('paket_tv').textContent = data.paket_tv;
-        document.getElementById('metode_pembayaran').textContent = data.metode_pembayaran;
-        
-        // Menangani data relasi (Kota & Cluster)
-        document.getElementById('kota').textContent = data.kota?.nama || 'Tidak ada';
-        document.getElementById('cluster').textContent = data.cluster?.nama || 'Tidak ada';
-
-        // Menangani data Add On (jsonb)
-        if (data.addon && data.addon.length > 0) {
-            document.getElementById('addon').textContent = data.addon.join(', ');
-        } else {
-            document.getElementById('addon').textContent = 'Tidak ada';
-        }
-        
-        // Menangani data Promo (boolean)
-        document.getElementById('promo').textContent = data.promo ? 'Ya' : 'Tidak';
-
-        detailCard.style.display = 'block';
-    }
-
-    // Panggil fungsi saat halaman dimuat
-    const customerId = getCustomerIdFromUrl();
-    fetchCustomerDetails(customerId);
-
-    function copyText(el) {
-        const text = el.previousElementSibling.innerText;
-        navigator.clipboard.writeText(text).then(() => {
-          const icon = el.querySelector("i");
-          icon.classList.remove("fa-copy");
-          icon.classList.add("fa-check");
-          setTimeout(() => {
-            icon.classList.remove("fa-check");
-            icon.classList.add("fa-copy");
-          }, 1200);
-        });
-    }
+    document.addEventListener('DOMContentLoaded', loadCustomerDetail);
   </script>
-
 </body>
 </html>
-
