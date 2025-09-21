@@ -145,26 +145,6 @@
       position: relative;
     }
 
-    /* Kotak Patokan OCR */
-    .ocr-region {
-        position: absolute;
-        border: 1px dashed rgba(255, 255, 255, 0.7);
-        box-sizing: border-box;
-    }
-    /* Posisi berdasarkan pengukuran dari user */
-    .nik-frame {
-        left: 23.36%;
-        top: 14.82%;
-        width: 47.43%;
-        height: 9.26%;
-    }
-    .nama-frame {
-        left: 23.36%;
-        top: 24.08%;
-        width: 47.43%;
-        height: 11.08%;
-    }
-
     #camera-capture-btn {
       position: fixed;
       bottom: 50px;
@@ -298,9 +278,7 @@
     <video id="camera-view" autoplay playsinline></video>
     <div class="camera-overlay">
       <div class="ktp-frame">
-        <div class="ocr-region nik-frame"></div>
-        <div class="ocr-region nama-frame"></div>
-      </div>
+        </div>
     </div>
     <button id="camera-capture-btn" class="scan-btn">Ambil Foto</button>
     <canvas id="camera-canvas" style="display:none;"></canvas>
@@ -327,7 +305,7 @@
     const alamatInput = document.getElementById('alamat');
     const ktpFrame = document.querySelector('.ktp-frame');
     let stream;
-    
+
     // Fungsi untuk membuka kamera
     async function openCamera() {
       try {
@@ -372,14 +350,12 @@
         
         try {
             // Logika pemindaian dua tahap
-            // Tahap 1: Pindai seluruh gambar untuk menemukan posisi kata kunci "NIK" dan "Nama"
             const { data: { words } } = await Tesseract.recognize(canvas, 'ind', {
                 logger: m => console.log('Tahap 1 scan status:', m.status)
             });
 
-            // Temukan kata kunci
             let nikKeyword = words.find(w => w.text.toUpperCase().includes('NIK'));
-            let namaKeyword = words.find(w => w.text.toUpperCase().includes('NAMA'));
+            let namaKeyword = words.find(w => w.text.toUpperCase() === 'NAMA'); // Mencari kata 'NAMA' secara eksak
 
             if (!nikKeyword || !namaKeyword) {
                 ocrStatusOverlay.style.display = 'none';
@@ -387,19 +363,19 @@
                 return;
             }
 
-            // Tahap 2: Pindai area spesifik di sebelah kanan kata kunci
+            // Hitung area pemindaian untuk NIK dan Nama
             const nikRegion = {
-                left: nikKeyword.bbox.x1, // Mulai dari ujung kanan kata "NIK"
-                top: nikKeyword.bbox.y0,
-                width: ocrWidth - nikKeyword.bbox.x1, // Sampai ujung kanan gambar
-                height: nikKeyword.bbox.y1 - nikKeyword.bbox.y0
+                left: nikKeyword.bbox.x1, // Setelah kata "NIK"
+                top: nikKeyword.bbox.y0 - 5, // Sedikit ke atas untuk toleransi
+                width: ocrWidth - nikKeyword.bbox.x1,
+                height: nikKeyword.bbox.y1 - nikKeyword.bbox.y0 + 10 // Sedikit ke bawah untuk toleransi
             };
 
             const namaRegion = {
-                left: namaKeyword.bbox.x1,
-                top: namaKeyword.bbox.y0,
+                left: namaKeyword.bbox.x1, // Setelah kata "Nama"
+                top: namaKeyword.bbox.y0 - 5,
                 width: ocrWidth - namaKeyword.bbox.x1,
-                height: namaKeyword.bbox.y1 - namaKeyword.bbox.y0
+                height: namaKeyword.bbox.y1 - namaKeyword.bbox.y0 + 10
             };
             
             // Pindai area NIK
@@ -418,8 +394,8 @@
 
             if (nikText) {
                 const cleanNik = nikText.replace(/[^0-9]/g, '');
-                if (cleanNik.length === 16) {
-                    nikInput.value = cleanNik;
+                if (cleanNik.length >= 16) {
+                    nikInput.value = cleanNik.substring(0, 16);
                 }
             }
             if (namaText) {
@@ -427,8 +403,6 @@
             }
 
             ocrStatus.textContent = 'Pemindaian selesai. Harap periksa kembali data!';
-            
-            cameraContainer.style.display = 'none';
         } catch (ocrError) {
             ocrStatusOverlay.style.display = 'none';
             ocrStatus.textContent = 'Terjadi kesalahan saat memproses OCR.';
