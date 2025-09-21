@@ -91,89 +91,6 @@
       margin-top:10px; 
       text-align:center;
     }
-    .scan-btn {
-      width: 100%;
-      padding: 14px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-bottom: 10px;
-    }
-    .scan-btn:hover {
-      background: #0056b3;
-    }
-
-    /* CSS untuk Tampilan Kamera Layar Penuh */
-    .camera-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: none;
-      background-color: black;
-      z-index: 100;
-    }
-    #camera-view {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 101;
-    }
-    .camera-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 102;
-    }
-    .ktp-frame {
-      width: 90%;
-      max-width: 400px;
-      aspect-ratio: 1.586 / 1;
-      border: 2px solid white;
-      box-shadow: 0 0 0 1000px rgba(0,0,0,0.5);
-      border-radius: 10px;
-      position: relative;
-    }
-
-    #camera-capture-btn {
-      position: fixed;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 70px;
-      height: 70px;
-      background-color: white;
-      border-radius: 50%;
-      border: 5px solid rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      z-index: 103;
-      display: none;
-    }
-    #ocr-status-overlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 15px;
-      border-radius: 10px;
-      font-style: italic;
-      z-index: 104;
-      display: none;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
@@ -181,10 +98,6 @@
     <h1>Input Data Pelanggan</h1>
     <div class="card">
       <form id="pelangganForm">
-        <button type="button" id="scanKtpBtn" class="scan-btn">Pindai KTP</button>
-        <div id="ocr-status"></div>
-
-        <div class="divider"></div>
         <div class="section-title">Info Pelanggan</div>
         <div class="form-group">
           <label for="tanggal_pasang">Tanggal Pemasangan</label>
@@ -275,120 +188,12 @@
     </div>
   </div>
 
-  <div id="camera-container" class="camera-container">
-    <video id="camera-view" autoplay playsinline></video>
-    <div class="camera-overlay">
-      <div class="ktp-frame"></div>
-    </div>
-    <button id="camera-capture-btn" class="scan-btn">Ambil Foto</button>
-    <canvas id="camera-canvas" style="display:none;"></canvas>
-    <div id="ocr-status-overlay"></div>
-  </div>
-
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const scanKtpBtn = document.getElementById('scanKtpBtn');
-    const cameraContainer = document.getElementById('camera-container');
-    const video = document.getElementById('camera-view');
-    const captureBtn = document.getElementById('camera-capture-btn');
-    const canvas = document.getElementById('camera-canvas');
-    const ocrStatus = document.getElementById('ocr-status');
-    const ocrStatusOverlay = document.getElementById('ocr-status-overlay');
-    const nikInput = document.getElementById('nik');
-    const namaLengkapInput = document.getElementById('nama_lengkap');
-    const alamatInput = document.getElementById('alamat');
-    const ktpFrame = document.querySelector('.ktp-frame');
-    let stream;
-    let isCameraActive = false;
-
-    // Fungsi untuk membuka kamera
-    async function openCamera() {
-      try {
-        ocrStatus.textContent = 'Meminta akses kamera...';
-        cameraContainer.style.display = 'block';
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'environment',
-            width: { ideal: 1280 }, 
-            height: { ideal: 720 }
-          }
-        });
-        video.srcObject = stream;
-        captureBtn.style.display = 'block';
-        isCameraActive = true;
-        ocrStatus.textContent = '';
-      } catch (err) {
-        ocrStatus.textContent = 'Gagal mengakses kamera. Pastikan Anda memberikan izin.';
-        console.error('Error accessing camera:', err);
-        cameraContainer.style.display = 'none';
-      }
-    }
-
-    // Fungsi untuk mengambil foto dan memproses OCR
-    async function captureAndRecognize() {
-        video.pause();
-        captureBtn.style.display = 'none';
-        
-        const context = canvas.getContext('2d');
-        const ocrWidth = 800;
-        const ocrHeight = video.videoHeight * (ocrWidth / video.videoWidth);
-        
-        canvas.width = ocrWidth;
-        canvas.height = ocrHeight;
-        context.drawImage(video, 0, 0, ocrWidth, ocrHeight);
-        
-        // Hentikan stream kamera
-        stream.getTracks().forEach(track => track.stop());
-        cameraContainer.style.display = 'none';
-        isCameraActive = false;
-        
-        const imageBase64 = canvas.toDataURL('image/jpeg').split(',')[1];
-        
-        // Mulai proses OCR
-        ocrStatus.textContent = 'Menganalisis teks dari foto... Mohon tunggu.';
-        ocrStatusOverlay.textContent = 'Menganalisis teks dari foto...';
-        ocrStatusOverlay.style.display = 'block';
-        
-        try {
-            const response = await fetch('/api/ocr', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ imageBase64 })
-            });
-            const result = await response.json();
-            ocrStatusOverlay.style.display = 'none';
-            
-            if (result.success) {
-                const { nik, nama } = result.data;
-                nikInput.value = nik;
-                namaLengkapInput.value = nama;
-                
-                ocrStatus.textContent = 'Pemindaian selesai. Harap periksa kembali data!';
-            } else {
-                ocrStatus.textContent = result.message;
-            }
-        } catch (serverError) {
-            ocrStatusOverlay.style.display = 'none';
-            ocrStatus.textContent = 'Terjadi kesalahan saat menghubungi server OCR.';
-            console.error('Server Error:', serverError);
-        }
-        
-        // Kembalikan tombol ke kondisi awal
-        scanKtpBtn.textContent = 'Pindai KTP';
-        stream = null;
-    }
-
-    // Event listener untuk tombol utama
-    scanKtpBtn.addEventListener('click', openCamera);
-    captureBtn.addEventListener('click', captureAndRecognize);
-
-    // ... (Sisa kode loadKota, loadCluster, dan submit form Anda)
     async function loadKota() {
       const { data, error } = await client.from("kota").select("id,nama");
       if (error) { console.error("Error loading kota:", error.message); return; }
