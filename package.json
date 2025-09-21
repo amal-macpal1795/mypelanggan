@@ -1,0 +1,12 @@
+{
+  "name": "myrepublic-app",
+  "version": "1.0.0",
+  "description": "Sistem pencatatan pelanggan MyRepublic",
+  "main": "api/ocr.js",
+  "scripts": {
+    "start": "node api/ocr.js"
+  },
+  "dependencies": {
+    "@google-cloud/vision": "^4.1.0"
+  }
+}
