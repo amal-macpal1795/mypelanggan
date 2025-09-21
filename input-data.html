@@ -7,90 +7,89 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #fafafa;
-      display: flex;
-      justify-content: center;
-      padding: 20px;
+      margin:0; 
+      font-family:'Poppins',sans-serif; 
+      background:#fafafa; 
+      display:flex; 
+      justify-content:center; 
+      padding:20px;
     }
     .container {
-      width: 100%;
-      max-width: 500px;
-      position: relative;
+      width:100%; 
+      max-width:500px;
     }
     h1 {
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: #333;
-      text-align: center;
+      font-size:22px; 
+      font-weight:600; 
+      margin-bottom:20px; 
+      color:#333; 
+      text-align:center;
     }
     .card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      padding: 20px;
+      background:#fff; 
+      border-radius:16px; 
+      box-shadow:0 2px 10px rgba(0,0,0,0.08); 
+      padding:20px;
     }
     .section-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: #222;
+      font-size:16px; 
+      font-weight:600; 
+      margin-bottom:12px; 
+      color:#222;
     }
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom:14px;
     }
     label {
-      font-size: 14px;
-      font-weight: 500;
-      color: #333;
-      display: block;
-      margin-bottom: 6px;
+      font-size:14px; 
+      font-weight:500; 
+      color:#333; 
+      display:block; 
+      margin-bottom:6px;
     }
     input, select, textarea {
-      width: 95%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      font-size: 14px;
-      font-family: 'Poppins', sans-serif;
-      outline: none;
-      transition: border 0.2s;
+      width:95%; 
+      padding:12px; 
+      border-radius:10px; 
+      border:1px solid #ddd; 
+      font-size:14px; 
+      font-family:'Poppins',sans-serif; 
+      outline:none; 
+      transition:border 0.2s;
     }
     input:focus, select:focus, textarea:focus {
-      border-color: #4f46e5;
+      border-color:#4f46e5;
     }
     .divider {
-      border-top: 1px solid #e5e5e5;
-      margin: 20px 0;
+      border-top:1px solid #e5e5e5; 
+      margin:20px 0;
     }
     .submit-btn {
-      width: 100%;
-      padding: 14px;
-      background: #8119b5;
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
+      width:100%; 
+      padding:14px; 
+      background:#8119b5; 
+      color:#fff; 
+      border:none; 
+      border-radius:12px; 
+      font-size:15px; 
+      font-weight:500; 
+      cursor:pointer; 
+      transition:background 0.2s;
     }
     .submit-btn:hover {
       background: #550a7a;
     }
     .success {
-      color: green;
-      font-size: 14px;
-      margin-top: 10px;
-      text-align: center;
+      color:green; 
+      font-size:14px; 
+      margin-top:10px; 
+      text-align:center;
     }
     .error {
-      color: red;
-      font-size: 14px;
-      margin-top: 10px;
-      text-align: center;
+      color:red; 
+      font-size:14px; 
+      margin-top:10px; 
+      text-align:center;
     }
     .scan-btn {
       width: 100%;
@@ -107,6 +106,20 @@
     }
     .scan-btn:hover {
       background: #0056b3;
+    }
+    #camera-view {
+      display: none;
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    #ocr-status {
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+      color: #555;
     }
 
     /* CSS untuk Tampilan Kamera Layar Penuh */
@@ -144,7 +157,6 @@
       border-radius: 10px;
       position: relative;
     }
-
     #camera-capture-btn {
       position: fixed;
       bottom: 50px;
@@ -277,8 +289,7 @@
   <div id="camera-container" class="camera-container">
     <video id="camera-view" autoplay playsinline></video>
     <div class="camera-overlay">
-      <div class="ktp-frame">
-        </div>
+      <div class="ktp-frame"></div>
     </div>
     <button id="camera-capture-btn" class="scan-btn">Ambil Foto</button>
     <canvas id="camera-canvas" style="display:none;"></canvas>
@@ -286,7 +297,6 @@
   </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src='https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js'></script>
   <script>
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
@@ -305,20 +315,23 @@
     const alamatInput = document.getElementById('alamat');
     const ktpFrame = document.querySelector('.ktp-frame');
     let stream;
+    let isCameraActive = false;
 
     // Fungsi untuk membuka kamera
     async function openCamera() {
       try {
         ocrStatus.textContent = 'Meminta akses kamera...';
         cameraContainer.style.display = 'block';
-        video.srcObject = await navigator.mediaDevices.getUserMedia({
+        stream = await navigator.mediaDevices.getUserMedia({
           video: {
             facingMode: 'environment',
             width: { ideal: 1280 }, 
             height: { ideal: 720 }
           }
         });
+        video.srcObject = stream;
         captureBtn.style.display = 'block';
+        isCameraActive = true;
         ocrStatus.textContent = '';
       } catch (err) {
         ocrStatus.textContent = 'Gagal mengakses kamera. Pastikan Anda memberikan izin.';
@@ -341,75 +354,49 @@
         context.drawImage(video, 0, 0, ocrWidth, ocrHeight);
         
         // Hentikan stream kamera
-        video.srcObject.getTracks().forEach(track => track.stop());
+        stream.getTracks().forEach(track => track.stop());
         cameraContainer.style.display = 'none';
+        isCameraActive = false;
         
+        const imageBase64 = canvas.toDataURL('image/jpeg').split(',')[1];
+        
+        // Mulai proses OCR
         ocrStatus.textContent = 'Menganalisis teks dari foto... Mohon tunggu.';
         ocrStatusOverlay.textContent = 'Menganalisis teks dari foto...';
         ocrStatusOverlay.style.display = 'block';
         
         try {
-            // Logika pemindaian dua tahap
-            const { data: { words } } = await Tesseract.recognize(canvas, 'ind', {
-                logger: m => console.log('Tahap 1 scan status:', m.status)
+            const response = await fetch('/api/ocr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ imageBase64 })
             });
-
-            let nikKeyword = words.find(w => w.text.toUpperCase().includes('NIK'));
-            let namaKeyword = words.find(w => w.text.toUpperCase() === 'NAMA'); // Mencari kata 'NAMA' secara eksak
-
-            if (!nikKeyword || !namaKeyword) {
-                ocrStatusOverlay.style.display = 'none';
-                ocrStatus.textContent = 'Kata kunci NIK atau Nama tidak ditemukan. Coba foto ulang.';
-                return;
-            }
-
-            // Hitung area pemindaian untuk NIK dan Nama
-            const nikRegion = {
-                left: nikKeyword.bbox.x1, // Setelah kata "NIK"
-                top: nikKeyword.bbox.y0 - 5, // Sedikit ke atas untuk toleransi
-                width: ocrWidth - nikKeyword.bbox.x1,
-                height: nikKeyword.bbox.y1 - nikKeyword.bbox.y0 + 10 // Sedikit ke bawah untuk toleransi
-            };
-
-            const namaRegion = {
-                left: namaKeyword.bbox.x1, // Setelah kata "Nama"
-                top: namaKeyword.bbox.y0 - 5,
-                width: ocrWidth - namaKeyword.bbox.x1,
-                height: namaKeyword.bbox.y1 - namaKeyword.bbox.y0 + 10
-            };
+            const result = await response.json();
+            ocrStatusOverlay.style.display = 'none';
             
-            // Pindai area NIK
-            const { data: { text: nikText } } = await Tesseract.recognize(canvas, 'ind', {
-                logger: m => console.log('Tahap 2 NIK scan status:', m.status),
-                rectangle: nikRegion
-            });
-
-            // Pindai area Nama
-            const { data: { text: namaText } } = await Tesseract.recognize(canvas, 'ind', {
-                logger: m => console.log('Tahap 2 Nama scan status:', m.status),
-                rectangle: namaRegion
-            });
-
-            ocrStatusOverlay.style.display = 'none';
-
-            if (nikText) {
-                const cleanNik = nikText.replace(/[^0-9]/g, '');
-                if (cleanNik.length >= 16) {
-                    nikInput.value = cleanNik.substring(0, 16);
-                }
+            if (result.success) {
+                const { nik, nama } = result.data;
+                nikInput.value = nik;
+                namaLengkapInput.value = nama;
+                
+                ocrStatus.textContent = 'Pemindaian selesai. Harap periksa kembali data!';
+            } else {
+                ocrStatus.textContent = result.message;
             }
-            if (namaText) {
-                namaLengkapInput.value = namaText.trim().toUpperCase();
-            }
-
-            ocrStatus.textContent = 'Pemindaian selesai. Harap periksa kembali data!';
-        } catch (ocrError) {
+        } catch (serverError) {
             ocrStatusOverlay.style.display = 'none';
-            ocrStatus.textContent = 'Terjadi kesalahan saat memproses OCR.';
-            console.error('OCR Error:', ocrError);
+            ocrStatus.textContent = 'Terjadi kesalahan saat menghubungi server OCR.';
+            console.error('Server Error:', serverError);
         }
+        
+        // Kembalikan tombol ke kondisi awal
+        scanKtpBtn.textContent = 'Pindai KTP';
+        stream = null;
     }
 
+    // Event listener untuk tombol utama
     scanKtpBtn.addEventListener('click', openCamera);
     captureBtn.addEventListener('click', captureAndRecognize);
 
