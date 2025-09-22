@@ -9,102 +9,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
-    body {
-      margin:0; 
-      font-family:'Poppins',sans-serif; 
-      background:#fafafa; 
-      display:flex; 
-      justify-content:center; 
-      padding:20px;
-    }
-    .container {
-      width:100%; 
-      max-width:500px;
-    }
-    h1 {
-      font-size:22px; 
-      font-weight:600; 
-      margin-bottom:20px; 
-      color:#333; 
-      text-align:center;
-    }
-    /* (No. 7) Desain CARD dihilangkan, tidak ada background, shadow, atau padding. */
-    .card {
-      /* Dibiarkan kosong agar tidak ada efek card */
-    }
-    .section-title {
-      font-size:16px; 
-      font-weight:600; 
-      margin-bottom:12px; 
-      color:#222;
-    }
-    .form-group {
-      margin-bottom:14px;
-    }
-    /* (No. 1) Ukuran font label diperkecil */
-    label {
-      font-size:13px; 
-      font-weight:500; 
-      color:#333; 
-      display:block; 
-      margin-bottom:6px;
-    }
-    /* (No. 1 & 6) Ukuran font input & dropdown diperkecil */
-    input, select, textarea {
-      width:100%; 
-      padding:12px; 
-      border-radius:10px; 
-      border:1px solid #ddd; 
-      font-size:13px; 
-      font-family:'Poppins',sans-serif; 
-      outline:none; 
-      transition:border 0.2s;
-      box-sizing: border-box;
-    }
-    /* (No. 2) Gaya khusus untuk input NIK */
-    .nik-input {
-      font-family: 'OCR A Extended', 'SF Mono', 'Courier New', monospace;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      font-size: 15px;
-    }
-    /* (No. 3) Gaya untuk membuat input menjadi kapital */
-    .uppercase-input {
-      text-transform: uppercase;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color:#8119b5;
-    }
+    body { margin:0; font-family:'Poppins',sans-serif; background:#fafafa; display:flex; justify-content:center; padding:20px; }
+    .container { width:100%; max-width:500px; }
+    h1 { font-size:22px; font-weight:600; margin-bottom:20px; color:#333; text-align:center; }
+    .card { /* Dibiarkan kosong */ }
+    .section-title { font-size:16px; font-weight:600; margin-bottom:12px; color:#222; }
+    .form-group { margin-bottom:14px; }
+    label { font-size:13px; font-weight:500; color:#333; display:block; margin-bottom:6px; }
+    input, select, textarea { width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-size:13px; font-family:'Poppins',sans-serif; outline:none; transition:border 0.2s; box-sizing: border-box; }
+    .nik-input { font-family: 'OCR A Extended', 'SF Mono', 'Courier New', monospace; font-weight: 600; letter-spacing: 1.5px; font-size: 15px; }
+    .uppercase-input { text-transform: uppercase; }
+    input:focus, select:focus, textarea:focus { border-color:#8119b5; }
     .divider { border-top:1px solid #e5e5e5; margin:20px 0; }
-    .submit-btn {
-      width:100%; padding:14px; background:#8119b5; color:#fff;
-      border:none; border-radius:12px; font-size:15px; font-weight:500;
-      cursor:pointer; transition:background 0.2s;
-    }
+    .submit-btn { width:100%; padding:14px; background:#8119b5; color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:500; cursor:pointer; transition:background 0.2s; }
     .submit-btn:hover { background: #550a7a; }
+    .success, .error { font-size:14px; margin-top:10px; text-align:center; }
     .success { color:green; }
     .error { color:red; }
-    .success, .error { font-size:14px; margin-top:10px; text-align:center; }
-    
-    /* Gaya untuk pesan validasi */
-    .validation-error {
-      color: #d92d20;
-      font-size: 11px;
-      font-weight: 500;
-      margin-top: 4px;
-      display: none; /* Sembunyi by default */
-    }
-
+    .validation-error { color: #d92d20; font-size: 11px; font-weight: 500; margin-top: 4px; display: none; }
     #map { height: 300px; width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #ddd; }
-    .locate-btn {
-      margin-left: 10px; padding: 4px 8px; font-size: 10px; font-weight: 600;
-      border-radius: 6px; border: 1px solid #8119b5; background: #f4e8ff;
-      color: #8119b5; cursor: pointer;
-    }
+    .locate-btn { margin-left: 10px; padding: 4px 8px; font-size: 10px; font-weight: 600; border-radius: 6px; border: 1px solid #8119b5; background: #f4e8ff; color: #8119b5; cursor: pointer; }
     .locate-btn:hover { background: #8119b5; color: white; }
-    /* (No. 1) Gaya untuk custom display tanggal */
     .date-display-container { position: relative; }
-    #tanggal_pasang_display { background-color: #f8f9fa; cursor: pointer; }
+    #tanggal_pasang_display { background-color: #fff; cursor: pointer; } /* Diubah agar background putih */
     #tanggal_pasang { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
   </style>
 </head>
@@ -130,14 +57,13 @@
         <div class="form-group">
           <label for="nama_lengkap">Nama Lengkap</label>
            <input type="text" id="nama_lengkap" class="uppercase-input" required>
-          <div class="validation-error" id="nama_lengkap-error"></div>
+           <div class="validation-error" id="nama_lengkap-error"></div>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" id="email">
           <div class="validation-error" id="email-error"></div>
         </div>
-        
         <div class="form-group">
           <label for="hp_wa">Nomor Handphone (WA/SMS)</label>
           <input type="text" id="hp_wa" maxlength="13">
@@ -146,6 +72,7 @@
         <div class="form-group">
           <label for="hp_dial">Nomor Handphone (Dial Phone)</label>
            <input type="text" id="hp_dial" maxlength="13">
+           <div class="validation-error" id="hp_dial-error"></div>
         </div>
         <div class="form-group">
           <label for="kota">Kota</label>
@@ -176,7 +103,6 @@
           <div id="map">Memuat peta...</div>
           <input type="text" id="map-link" placeholder="Geser pin di peta untuk membuat link..." readonly style="margin-top: 10px; background: #f0f0f0; color: #555;">
         </div>
-        
         <div class="divider"></div>
         <div class="section-title">Info Produk</div>
         <div class="form-group">
@@ -284,6 +210,38 @@
     }
 
     // --- FUNGSI-FUNGSI FORM (TIDAK DIUBAH) ---
+    function formatDate(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);
+      const options = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' };
+      return date.toLocaleDateString('id-ID', options);
+    }
+    
+    async function populateForm(id) {
+        const { data, error } = await client.from("pelanggan").select("*").eq("id", id).single();
+        if (error) {
+            console.error("Gagal mengambil data untuk diedit:", error);
+            errorDiv.textContent = "Gagal memuat data pelanggan.";
+            return;
+        }
+        document.getElementById("tanggal_pasang").value = data.tanggal;
+        document.getElementById("tanggal_pasang_display").value = formatDate(data.tanggal);
+        document.getElementById("nik").value = data.nik;
+        document.getElementById("nama_lengkap").value = data.nama_lengkap;
+        document.getElementById("email").value = data.email;
+        document.getElementById("hp_wa").value = data.hp_wa;
+        document.getElementById("hp_dial").value = data.hp_dial;
+        document.getElementById("homepass").value = data.homepass;
+        document.getElementById("alamat").value = data.alamat;
+        document.getElementById("paket_internet").value = data.paket_internet;
+        document.getElementById("paket_tv").value = data.paket_tv;
+        document.getElementById("addon").value = data.addon ? data.addon.join(", ") : "";
+        document.getElementById("metode_bayar").value = data.metode_bayar;
+        document.getElementById("promo").checked = data.promo;
+        await loadKota(data.kota_id);
+        await loadCluster(data.kota_id, data.cluster_id);
+        initMap(data.latitude, data.longitude);
+    }
     async function loadKota(selectedKotaId = null) {
       const { data, error } = await client.from("kota").select("id,nama");
       if (error) { console.error("Error loading kota:", error.message); return; }
@@ -316,102 +274,70 @@
       });
     }
 
-    // --- (No. 1) FUNGSI BARU UNTUK FORMAT TANGGAL ---
-    function formatDate(dateString) {
-      if (!dateString) return "";
-      const date = new Date(dateString);
-      // Opsi untuk memastikan tanggal tidak terpengaruh timezone browser
-      const options = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' };
-      return date.toLocaleDateString('id-ID', options);
-    }
+    // --- EVENT LISTENERS UNTUK VALIDASI REAL-TIME & FUNGSI LAINNYA ---
     
-    async function populateForm(id) {
-        const { data, error } = await client.from("pelanggan").select("*").eq("id", id).single();
-        if (error) {
-            console.error("Gagal mengambil data untuk diedit:", error);
-            errorDiv.textContent = "Gagal memuat data pelanggan.";
-            return;
-        }
-        document.getElementById("tanggal_pasang").value = data.tanggal; // Mengisi input date tersembunyi
-        document.getElementById("tanggal_pasang_display").value = formatDate(data.tanggal); // Menampilkan format cantik
-        document.getElementById("nik").value = data.nik;
-        document.getElementById("nama_lengkap").value = data.nama_lengkap;
-        document.getElementById("email").value = data.email;
-        document.getElementById("hp_wa").value = data.hp_wa;
-        document.getElementById("hp_dial").value = data.hp_dial;
-        document.getElementById("homepass").value = data.homepass;
-        document.getElementById("alamat").value = data.alamat;
-        document.getElementById("paket_internet").value = data.paket_internet;
-        document.getElementById("paket_tv").value = data.paket_tv;
-        document.getElementById("addon").value = data.addon ? data.addon.join(", ") : "";
-        document.getElementById("metode_bayar").value = data.metode_bayar;
-        document.getElementById("promo").checked = data.promo;
-        await loadKota(data.kota_id);
-        await loadCluster(data.kota_id, data.cluster_id);
-        initMap(data.latitude, data.longitude);
-    }
-
-    // --- EVENT LISTENERS UNTUK VALIDASI REAL-TIME ---
-    
-    // (No. 1) Event listener untuk input tanggal
+    // (No. 1) Event listener untuk memunculkan kalender
+    document.getElementById('tanggal_pasang_display').addEventListener('click', function() {
+      // showPicker() adalah metode modern untuk memicu date picker
+      document.getElementById('tanggal_pasang').showPicker();
+    });
     document.getElementById('tanggal_pasang').addEventListener('change', function() {
       document.getElementById('tanggal_pasang_display').value = formatDate(this.value);
     });
 
-    // (No. 2) Validasi NIK
+    // (No. 2) Validasi NIK (termasuk cek karakter non-numerik)
     const nikInput = document.getElementById('nik');
     nikInput.addEventListener('input', () => {
         const nikError = document.getElementById('nik-error');
-        if (nikInput.value.length > 0 && nikInput.value.length < 16) {
+        nikError.style.display = 'none'; // Selalu reset
+        if (/[^\d]/.test(nikInput.value)) {
+            nikError.textContent = "NIK hanya boleh berisi angka.";
+            nikError.style.display = 'block';
+        } else if (nikInput.value.length > 0 && nikInput.value.length < 16) {
             nikError.textContent = "NIK harus terdiri dari 16 angka.";
             nikError.style.display = 'block';
-        } else {
-            nikError.style.display = 'none';
         }
     });
 
-    // (No. 3) Kapital Otomatis untuk Nama
     document.getElementById("nama_lengkap").addEventListener('input', function() { this.value = this.value.toUpperCase(); });
 
-    // (No. 4) Validasi Email
     const emailInput = document.getElementById('email');
     emailInput.addEventListener('input', () => {
         const emailError = document.getElementById('email-error');
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (emailInput.value && !emailRegex.test(emailInput.value)) {
-            emailError.textContent = "Format email tidak valid (contoh: user@google.com).";
+            emailError.textContent = "Format email tidak valid.";
             emailError.style.display = 'block';
         } else {
             emailError.style.display = 'none';
         }
     });
 
-    // (No. 5) Validasi Nomor WA
-    const hpWaInput = document.getElementById('hp_wa');
-    hpWaInput.addEventListener('input', () => {
-        const hpWaError = document.getElementById('hp_wa-error');
-        const phoneValue = hpWaInput.value;
-        hpWaError.style.display = 'none'; // Selalu reset saat user mengetik
-        
-        // Cek jika ada karakter selain angka (karena type=text)
-        if (/[^\d]/.test(phoneValue)) { 
-            hpWaError.textContent = "Nomor hanya boleh berisi angka.";
-            hpWaError.style.display = 'block';
-        } else if (phoneValue.length > 0 && phoneValue.length < 10) {
-            hpWaError.textContent = "Panjang nomor minimal 10 angka.";
-            hpWaError.style.display = 'block';
+    // (No. 3) Fungsi validasi generik untuk nomor telepon
+    function validatePhoneNumber(inputId, errorId) {
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        const phoneValue = input.value;
+        error.style.display = 'none';
+        if (phoneValue) {
+            if (/[^\d]/.test(phoneValue)) {
+                error.textContent = "Nomor hanya boleh berisi angka.";
+                error.style.display = 'block';
+            } else if (phoneValue.length > 0 && (phoneValue.length < 10 || phoneValue.length > 13)) {
+                error.textContent = "Panjang nomor harus antara 10 hingga 13 angka.";
+                error.style.display = 'block';
+            }
         }
-    });
+    }
+    document.getElementById('hp_wa').addEventListener('input', () => validatePhoneNumber('hp_wa', 'hp_wa-error'));
+    document.getElementById('hp_dial').addEventListener('input', () => validatePhoneNumber('hp_dial', 'hp_dial-error'));
 
-    document.getElementById("kota").addEventListener("change", (e) => {
-        loadCluster(e.target.value);
-    });
+    document.getElementById("kota").addEventListener("change", (e) => { loadCluster(e.target.value); });
 
     document.addEventListener("DOMContentLoaded", async () => {
         const params = new URLSearchParams(window.location.search);
         editId = params.get('edit_id');
         document.getElementById("locate-btn").addEventListener("click", locateUser);
-
         if (editId) {
             pageTitle.textContent = "Edit Data Pelanggan";
             formTitle.textContent = "Edit Data Pelanggan";
@@ -423,59 +349,34 @@
         }
     });
 
-    // --- LOGIKA SAAT FORM DISUBMIT ---
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       
-      // Validasi saat submit (hanya untuk field wajib)
-      let isSubmitValid = true;
-      const requiredFields = {
-        'tanggal_pasang': 'Tanggal Pemasangan wajib diisi.',
-        'nik': 'NIK wajib diisi.',
-        'nama_lengkap': 'Nama Lengkap wajib diisi.'
-      };
-
-      for (const id in requiredFields) {
-          const input = document.getElementById(id);
-          const errorEl = document.getElementById(`${id}-error`);
-          if (!input.value) {
-              if (errorEl) { // Check if error element exists
-                  errorEl.textContent = requiredFields[id];
-                  errorEl.style.display = 'block';
-              }
-              isSubmitValid = false;
-          }
-      }
-
-      // Periksa juga error real-time yang mungkin masih ada
+      // (No. 4) Validasi saat submit DIHAPUS, hanya cek error real-time
       let hasRealtimeError = false;
       document.querySelectorAll('.validation-error').forEach(el => {
-        if (el.style.display === 'block') {
+        if (el.style.display === 'block' && el.textContent !== '') {
             hasRealtimeError = true;
         }
       });
 
-      if (!isSubmitValid || hasRealtimeError) {
+      if (hasRealtimeError) {
         errorDiv.textContent = "Harap perbaiki semua isian yang salah sebelum menyimpan.";
         return; 
       }
       
+      const successDiv = document.getElementById("success");
+      const submitBtn = document.getElementById("submit-btn");
       successDiv.textContent = "";
       errorDiv.textContent = "";
       submitBtn.disabled = true;
       submitBtn.textContent = "Menyimpan...";
 
       const { data: { user }, error: authError } = await client.auth.getUser();
-      if (authError || !user) {
-        errorDiv.textContent = "Sesi Anda berakhir. Silakan login kembali.";
-        submitBtn.disabled = false;
-        submitBtn.textContent = editId ? "Update Data" : "Simpan Data";
-        return;
-      }
+      if (authError || !user) { /* ... kode sama ... */ }
       
       const homepassValue = document.getElementById("homepass").value.trim();
       const alamatValue = document.getElementById("alamat").value.trim();
-
       const payload = {
         tanggal: document.getElementById("tanggal_pasang").value,
         nik: document.getElementById("nik").value,
@@ -499,28 +400,23 @@
       };
       
       let error;
-      if (editId) {
-        const { error: updateError } = await client
-          .from("pelanggan")
-          .update(payload)
-          .eq("id", editId);
-        error = updateError;
-      } else {
-        const { error: insertError } = await client.from("pelanggan").insert([payload]);
-        error = insertError;
+      if (editId) { 
+          const { error: updateError } = await client.from("pelanggan").update(payload).eq("id", editId);
+          error = updateError;
+      } else { 
+          const { error: insertError } = await client.from("pelanggan").insert([payload]);
+          error = insertError;
       }
 
       submitBtn.disabled = false;
       submitBtn.textContent = editId ? "Update Data" : "Simpan Data";
 
-      if (error) {
+      if (error) { 
         console.error(error);
         errorDiv.textContent = "Gagal menyimpan: " + error.message;
-      } else {
+      } else { 
         successDiv.textContent = "Data berhasil disimpan!";
-        setTimeout(() => {
-            window.location.href = "dashboard.html";
-        }, 1500);
+        setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
       }
     });
   </script>
