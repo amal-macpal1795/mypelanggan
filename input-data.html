@@ -247,8 +247,9 @@
             updateLink(selectedLat, selectedLng);
         });
     }
-
+    
     function updateLink(lat, lng) {
+      // Menggunakan format link yang lebih umum
       const link = `https://www.google.com/maps?q=${lat},${lng}`;
       document.getElementById('map-link').value = link;
       selectedLat = lat;
@@ -465,5 +466,6 @@
   </script>
 </body>
 </html>
+
 
 
