@@ -54,10 +54,25 @@
     .validation-error { color: #d92d20; font-size: 11px; font-weight: 500; margin-top: 4px; display: none; }
     #map { height: 300px; width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #ddd; }
     .locate-btn { margin-left: 10px; padding: 4px 8px; font-size: 10px; font-weight: 600; border-radius: 6px; border: 1px solid #8119b5; background: #f4e8ff; color: #8119b5; cursor: pointer; }
-    .locate-btn:hover { background: #8119b5; color: white; }
-    .date-display-container { position: relative; }
-    #tanggal_pasang_display { background-color: #fff; cursor: pointer; } /* Diubah agar background putih */
-    #tanggal_pasang { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .locate-btn:hover { 
+      background: #8119b5; color: white; 
+    }
+    .date-display-container { 
+      position: relative; 
+    }
+    #tanggal_pasang_display { 
+      background-color: #fff; 
+      pointers-event:none;
+    } /* Diubah agar background putih */
+    #tanggal_pasang { 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      opacity: 0; /* Tetap tidak terlihat */
+      cursor: pointer; /* Tapi bisa diklik */ 
+    }
   </style>
 </head>
 <body>
@@ -447,4 +462,5 @@
   </script>
 </body>
 </html>
+
 
