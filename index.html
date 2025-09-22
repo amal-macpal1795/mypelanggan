@@ -381,24 +381,29 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    (async function preventAccessIfLoggedIn() {
-  // Cek apakah ada user yang aktif dan punya catatan waktu login
-  const { data: { user } } = await client.auth.getUser();
-  const loginTimestamp = localStorage.getItem('loginTimestamp');
+    (async function checkSession() {
+      const { data: { user } } = await client.auth.getUser();
+      const loginTimestamp = localStorage.getItem('loginTimestamp');
+      
+      if (!user) {
+        window.location.replace('login.html');
+        return; 
+      }
+      
+      const sessionDuration = 3 * 60 * 60 * 1000; // 3 jam
+      const currentTime = new Date().getTime();
+      
+      if (!loginTimestamp || (currentTime - loginTimestamp > sessionDuration)) {
+        client.auth.signOut();
+        localStorage.clear();
+        alert('Sesi Anda telah berakhir. Silakan login kembali.');
+        window.location.replace('login.html');
+        return; 
+      }
 
-  // Hanya proses jika ada user dan timestamp
-  if (user && loginTimestamp) {
-    const sessionDuration = 3 * 60 * 60 * 1000; // 3 jam
-    const currentTime = new Date().getTime();
-
-    // Cek apakah sesi MASIH VALID (belum kedaluwarsa)
-    if ((currentTime - loginTimestamp) < sessionDuration) {
-      // Jika sesi masih valid, pengguna tidak seharusnya ada di sini.
-      // Arahkan kembali ke dashboard.
-      window.location.replace('index.html');
-    }
-  }
-})();
+      // Jika sesi valid, panggil fungsi untuk memuat data dashboard
+      fetchData();
+    })();
 
     // --- Referensi Elemen ---
     const pelangganList = document.getElementById('pelangganList');
@@ -653,6 +658,7 @@
   </script>
 </body>
 </html>
+
 
 
 
