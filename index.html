@@ -377,6 +377,34 @@
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
+    // --- GERBANG PEMERIKSAAN SESI ---
+// Kode ini akan berjalan pertama kali saat halaman dibuka
+(async function checkSession() {
+  const { data: { user } } = await client.auth.getUser();
+  const loginTimestamp = localStorage.getItem('loginTimestamp');
+  
+  // Jika tidak ada user atau tidak ada timestamp, paksa ke halaman login
+  if (!user || !loginTimestamp) {
+    window.location.replace('login.html');
+    return; // Hentikan eksekusi script lebih lanjut
+  }
+  
+  // Tentukan durasi sesi (3 jam dalam milidetik)
+  const sessionDuration = 3 * 60 * 60 * 1000;
+  const currentTime = new Date().getTime();
+  
+  // Jika waktu saat ini melebihi waktu login + durasi sesi
+  if (currentTime - loginTimestamp > sessionDuration) {
+    // Sesi berakhir, bersihkan data dan paksa login ulang
+    client.auth.signOut();
+    localStorage.removeItem('userUID');
+    localStorage.removeItem('loginTimestamp');
+    
+    alert('Sesi Anda telah berakhir. Silakan login kembali.');
+    window.location.replace('login.html');
+  }
+})();
+    
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
@@ -623,6 +651,7 @@
   </script>
 </body>
 </html>
+
 
 
 
