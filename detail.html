@@ -324,7 +324,7 @@
       // --- TAMBAHKAN KODE DI BAWAH INI ---
       const mapLinkEl = document.getElementById('map-link-detail');
       if (data.latitude && data.longitude) {
-        mapLinkEl.href = `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+        mapLinkEl.href = `https://www.google.com/maps?q=latitude,longitude${data.latitude},${data.longitude}`;
       } else {
         mapLinkEl.textContent = 'Lokasi belum diatur';
         mapLinkEl.style.textDecoration = 'none';
@@ -336,6 +336,7 @@
   </script>
 </body>
 </html>
+
 
 
 
