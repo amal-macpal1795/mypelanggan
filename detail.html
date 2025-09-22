@@ -150,6 +150,13 @@
       <div class="section-title">Info Alamat</div>
 
       <div class="info-item">
+        <div class="label">Link Lokasi (Teknisi)</div>
+        <div class="value">
+          <a id="map-link-detail" href="#" target="_blank" style="color: #8119b5; text-decoration: underline;">Buka di Google Maps</a>
+        </div>
+      </div>
+
+      <div class="info-item">
         <div class="label">Kota</div>
         <div class="value">
           <span id="kota" class="uppercase">Memuat...</span>
@@ -276,8 +283,35 @@
       document.getElementById('promo').textContent = data.promo ? 'Ikut Promo' : '-';
     }
 
+    async function loadCustomerDetail() {
+      // ...
+      const { data, error } = await client
+        .from('pelanggan')
+        .select(`
+          *,
+          latitude, longitude, // <-- TAMBAHKAN INI
+          kota:kota_id ( nama ),
+          cluster:cluster_id ( nama )
+        `)
+        // ...
+      
+      // ... (semua baris 'populate data' yang sudah ada) ...
+      document.getElementById('promo').textContent = data.promo ? 'Ikut Promo' : '-';
+
+      // --- TAMBAHKAN KODE DI BAWAH INI ---
+      const mapLinkEl = document.getElementById('map-link-detail');
+      if (data.latitude && data.longitude) {
+        mapLinkEl.href = `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+      } else {
+        mapLinkEl.textContent = 'Lokasi belum diatur';
+        mapLinkEl.style.textDecoration = 'none';
+        mapLinkEl.style.color = 'inherit';
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', loadCustomerDetail);
   </script>
 </body>
 </html>
+
 
