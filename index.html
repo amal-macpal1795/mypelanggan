@@ -377,32 +377,35 @@
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    // --- GERBANG PEMERIKSAAN SESI ---
-// Kode ini akan berjalan pertama kali saat halaman dibuka
-(async function checkSession() {
+    (async function checkSession() {
+  // 1. Periksa apakah ada user yang aktif di Supabase
   const { data: { user } } = await client.auth.getUser();
+
+  // 2. Ambil catatan waktu saat user terakhir login
   const loginTimestamp = localStorage.getItem('loginTimestamp');
   
-  // Jika tidak ada user atau tidak ada timestamp, paksa ke halaman login
-  if (!user || !loginTimestamp) {
-    window.location.replace('login.html');
-    return; // Hentikan eksekusi script lebih lanjut
-  }
-  
-  // Tentukan durasi sesi (3 jam dalam milidetik)
-  const sessionDuration = 3 * 60 * 60 * 1000;
+  // 3. Tentukan durasi sesi (contoh: 3 jam dalam milidetik)
+  // Anda bisa mengubah angka '3' ini sesuai kebutuhan
+  const sessionDuration = 3 * 60 * 60 * 1000; 
   const currentTime = new Date().getTime();
   
-  // Jika waktu saat ini melebihi waktu login + durasi sesi
-  if (currentTime - loginTimestamp > sessionDuration) {
-    // Sesi berakhir, bersihkan data dan paksa login ulang
+  // 4. Cek apakah sesi sudah kedaluwarsa
+  let isSessionExpired = true; // Anggap sesi tidak valid pada awalnya
+  if (loginTimestamp) {
+    // Jika waktu saat ini > waktu login + durasi, maka sesi berakhir
+    isSessionExpired = (currentTime - loginTimestamp > sessionDuration);
+  }
+  
+  // 5. Jika tidak ada user ATAU tidak ada catatan waktu ATAU sesi sudah berakhir
+  if (!user || !loginTimestamp || isSessionExpired) {
+    // Hapus sisa data login lama untuk memastikan logout bersih
     client.auth.signOut();
-    localStorage.removeItem('userUID');
-    localStorage.removeItem('loginTimestamp');
-    
-    alert('Sesi Anda telah berakhir. Silakan login kembali.');
+    localStorage.clear();
+
+    // Arahkan ke halaman login
     window.location.replace('login.html');
   }
+  // Jika semua syarat terpenuhi, kode akan lanjut berjalan dan dashboard akan ditampilkan.
 })();
     
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
@@ -651,6 +654,7 @@
   </script>
 </body>
 </html>
+
 
 
 
