@@ -377,47 +377,33 @@
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    // Di dalam file index.html (Dashboard)
-// GANTI SEMUA LOGIKA checkSession LAMA ANDA DENGAN INI:
-
-(async function checkSession() {
-  // 1. Cek apakah ada user yang aktif di Supabase
-  const { data: { user } } = await client.auth.getUser();
-
-  // 2. Jika tidak ada user, langsung arahkan ke halaman login
-  if (!user) {
-    window.location.replace('login.html');
-    return; // Hentikan script agar tidak lanjut ke bawah
-  }
-  
-  // 3. Jika ADA user, cek durasi sesi
-  const loginTimestamp = localStorage.getItem('loginTimestamp');
-  const sessionDuration = 3 * 60 * 60 * 1000; // 3 jam
-  const currentTime = new Date().getTime();
-  
-  // 4. Jika timestamp tidak ada ATAU sesi sudah berakhir
-  if (!loginTimestamp || (currentTime - loginTimestamp > sessionDuration)) {
-    client.auth.signOut(); // Logout dari Supabase
-    localStorage.clear();  // Hapus semua data di localStorage
-    alert('Sesi Anda telah berakhir. Silakan login kembali.');
-    window.location.replace('login.html');
-    return; // Hentikan script
-  }
-
-  // 5. Jika lolos semua pemeriksaan, panggil fungsi untuk memuat data dashboard
-  fetchData();
-
-})(); // Tanda () ini membuat fungsi langsung berjalan
-
-
-// PENTING: Hapus pemanggilan fetchData() di bagian bawah script Anda,
-// karena sekarang sudah dipanggil dari dalam checkSession.
-// Hapus baris ini dari bagian paling bawah script Anda:
-// fetchData();
-    
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+    (async function checkSession() {
+      const { data: { user } } = await client.auth.getUser();
+      const loginTimestamp = localStorage.getItem('loginTimestamp');
+      
+      if (!user) {
+        window.location.replace('login.html');
+        return; 
+      }
+      
+      const sessionDuration = 3 * 60 * 60 * 1000; // 3 jam
+      const currentTime = new Date().getTime();
+      
+      if (!loginTimestamp || (currentTime - loginTimestamp > sessionDuration)) {
+        client.auth.signOut();
+        localStorage.clear();
+        alert('Sesi Anda telah berakhir. Silakan login kembali.');
+        window.location.replace('login.html');
+        return; 
+      }
+
+      // Jika sesi valid, panggil fungsi untuk memuat data dashboard
+      fetchData();
+    })();
 
     // --- Referensi Elemen ---
     const pelangganList = document.getElementById('pelangganList');
@@ -672,6 +658,7 @@
   </script>
 </body>
 </html>
+
 
 
 
