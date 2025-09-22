@@ -231,6 +231,7 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
+    // --- Referensi Elemen HTML ---
     const form = document.getElementById("pelangganForm");
     const pageTitle = document.getElementById("page-title");
     const formTitle = document.getElementById("form-title");
@@ -238,138 +239,70 @@
     const errorDiv = document.getElementById("error");
     const successDiv = document.getElementById("success");
     
-    // Variabel untuk menyimpan ID pelanggan jika dalam mode edit
+    // --- Variabel Global ---
     let editId = null;
-
     let map, marker;
-    let selectedLat, selectedLng; // Variabel untuk simpan koordinat
-    
-    // --- FUNGSI UNTUK MENDAPATKAN LOKASI REAL-TIME ---
+    let selectedLat, selectedLng;
+
+    // --- FUNGSI-FUNGSI PETA ---
     function locateUser() {
       if (!navigator.geolocation) {
         alert("Browser Anda tidak mendukung Geolocation.");
         return;
       }
-
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          
-          // Pindahkan peta dan pin ke lokasi pengguna
-          map.setView([lat, lng], 17); // Zoom lebih dekat
+          map.setView([lat, lng], 17);
           marker.setLatLng([lat, lng]);
-          
-          // Update link dan koordinat
           updateLink(lat, lng);
         },
         (error) => {
-          alert("Gagal mendapatkan lokasi. Pastikan GPS aktif dan Anda sudah memberi izin akses lokasi untuk browser ini.");
+          alert("Gagal mendapatkan lokasi. Pastikan GPS aktif dan Anda sudah memberi izin.");
           console.error("Geolocation Error:", error);
         }
       );
     }
 
-    // --- FUNGSI PETA ---
     function initMap(lat, lng) {
-        // Default ke Manado jika tidak ada koordinat
-        const defaultLat = lat || 1.4748;
+        const defaultLat = lat || 1.4748; // Default Manado
         const defaultLng = lng || 124.8421;
-
+        
         map = L.map('map').setView([defaultLat, defaultLng], 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
         marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
 
-        // Jika sudah ada koordinat, update link
         if(lat && lng) {
           updateLink(lat, lng);
         }
 
         marker.on('dragend', function(event) {
             const position = marker.getLatLng();
-            selectedLat = position.lat;
-            selectedLng = position.lng;
-            updateLink(selectedLat, selectedLng);
+            updateLink(position.lat, position.lng);
         });
     }
     
     function updateLink(lat, lng) {
-      // Tanda Dolar ($) adalah kunci yang benar
-      const link = `http://googleusercontent.com/maps.google.com/8{lat},${lng}`;
+      // INI ADALAH PERBAIKAN UTAMA DARI ERROR SEBELUMNYA
+      const link = `https://www.google.com/maps?q=$0{lat},${lng}`;
       document.getElementById('map-link').value = link;
       selectedLat = lat;
       selectedLng = lng;
     }
 
-    // --- FUNGSI FORM (dengan data peta) ---
+    // --- FUNGSI-FUNGSI FORM ---
     async function populateForm(id) {
         const { data, error } = await client.from("pelanggan").select("*").eq("id", id).single();
-        if (error) { /* ... error handling ... */ return; }
-
-      // Isi form seperti biasa
-        document.getElementById("tanggal_pasang").value = data.tanggal.substring(0, 10);
-        document.getElementById("nik").value = data.nik;
-        // ... (isi semua field lain seperti kode sebelumnya) ...
-        document.getElementById("promo").checked = data.promo;
-        
-        await loadKota(data.kota_id);
-        await loadCluster(data.kota_id, data.cluster_id);
-        
-        // Inisialisasi peta dengan data yang ada
-        initMap(data.latitude, data.longitude);
-    }
-    
-    // (Fungsi loadKota dan loadCluster tetap sama, tidak perlu diubah)
-    async function loadKota(selectedKotaId = null) { /* ... kode sama ... */ }
-    async function loadCluster(kotaId, selectedClusterId = null) { /* ... kode sama ... */ }
-    document.getElementById("kota").addEventListener("change", (e) => { loadCluster(e.target.value); });
-
-    // --- LOGIKA UTAMA SAAT HALAMAN DIMUAT ---
-    document.addEventListener("DOMContentLoaded", async () => {
-        const params = new URLSearchParams(window.location.search);
-        editId = params.get('edit_id');
-      document.getElementById("locate-btn").addEventListener("click", locateUser);
-
-        if (editId) {
-            // Mode Edit
-            pageTitle.textContent = "Edit Data Pelanggan";
-            formTitle.textContent = "Edit Data Pelanggan";
-            submitBtn.textContent = "Update Data";
-            await populateForm(editId);
-        } else {
-            // Mode Buat Baru
-            await loadKota();
-            initMap(); // Panggil peta dengan lokasi default
-        }
-    });
-
-    // --- LOGIKA SAAT FORM DISUBMIT (dengan data peta) ---
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      // ... (kode loading button & user auth tetap sama) ...
-      
-      const homepassValue = document.getElementById("homepass").value.trim();
-      const alamatValue = document.getElementById("alamat").value.trim();
-
-      const payload = {
-        // ... (semua field lama seperti nik, nama, dll.) ...
-        sales_id: user.id,
-        is_complete: homepassValue !== '' && alamatValue !== '',
-        // Tambahkan data koordinat
-        latitude: selectedLat,
-        longitude: selectedLng
-      };
-
         if (error) {
             console.error("Gagal mengambil data untuk diedit:", error);
             errorDiv.textContent = "Gagal memuat data pelanggan.";
             return;
         }
 
-        // Isi semua field dengan data yang ada
         document.getElementById("tanggal_pasang").value = data.tanggal.substring(0, 10);
         document.getElementById("nik").value = data.nik;
         document.getElementById("nama_lengkap").value = data.nama_lengkap;
@@ -384,17 +317,17 @@
         document.getElementById("metode_bayar").value = data.metode_bayar;
         document.getElementById("promo").checked = data.promo;
         
-        // Untuk dropdown Kota dan Cluster, kita perlu memuatnya terlebih dahulu
         await loadKota(data.kota_id);
         await loadCluster(data.kota_id, data.cluster_id);
+        
+        initMap(data.latitude, data.longitude);
     }
     
-    // --- FUNGSI UNTUK DROPDOWN KOTA & CLUSTER (Dimodifikasi sedikit) ---
     async function loadKota(selectedKotaId = null) {
       const { data, error } = await client.from("kota").select("id,nama");
       if (error) { console.error("Error loading kota:", error.message); return; }
       const kotaSelect = document.getElementById("kota");
-      kotaSelect.innerHTML = '<option value="" disabled>Pilih kota...</option>';
+      kotaSelect.innerHTML = '<option value="" disabled selected>Pilih kota...</option>';
       data.forEach(k => {
         const opt = document.createElement("option");
         opt.value = k.id;
@@ -410,7 +343,7 @@
       if (!kotaId) return;
       const { data, error } = await client.from("cluster").select("id,nama").eq("kota_id", kotaId);
       const clusterSelect = document.getElementById("cluster");
-      clusterSelect.innerHTML = '<option value="" disabled>Pilih cluster...</option>';
+      clusterSelect.innerHTML = '<option value="" disabled selected>Pilih cluster...</option>';
       if (error) { console.error("Error loading cluster:", error.message); return; }
       data.forEach(c => {
         const opt = document.createElement("option");
@@ -423,28 +356,28 @@
       });
     }
 
+    // --- EVENT LISTENERS ---
     document.getElementById("kota").addEventListener("change", (e) => {
         loadCluster(e.target.value);
     });
 
-    // --- LOGIKA UTAMA SAAT HALAMAN DIMUAT ---
     document.addEventListener("DOMContentLoaded", async () => {
         const params = new URLSearchParams(window.location.search);
         editId = params.get('edit_id');
 
+        document.getElementById("locate-btn").addEventListener("click", locateUser);
+
         if (editId) {
-            // == INI ADALAH MODE EDIT ==
             pageTitle.textContent = "Edit Data Pelanggan";
             formTitle.textContent = "Edit Data Pelanggan";
             submitBtn.textContent = "Update Data";
             await populateForm(editId);
         } else {
-            // == INI ADALAH MODE BUAT BARU (default) ==
             await loadKota();
+            initMap();
         }
     });
 
-    // --- LOGIKA SAAT FORM DISUBMIT ---
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       successDiv.textContent = "";
@@ -480,20 +413,19 @@
         metode_bayar: document.getElementById("metode_bayar").value,
         promo: document.getElementById("promo").checked,
         sales_id: user.id,
-        // Jika homepass dan alamat sudah diisi, data dianggap lengkap
-        is_complete: homepassValue !== '' && alamatValue !== ''
+        is_complete: homepassValue !== '' && alamatValue !== '',
+        latitude: selectedLat,
+        longitude: selectedLng
       };
       
       let error;
       if (editId) {
-        // == PROSES UPDATE DATA LAMA ==
         const { error: updateError } = await client
           .from("pelanggan")
           .update(payload)
           .eq("id", editId);
         error = updateError;
       } else {
-        // == PROSES INSERT DATA BARU ==
         const { error: insertError } = await client.from("pelanggan").insert([payload]);
         error = insertError;
       }
@@ -506,7 +438,6 @@
         errorDiv.textContent = "Gagal menyimpan: " + error.message;
       } else {
         successDiv.textContent = "Data berhasil disimpan!";
-        // Tunggu sejenak lalu kembali ke dashboard
         setTimeout(() => {
             window.location.href = "dashboard.html";
         }, 1500);
@@ -515,6 +446,7 @@
   </script>
 </body>
 </html>
+
 
 
 
