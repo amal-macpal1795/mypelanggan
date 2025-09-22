@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <title>Akun Saya</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 0;
+      padding-bottom: 100px; /* Ruang untuk bottom nav */
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #d88efa, #ab48d9);
+      background-attachment: fixed;
+      color: #333;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      padding: 20px;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+
+    /* 1. Label "Akun" di paling atas */
+    .page-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    /* 2. Card Utama */
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+
+    /* Baris pertama card: Info User */
+    .user-info {
+      display: flex;
+      align-items: center;
+      padding-bottom: 15px;
+    }
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #8119b5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-right: 15px;
+    }
+    .user-details .name {
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    .user-details .email {
+      font-size: 13px;
+      color: #888; /* Warna gray */
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 0;
+    }
+
+    /* Baris kedua card: Statistik */
+    .user-stats {
+      padding-top: 15px;
+    }
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .stat-item .label {
+      color: #555;
+    }
+    .stat-item .value {
+      font-weight: 600;
+      color: #8119b5;
+      background: #f4e8ff;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    /* 3. Daftar Aksi di bawah card */
+    .action-list a {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .action-list a:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    .action-list i {
+      font-size: 18px;
+      width: 30px;
+      text-align: center;
+      margin-right: 10px;
+      opacity: 0.8;
+    }
+
+    /* 4. Bottom Navigation */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 70px; background: #fff;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.07);
+      display: flex; align-items: center; justify-content: space-around;
+      z-index: 100; padding: 0 10px;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; color: #666; font-size: 11px;
+      font-weight: 500; flex-grow: 1; flex-basis: 0; text-decoration: none;
+    }
+    .nav-item.active { color: #8119b5; }
+    .nav-item i { font-size: 20px; margin-bottom: 4px; }
+    .nav-fab {
+      width: 60px; height: 60px; background: #8119b5; border-radius: 50%;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25); display: flex;
+      align-items: center; justify-content: center; color: white;
+      font-size: 32px; cursor: pointer; margin-top: -30px;
+      border: 4px solid #fff; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <div class="page-title">Akun</div>
+
+    <div class="card">
+      <div class="user-info">
+        <div class="avatar" id="avatar-initials">..</div>
+        <div class="user-details">
+          <div class="name" id="user-fullname">Memuat...</div>
+          <div class="email" id="user-email">Memuat...</div>
+        </div>
+      </div>
+      
+      <hr class="divider">
+
+      <div class="user-stats">
+        <div class="stat-item">
+          <span class="label">Pencapaian Triwulan</span>
+          <span class="value" id="triwulanCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Pencapaian Bulanan</span>
+          <span class="value" id="bulanIniCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Pencapaian Harian</span>
+          <span class="value" id="hariIniCount">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-list">
+      <a href="#">
+        <i class="fa-solid fa-user-pen"></i>
+        <span>Informasi Pribadi</span>
+      </a>
+      <a href="#" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Log out</span>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <i class="fa-solid fa-house"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="input-data.html" class="nav-fab">
+      <i class="fa-solid fa-plus"></i>
+    </a>
+    <a href="akun.html" class="nav-item active"> <i class="fa-solid fa-person"></i>
+      <span>Akun</span>
+    </a>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // --- Fungsi Helper ---
+    function getInitials(name) {
+      if (!name) return "..";
+      const parts = name.split(' ');
+      let initials = parts[0].charAt(0);
+      if (parts.length > 1) {
+        initials += parts[parts.length - 1].charAt(0);
+      }
+      return initials.toUpperCase();
+    }
+
+    // --- Fungsi Utama untuk Memuat Data ---
+    async function loadAccountData() {
+      // Periksa sesi dulu, jika tidak ada, lempar ke login
+      const { data: { user } } = await client.auth.getUser();
+      if (!user) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      // 1. Isi data info user
+      const userName = user.user_metadata.name || 'Nama Pengguna';
+      const userEmail = user.email;
+      document.getElementById('avatar-initials').textContent = getInitials(userName);
+      document.getElementById('user-fullname').textContent = userName.toUpperCase();
+      document.getElementById('user-email').textContent = userEmail;
+
+      // 2. Ambil data pelanggan untuk statistik
+      const { data: pelangganData, error } = await client
+        .from('pelanggan')
+        .select('tanggal') // Kita hanya butuh tanggal untuk menghitung
+        .eq('sales_id', user.id);
+
+      if (error) {
+        console.error("Gagal mengambil data statistik:", error);
+        return;
+      }
+
+      // 3. Hitung statistik (logika sama seperti di dashboard)
+      const today = new Date();
+      const currentMonthIndex = today.getMonth();
+      const currentYear = today.getFullYear();
+      let quarterMonthStart;
+      if (currentMonthIndex < 3) quarterMonthStart = 0;
+      else if (currentMonthIndex < 6) quarterMonthStart = 3;
+      else if (currentMonthIndex < 9) quarterMonthStart = 6;
+      else quarterMonthStart = 9;
+      
+      const startOfQuarter = new Date(currentYear, quarterMonthStart, 1);
+      const startOfMonth = new Date(currentYear, currentMonthIndex, 1);
+      
+      let triwulanCount = 0;
+      let bulanIniCount = 0;
+      let hariIniCount = 0;
+
+      pelangganData.forEach(pelanggan => {
+        const pelangganDate = new Date(pelanggan.tanggal);
+        if (pelangganDate >= startOfQuarter) triwulanCount++;
+        if (pelangganDate >= startOfMonth) bulanIniCount++;
+        if (pelangganDate.toDateString() === today.toDateString()) hariIniCount++;
+      });
+      
+      // 4. Tampilkan statistik
+      document.getElementById('triwulanCount').textContent = triwulanCount;
+      document.getElementById('bulanIniCount').textContent = bulanIniCount;
+      document.getElementById('hariIniCount').textContent = hariIniCount;
+    }
+
+    // --- Event Listener untuk Logout ---
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const yakin = confirm("Apakah Anda yakin ingin keluar?");
+        if (yakin) {
+            await client.auth.signOut();
+            localStorage.removeItem('loginTimestamp');
+            window.location.replace("login.html");
+        }
+    });
+
+    // Panggil fungsi utama saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', loadAccountData);
+  </script>
+</body>
+</html>
