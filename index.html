@@ -638,6 +638,17 @@
       
       renderList(filteredData);
     });
+
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const yakin = confirm("Apakah Anda yakin ingin keluar?");
+    if (yakin) {
+        await client.auth.signOut();
+        // TAMBAHKAN BARIS INI
+        localStorage.removeItem('loginTimestamp');
+        window.location.replace("login.html");
+    }
+});
     
     // (Req 7) Event listener untuk Tombol Akun/Logout
     document.getElementById('logoutBtn').addEventListener('click', async (e) => {
@@ -654,6 +665,7 @@
   </script>
 </body>
 </html>
+
 
 
 
