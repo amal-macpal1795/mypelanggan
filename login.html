@@ -10,8 +10,18 @@
     body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  /* Background gradien ungu */
-  background: linear-gradient(180deg, #d88efa, #ab48d9);
+ /* --- Background Abstrak Geometris --- */
+  
+      /* Warna dasar */
+      background-color: #1a092a;
+  
+      /* Tumpukan beberapa gradien lingkaran (radial) */
+      background-image: 
+      /* Lingkaran besar di kiri atas */
+      radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%),
+    
+      /* Lingkaran besar di kanan bawah */
+      radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
   background-attachment: fixed;
   display: flex;
   justify-content: center;
@@ -186,6 +196,7 @@
   </script>
 </body>
 </html>
+
 
 
 
