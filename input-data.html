@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <title id="page-title">Input Data Pelanggan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -92,6 +94,13 @@
       margin-top:10px; 
       text-align:center;
     }
+    #map {
+      height: 300px;
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 1px solid #ddd;
+    }
   </style>
 </head>
 <body>
@@ -144,6 +153,11 @@
         <div class="form-group">
           <label for="alamat">Alamat Pemasangan</label>
           <textarea id="alamat" rows="3" placeholder="Diisi jika sudah ada"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="map-link">Titik Lokasi</label>
+          <div id="map">Memuat peta...</div>
+          <input type="text" id="map-link" placeholder="Geser pin di peta untuk membuat link..." readonly style="margin-top: 10px; background: #f0f0f0; color: #555;">
         </div>
         <div class="divider"></div>
         <div class="section-title">Info Produk</div>
@@ -205,9 +219,99 @@
     // Variabel untuk menyimpan ID pelanggan jika dalam mode edit
     let editId = null;
 
-    // --- FUNGSI UNTUK MENGISI FORM (MODE EDIT) ---
+    let map, marker;
+    let selectedLat, selectedLng; // Variabel untuk simpan koordinat
+
+    // --- FUNGSI PETA ---
+    function initMap(lat, lng) {
+        // Default ke Manado jika tidak ada koordinat
+        const defaultLat = lat || 1.4748;
+        const defaultLng = lng || 124.8421;
+
+        map = L.map('map').setView([defaultLat, defaultLng], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+
+        // Jika sudah ada koordinat, update link
+        if(lat && lng) {
+          updateLink(lat, lng);
+        }
+
+        marker.on('dragend', function(event) {
+            const position = marker.getLatLng();
+            selectedLat = position.lat;
+            selectedLng = position.lng;
+            updateLink(selectedLat, selectedLng);
+        });
+    }
+
+    function updateLink(lat, lng) {
+      const link = `https://www.google.com/maps?q=${lat},${lng}`;
+      document.getElementById('map-link').value = link;
+      selectedLat = lat;
+      selectedLng = lng;
+    }
+
+    // --- FUNGSI FORM (dengan data peta) ---
     async function populateForm(id) {
         const { data, error } = await client.from("pelanggan").select("*").eq("id", id).single();
+        if (error) { /* ... error handling ... */ return; }
+
+      // Isi form seperti biasa
+        document.getElementById("tanggal_pasang").value = data.tanggal.substring(0, 10);
+        document.getElementById("nik").value = data.nik;
+        // ... (isi semua field lain seperti kode sebelumnya) ...
+        document.getElementById("promo").checked = data.promo;
+        
+        await loadKota(data.kota_id);
+        await loadCluster(data.kota_id, data.cluster_id);
+        
+        // Inisialisasi peta dengan data yang ada
+        initMap(data.latitude, data.longitude);
+    }
+    
+    // (Fungsi loadKota dan loadCluster tetap sama, tidak perlu diubah)
+    async function loadKota(selectedKotaId = null) { /* ... kode sama ... */ }
+    async function loadCluster(kotaId, selectedClusterId = null) { /* ... kode sama ... */ }
+    document.getElementById("kota").addEventListener("change", (e) => { loadCluster(e.target.value); });
+
+    // --- LOGIKA UTAMA SAAT HALAMAN DIMUAT ---
+    document.addEventListener("DOMContentLoaded", async () => {
+        const params = new URLSearchParams(window.location.search);
+        editId = params.get('edit_id');
+
+        if (editId) {
+            // Mode Edit
+            pageTitle.textContent = "Edit Data Pelanggan";
+            formTitle.textContent = "Edit Data Pelanggan";
+            submitBtn.textContent = "Update Data";
+            await populateForm(editId);
+        } else {
+            // Mode Buat Baru
+            await loadKota();
+            initMap(); // Panggil peta dengan lokasi default
+        }
+    });
+
+    // --- LOGIKA SAAT FORM DISUBMIT (dengan data peta) ---
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      // ... (kode loading button & user auth tetap sama) ...
+      
+      const homepassValue = document.getElementById("homepass").value.trim();
+      const alamatValue = document.getElementById("alamat").value.trim();
+
+      const payload = {
+        // ... (semua field lama seperti nik, nama, dll.) ...
+        sales_id: user.id,
+        is_complete: homepassValue !== '' && alamatValue !== '',
+        // Tambahkan data koordinat
+        latitude: selectedLat,
+        longitude: selectedLng
+      };
 
         if (error) {
             console.error("Gagal mengambil data untuk diedit:", error);
@@ -361,4 +465,5 @@
   </script>
 </body>
 </html>
+
 
