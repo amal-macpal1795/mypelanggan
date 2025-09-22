@@ -298,7 +298,7 @@
     
     function updateLink(lat, lng) {
       // Menggunakan format link yang lebih umum
-      const link = `https://www.google.com/maps?q=latitude,longitude${lat},${lng}`;
+      const link = `http://googleusercontent.com/maps.google.com/6{lat},${lng}`;
       document.getElementById('map-link').value = link;
       selectedLat = lat;
       selectedLng = lng;
@@ -515,6 +515,7 @@
   </script>
 </body>
 </html>
+
 
 
 
