@@ -377,36 +377,43 @@
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
-    (async function checkSession() {
-  // 1. Periksa apakah ada user yang aktif di Supabase
+    // Di dalam file index.html (Dashboard)
+// GANTI SEMUA LOGIKA checkSession LAMA ANDA DENGAN INI:
+
+(async function checkSession() {
+  // 1. Cek apakah ada user yang aktif di Supabase
   const { data: { user } } = await client.auth.getUser();
 
-  // 2. Ambil catatan waktu saat user terakhir login
-  const loginTimestamp = localStorage.getItem('loginTimestamp');
+  // 2. Jika tidak ada user, langsung arahkan ke halaman login
+  if (!user) {
+    window.location.replace('login.html');
+    return; // Hentikan script agar tidak lanjut ke bawah
+  }
   
-  // 3. Tentukan durasi sesi (contoh: 3 jam dalam milidetik)
-  // Anda bisa mengubah angka '3' ini sesuai kebutuhan
-  const sessionDuration = 3 * 60 * 60 * 1000; 
+  // 3. Jika ADA user, cek durasi sesi
+  const loginTimestamp = localStorage.getItem('loginTimestamp');
+  const sessionDuration = 3 * 60 * 60 * 1000; // 3 jam
   const currentTime = new Date().getTime();
   
-  // 4. Cek apakah sesi sudah kedaluwarsa
-  let isSessionExpired = true; // Anggap sesi tidak valid pada awalnya
-  if (loginTimestamp) {
-    // Jika waktu saat ini > waktu login + durasi, maka sesi berakhir
-    isSessionExpired = (currentTime - loginTimestamp > sessionDuration);
-  }
-  
-  // 5. Jika tidak ada user ATAU tidak ada catatan waktu ATAU sesi sudah berakhir
-  if (!user || !loginTimestamp || isSessionExpired) {
-    // Hapus sisa data login lama untuk memastikan logout bersih
-    client.auth.signOut();
-    localStorage.clear();
-
-    // Arahkan ke halaman login
+  // 4. Jika timestamp tidak ada ATAU sesi sudah berakhir
+  if (!loginTimestamp || (currentTime - loginTimestamp > sessionDuration)) {
+    client.auth.signOut(); // Logout dari Supabase
+    localStorage.clear();  // Hapus semua data di localStorage
+    alert('Sesi Anda telah berakhir. Silakan login kembali.');
     window.location.replace('login.html');
+    return; // Hentikan script
   }
-  // Jika semua syarat terpenuhi, kode akan lanjut berjalan dan dashboard akan ditampilkan.
-})();
+
+  // 5. Jika lolos semua pemeriksaan, panggil fungsi untuk memuat data dashboard
+  fetchData();
+
+})(); // Tanda () ini membuat fungsi langsung berjalan
+
+
+// PENTING: Hapus pemanggilan fetchData() di bagian bawah script Anda,
+// karena sekarang sudah dipanggil dari dalam checkSession.
+// Hapus baris ini dari bagian paling bawah script Anda:
+// fetchData();
     
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
@@ -665,6 +672,7 @@
   </script>
 </body>
 </html>
+
 
 
 
