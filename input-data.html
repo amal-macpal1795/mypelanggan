@@ -9,13 +9,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
-    body { margin:0; font-family:'Poppins',sans-serif; background:#fafafa; display:flex; justify-content:center; padding:20px; }
-    .container { width:100%; max-width:500px; }
-    h1 { font-size:22px; font-weight:600; margin-bottom:20px; color:#333; text-align:center; }
+    body { 
+      margin:0; 
+      font-family:'Poppins',sans-serif; 
+      background:#fafafa; 
+      display:flex; 
+      justify-content:center; 
+      padding:20px; 
+    }
+    .container { 
+      width:100%; 
+      max-width:500px; 
+    }
+    h1 { 
+      font-size:22px; 
+      font-weight:600; 
+      margin-bottom:20px; 
+      color:#333; 
+      text-align:center; 
+    }
     .card { /* Dibiarkan kosong */ }
-    .section-title { font-size:16px; font-weight:600; margin-bottom:12px; color:#222; }
-    .form-group { margin-bottom:14px; }
-    label { font-size:13px; font-weight:500; color:#333; display:block; margin-bottom:6px; }
+    
+    .section-title { 
+      font-size:16px; 
+      font-weight:600; 
+      margin-bottom:12px; 
+      color:#222; 
+    }
+    .form-group { 
+      margin-bottom:14px; 
+    }
+    label { font-size:13px;
+    font-weight:500; color:#333; display:block; margin-bottom:6px; }
     input, select, textarea { width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-size:13px; font-family:'Poppins',sans-serif; outline:none; transition:border 0.2s; box-sizing: border-box; }
     .nik-input { font-family: 'OCR A Extended', 'SF Mono', 'Courier New', monospace; font-weight: 600; letter-spacing: 1.5px; font-size: 15px; }
     .uppercase-input { text-transform: uppercase; }
@@ -277,10 +302,10 @@
     // --- EVENT LISTENERS UNTUK VALIDASI REAL-TIME & FUNGSI LAINNYA ---
     
     // (No. 1) Event listener untuk memunculkan kalender
-    document.getElementById('tanggal_pasang_display').addEventListener('click', function() {
+    //document.getElementById('tanggal_pasang_display').addEventListener('click', function() {
       // showPicker() adalah metode modern untuk memicu date picker
-      document.getElementById('tanggal_pasang').showPicker();
-    });
+      //document.getElementById('tanggal_pasang').showPicker();
+    
     document.getElementById('tanggal_pasang').addEventListener('change', function() {
       document.getElementById('tanggal_pasang_display').value = formatDate(this.value);
     });
@@ -422,3 +447,4 @@
   </script>
 </body>
 </html>
+
