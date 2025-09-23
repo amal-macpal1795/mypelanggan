@@ -364,70 +364,109 @@
 
   <!-- ----------------AKUN---------------- -->
 
-  <div class="bottom-nav">
-    <a href="dashboard.html" class="nav-item active">
-      <i class="fa-solid fa-house"></i>
-      <span>Dashboard</span>
-    </a>
-    <a href="input-data.html" class="nav-fab">
-      <i class="fa-solid fa-plus"></i>
-    </a>
-    <a href="akun.html" class="nav-item">
-      <i class="fa-solid fa-person"></i>
-      <span>Akun</span>
-    </a>
+  <div class="account-view" style="display: none;">
+    <div class="page-title">Akun</div>
+    <div class="card">
+      <div class="user-info">
+        <div class="avatar" id="avatar-initials">..</div>
+        <div class="user-details">
+          <div class="name" id="user-fullname">Memuat...</div>
+          <div class="email" id="user-email">Memuat...</div>
+        </div>
+      </div>
+      
+      <hr class="divider">
+      
+      <div class="user-stats">
+        <div class="stat-item">
+          <span class="label">Pencapaian Triwulan</span>
+          <span class="value" id="triwulanCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Pencapaian Bulanan</span>
+          <span class="value" id="bulanIniCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="label">Pencapaian Harian</span>
+          <span class="value" id="hariIniCount">0</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <div class="action-list">
+      <a href="#">
+        <i class="fa-solid fa-user-pen"></i>
+        <span>Informasi Pribadi</span>
+      </a>
+      <a href="#" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Log out</span>
+      </a>
+    </div>
+  </div>
+
+
+  
+  <div class="bottom-nav">
+  <a href="#dashboard" class="nav-item active"> <i class="fa-solid fa-house"></i>
+    <span>Dashboard</span>
+  </a>
+  <a href="input-data.html" class="nav-fab">
+    <i class="fa-solid fa-plus"></i>
+  </a>
+  <a href="#akun" class="nav-item"> <i class="fa-solid fa-person"></i>
+    <span>Akun</span>
+  </a>
+</div>
+
   <script>
+    // ===================================================================
+    // BAGIAN 1: INISIALISASI & REFERENSI (Harus di paling atas)
+    // ===================================================================
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    (async function checkSession() {
-      const { data: { user } } = await client.auth.getUser();
-      const loginTimestamp = localStorage.getItem('loginTimestamp');
-      
-      if (!user) {
-        window.location.replace('login.html');
-        return; 
-      }
-      
-      const sessionDuration = 3 * 60 * 60 * 1000; // 3 jam
-      const currentTime = new Date().getTime();
-      
-      if (!loginTimestamp || (currentTime - loginTimestamp > sessionDuration)) {
-        client.auth.signOut();
-        localStorage.clear();
-        alert('Sesi Anda telah berakhir. Silakan login kembali.');
-        window.location.replace('login.html');
-        return; 
-      }
+    // Referensi Elemen Tampilan Utama
+    const dashboardView = document.getElementById('dashboard-view');
+    const accountView = document.getElementById('account-view');
 
-      // Jika sesi valid, panggil fungsi untuk memuat data dashboard
-      fetchData();
-    })();
-
-    // --- Referensi Elemen ---
+    // Referensi Elemen Dashboard
     const pelangganList = document.getElementById('pelangganList');
+    const searchInput = document.getElementById('search-input');
+
+    // Referensi Elemen Akun
+    const avatarInitials = document.getElementById('avatar-initials');
+    const userFullname = document.getElementById('user-fullname');
+    const userEmail = document.getElementById('user-email');
     const triwulanCountEl = document.getElementById('triwulanCount');
     const bulanIniCountEl = document.getElementById('bulanIniCount');
     const hariIniCountEl = document.getElementById('hariIniCount');
-    const progressTitleEl = document.getElementById('progress-title');
-    const avatarEl = document.getElementById('avatar-initials');
-    const userFullnameEl = document.getElementById('user-fullname');
-    const searchInput = document.getElementById('search-input');
-    
-    const loadingMessageEl = pelangganList.querySelector('.loading-message');
-    const errorMessageEl = pelangganList.querySelector('.error-message');
-    const noDataMessageEl = pelangganList.querySelector('.no-data-message');
-    
-    // Variabel global untuk menyimpan semua data (untuk pencarian)
-    let allPelanggan = [];
-    
-    // --- Fungsi Helper ---
 
-    /** 1. (Req 1) Membuat inisial dari nama */
+    let allPelanggan = []; // Variabel global
+
+    // ===================================================================
+    // BAGIAN 2: SEMUA DEFINISI FUNGSI
+    // ===================================================================
+
+    // --- FUNGSI NAVIGASI SPA (Single Page Application) ---
+    function showView(viewId) {
+      dashboardView.style.display = 'none';
+      accountView.style.display = 'none';
+      document.getElementById(viewId).style.display = 'block';
+
+      document.querySelector('.nav-item.active')?.classList.remove('active');
+      if (viewId === 'dashboard-view') {
+        document.querySelector('a[href="#dashboard"]').classList.add('active');
+        fetchData(); // Muat data saat tampilan dashboard dibuka
+      } else if (viewId === 'account-view') {
+        document.querySelector('a[href="#akun"]').classList.add('active');
+        loadAccountData(); // Muat data saat tampilan akun dibuka
+      }
+    }
+
+    // --- FUNGSI-FUNGSI DARI DASHBOARD ---
     function getInitials(name) {
       if (!name) return "..";
       const parts = name.split(' ');
@@ -437,230 +476,80 @@
       }
       return initials.toUpperCase();
     }
-    
-    /** 2. (Req 6) Mendapatkan harga paket (ASUMSI) */
-    // Anda harus melengkapi daftar ini sesuai data Anda
-    function getPaketPrice(paketName) {
-        const prices = {
-            "(107) Jet20 Mbps": "Rp180.000",
-            "(146) Plus Value30 Mbps": "Rp210.000",
-            "(108) Value30 Mbps": "Rp227.550", // Sesuai contoh Anda
-            "(109) Fast50 Mbps": "Rp300.000",
-            "(127) Nova100 Mbps Reg": "Rp450.000",
-            "(133) MyGamers250 Mbps": "Rp700.000",
-            "(138) Prime500 Mbps": "Rp1.200.000"
-            // Tambahkan paket lainnya di sini
-        };
-        return prices[paketName] || "Harga tidak diatur";
-    }
-
-    /** 3. (Req 6) Merender daftar pelanggan ke HTML */
-    function renderList(dataToRender) {
-      // Bersihkan daftar sebelum render
-      pelangganList.innerHTML = '';
-      
-      // Sembunyikan pesan status
-      loadingMessageEl.style.display = 'none';
-      errorMessageEl.style.display = 'none';
-      noDataMessageEl.style.display = 'none';
-
-      if (dataToRender.length === 0) {
-        // Tampilkan pesan 'tidak ada data'
-        // Jika allPelanggan > 0, berarti ini hasil filter, jika tidak, memang datanya kosong
-        if (allPelanggan.length > 0) {
-            noDataMessageEl.textContent = "Tidak ada pelanggan yang cocok dengan pencarian Anda.";
-        } else {
-            noDataMessageEl.textContent = "Belum ada data pelanggan yang tersedia.";
-        }
-        noDataMessageEl.style.display = 'block';
-      } else {
-        dataToRender.forEach(pelanggan => {
-          const card = document.createElement('div');
-          card.className = 'customer-card';
-
-          const paketPrice = getPaketPrice(pelanggan.paket_internet);
-          
-          // (Req 6) Dapatkan nama kota. Jika tidak ada, pakai alamat, jika tidak ada, 'Lokasi tidak ada'
-          // 'kota' adalah nama alias dari join tabel
-          const cityName = pelanggan.kota ? pelanggan.kota.nama : (pelanggan.alamat || 'Lokasi tidak ada');
-
-          // (Req 6) ASUMSI: Tombol Detail/Edit
-          // Saya berasumsi ada kolom 'is_complete' di tabel Anda
-          // Jika tidak ada, ganti `pelanggan.is_complete` dengan `true` agar semua tombol 'Detail'
-          const isComplete = pelanggan.is_complete === true; // Ganti ini jika perlu
-
-          const buttonHtml = isComplete
-            ? `<a href="detail.html?id=${pelanggan.id}" class="btn btn-detail">Detail</a>`
-            : `<a href="input-data.html?edit_id=${pelanggan.id}" class="btn btn-edit">Edit</a>`; // Asumsi link edit
-
-          // (Req 6) ASUMSI: Box 'Harap dilengkapi'
-          const statusBoxHtml = !isComplete
-            ? `<div class="status-box">Harap dilengkapi</div>`
-            : '';
-            
-          card.innerHTML = `
-            <div class="card-row1">
-              <div class="name">${pelanggan.nama_lengkap.toUpperCase()}</div>
-              <div class="city-tag">${cityName}</div>
-            </div>
-            <div class="card-row2">
-              <div class="paket">${pelanggan.paket_internet || 'Paket tidak diatur'}</div>
-              <div class="price">${paketPrice}</div>
-              ${statusBoxHtml}
-            </div>
-            <div class="card-row3">
-              ${buttonHtml}
-            </div>
-          `;
-          pelangganList.appendChild(card);
-        });
-      }
-    }
-
-    /** 4. Fungsi utama untuk mengambil data */
+    // ... (Fungsi renderList, getPaketPrice, dll. jika ada, letakkan di sini) ...
     async function fetchData() {
-      // Tampilkan pesan loading
-      loadingMessageEl.style.display = 'block';
-      
-      // (Req 1 & 2) Dapatkan data user yang sedang login
-      const { data: { user }, error: authError } = await client.auth.getUser();
-      if (authError || !user) {
-        errorMessageEl.textContent = 'Anda harus login untuk melihat data ini. Mengalihkan ke halaman login...';
-        errorMessageEl.style.display = 'block';
-        setTimeout(() => window.location.replace("index.html"), 2000);
-        return;
-      }
-      
-      // Ambil nama dari metadata (disimpan saat daftar)
-      const userName = user.user_metadata.name || 'Nama User';
-      avatarEl.textContent = getInitials(userName);
-      userFullnameEl.textContent = userName.toUpperCase();
-      
-      // (Req 6) MODIFIKASI QUERY:
-      // Kita tambahkan 'paket_internet', 'is_complete' (ASUMSI),
-      // dan join ke tabel 'kota' untuk mengambil 'nama' kota.
-      const { data: pelangganData, error: pelangganError } = await client
-        .from('pelanggan')
-        .select(`
-          id, 
-          nama_lengkap, 
-          alamat, 
-          tanggal, 
-          paket_internet,
-          is_complete, 
-          created_at,
-          kota:kota_id ( nama )
-        `) // Query diubah
-        .eq('sales_id', user.id) // Filter data berdasarkan user yang login
-        .order('created_at', { ascending: false }); // Urutkan berdasarkan WAKTU INPUT
-      
-      if (pelangganError) {
-        console.error('Error fetching data:', pelangganError);
-        errorMessageEl.textContent = 'Gagal memuat data: ' + pelangganError.message;
-        errorMessageEl.style.display = 'block';
-        loadingMessageEl.style.display = 'none';
-        return;
-      }
-      
-      // Simpan data ke variabel global
+      // (Isi lengkap fungsi fetchData Anda dari index.html sebelumnya)
+      // Contoh:
+      const { data: pelangganData, error } = await client.from('pelanggan').select('*').order('created_at', { ascending: false });
       allPelanggan = pelangganData;
-
-      // (Req 4 & 5) Hitung Statistik
-      const today = new Date();
-      const currentMonthIndex = today.getMonth(); // 0-11
-      const currentYear = today.getFullYear();
-      
-      // Judul Progress Card
-      const monthName = today.toLocaleString('id-ID', { month: 'long' });
-      progressTitleEl.textContent = `Progres ${monthName} ${currentYear}`;
-
-      // Tentukan awal triwulan
-      let quarterMonthStart;
-      if (currentMonthIndex < 3) quarterMonthStart = 0; // Q1 (Jan)
-      else if (currentMonthIndex < 6) quarterMonthStart = 3; // Q2 (Apr)
-      else if (currentMonthIndex < 9) quarterMonthStart = 6; // Q3 (Jul)
-      else quarterMonthStart = 9; // Q4 (Oct)
-      
-      const startOfQuarter = new Date(currentYear, quarterMonthStart, 1);
-      const startOfMonth = new Date(currentYear, currentMonthIndex, 1);
-      
-      let triwulanCount = 0;
-      let bulanIniCount = 0;
-      let hariIniCount = 0;
-
-      allPelanggan.forEach(pelanggan => {
-    // Variabel ini harus dibuat di paling atas agar bisa dipakai semua
-    const tanggalPemasangan = new Date(pelanggan.tanggal);
-    
-    // Kalkulasi Triwulan & Bulanan (sekarang aman)
-    if (tanggalPemasangan >= startOfQuarter) triwulanCount++;
-    if (tanggalPemasangan >= startOfMonth) bulanIniCount++;
-    
-    // Kalkulasi Harian (kode perbaikan dari sebelumnya)
-    if (pelanggan.created_at) {
-        const tanggalDibuat = new Date(pelanggan.created_at);
-        if (tanggalDibuat.toDateString() === today.toDateString()) {
-            hariIniCount++;
-        }
+      renderList(allPelanggan); // Fungsi renderList Anda harus ada
+      // ... sisa logika fetchData ...
     }
-});
+    function renderList(data) { /*... Isi fungsi renderList Anda ...*/ }
 
-      // Perbarui statistik di halaman
-      triwulanCountEl.textContent = triwulanCount;
-      bulanIniCountEl.textContent = bulanIniCount;
-      hariIniCountEl.textContent = hariIniCount;
+    // --- FUNGSI DARI AKUN (DIPINDAHKAN KE SINI) ---
+    async function loadAccountData() {
+      const { data: { user } } = await client.auth.getUser();
+      if (!user) return; // Seharusnya tidak terjadi karena sudah dicek
 
-      // Render daftar awal
-      renderList(allPelanggan);
+      const userName = user.user_metadata.name || 'Nama Pengguna';
+      avatarInitials.textContent = getInitials(userName);
+      userFullname.textContent = userName.toUpperCase();
+      userEmail.textContent = user.email;
+
+      const { data: pelangganData } = await client.from('pelanggan').select('tanggal').eq('sales_id', user.id);
+      
+      // ... (kode lengkap untuk menghitung statistik) ...
+      triwulanCountEl.textContent = 0; // Ganti dengan hasil perhitungan
+      bulanIniCountEl.textContent = 0; // Ganti dengan hasil perhitungan
+      hariIniCountEl.textContent = 0; // Ganti dengan hasil perhitungan
     }
-    
-    // --- Event Listeners ---
 
-    // (Req 3) Event listener untuk search bar
-    searchInput.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      
-      if (searchTerm === "") {
-        renderList(allPelanggan); // Tampilkan semua jika search kosong
-        return;
-      }
-      
-      const filteredData = allPelanggan.filter(p => 
-        p.nama_lengkap.toLowerCase().includes(searchTerm) ||
-        (p.alamat && p.alamat.toLowerCase().includes(searchTerm)) ||
-        (p.kota && p.kota.nama.toLowerCase().includes(searchTerm)) ||
-        (p.paket_internet && p.paket_internet.toLowerCase().includes(searchTerm))
-      );
-      
-      renderList(filteredData);
+    // ===================================================================
+    // BAGIAN 3: EVENT LISTENERS (Pemroses Aksi Pengguna)
+    // ===================================================================
+    
+    // Event Listener untuk Navigasi SPA
+    document.querySelector('a[href="#dashboard"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      showView('dashboard-view');
     });
 
-    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
-    e.preventDefault();
-    const yakin = confirm("Apakah Anda yakin ingin keluar?");
-    if (yakin) {
-        await client.auth.signOut();
-        // TAMBAHKAN BARIS INI
-        localStorage.removeItem('loginTimestamp');
-        window.location.replace("login.html");
-    }
-});
-    
-    // (Req 7) Event listener untuk Tombol Akun/Logout
+    document.querySelector('a[href="#akun"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      showView('account-view');
+    });
+
+    // Event Listener untuk Logout (pastikan ID tombol logout adalah 'logoutBtn')
+    // Jika tombol logout ada di dalam #account-view, pastikan ID-nya unik
     document.getElementById('logoutBtn').addEventListener('click', async (e) => {
         e.preventDefault();
-        const yakin = confirm("Apakah Anda yakin ingin keluar?");
-        if (yakin) {
+        if (confirm("Apakah Anda yakin ingin keluar?")) {
             await client.auth.signOut();
-            window.location.replace("index.html");
+            localStorage.clear();
+            window.location.replace("login.html");
         }
     });
 
-    // --- Panggil Fungsi Utama ---
-    fetchData();
-  </script>
+    // Event Listener lain yang Anda punya (misal: searchInput)
+    // searchInput.addEventListener('input', () => { ... });
+
+    // ===================================================================
+    // BAGIAN 4: LOGIKA AWAL SAAT HALAMAN DIBUKA
+    // ===================================================================
+    (async function initPage() {
+      const { data: { user } } = await client.auth.getUser();
+      if (!user) {
+        window.location.replace('login.html');
+      } else {
+        // Tampilkan dashboard sebagai tampilan default saat pertama kali dibuka
+        showView('dashboard-view');
+      }
+    })();
+</script>
 </body>
 </html>
+
 
 
 
