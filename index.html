@@ -6,36 +6,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
+
   <style>
-    /* ------------------------------ */
-    /* == Global & Reset == */
-    /* ------------------------------ */
     :root {
       --myrepublic-purple: #8119b5;
-      --myrepublic-orange: #ff7f00; /* Warna untuk tombol 'Edit' */
+      --myrepublic-orange: #ff7f00;
       --light-gray-bg: #f0f0f0;
-      --light-orange-bg: #fff4e6; /* Background 'Harap dilengkapi' */
+      --light-orange-bg: #fff4e6;
       --text-primary: #222;
       --text-secondary: #666;
     }
     body {
       margin: 0;
-      padding: 180px 0 100px 0; 
+      padding-top: 180px; /* Hanya padding atas untuk header */
+      padding-bottom: 100px; /* Padding bawah untuk bottom nav */
       font-family: 'Poppins', sans-serif;
-  
-      /* --- Background Abstrak Geometris --- */
-  
-      /* Warna dasar */
+      /* Background Abstrak Geometris dari index.html */
       background-color: #1a092a;
-  
-      /* Tumpukan beberapa gradien lingkaran (radial) */
       background-image: 
-      /* Lingkaran besar di kiri atas */
-      radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%),
-    
-      /* Lingkaran besar di kanan bawah */
-      radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
-  
+        radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%),
+        radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
       background-attachment: fixed;
     }
     * {
@@ -46,14 +36,12 @@
       color: inherit;
     }
 
-    /* ------------------------------ */
-    /* == 1, 2, 3: Header & Search (Fixed) == */
-    /* ------------------------------ */
+    /* == Header & Search (Fixed) == */
     .header-container {
       background: #fff;
       padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,.05);
-      position: fixed; /* Header dibuat fix di atas */
+      position: fixed;
       top: 0;
       left: 0;
       right: 0;
@@ -64,7 +52,7 @@
       align-items: center;
       margin-bottom: 16px;
     }
-    .avatar {
+    .header-profile .avatar { /* Lebih spesifik untuk header */
       width: 48px;
       height: 48px;
       border-radius: 50%;
@@ -91,13 +79,12 @@
       text-transform: uppercase;
       line-height: 1.2;
     }
-    
     .search-bar {
       position: relative;
     }
     .search-bar input {
       width: 100%;
-      padding: 12px 16px 12px 40px; /* Ruang untuk ikon */
+      padding: 12px 16px 12px 40px;
       border-radius: 12px;
       border: 1px solid #ddd;
       font-size: 14px;
@@ -110,18 +97,20 @@
       top: 13px;
       color: #999;
     }
-
-    /* Container untuk konten di bawah header */
     .container {
       width: 100%;
       max-width: 500px;
-      padding: 0 20px; /* Padding untuk konten */
-      margin: 0 auto; /* Tengahkan konten */
+      padding: 0 20px;
+      margin: 0 auto;
     }
 
-    /* ------------------------------ */
-    /* == 4 & 5: Progress Card == */
-    /* ------------------------------ */
+    /* == Gaya untuk Tampilan Dashboard == */
+    #dashboard-view h1 { /* Dibuat lebih spesifik */
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #f0f0f0; /* Warna disesuaikan dengan background gelap */
+    }
     .progress-card {
       background: #fff;
       border-radius: 16px;
@@ -130,8 +119,8 @@
       margin-bottom: 24px;
     }
     .progress-title {
-      font-size: 15px; /* Dikecilkan */
-      font-weight: 600; /* Judul bold */
+      font-size: 15px;
+      font-weight: 600;
       color: var(--text-primary);
       margin-bottom: 16px;
     }
@@ -141,10 +130,10 @@
       text-align: center;
     }
     .stats-item {
-      flex-basis: 33%; /* Dibagi 3 kolom */
+      flex-basis: 33%;
     }
     .stats-label {
-      font-size: 11px; /* Teks kecil */
+      font-size: 11px;
       color: var(--text-secondary);
       margin-bottom: 4px;
     }
@@ -153,20 +142,9 @@
       font-weight: 700;
       color: var(--myrepublic-purple);
     }
-    /* Pemisah antar kolom stats */
     .stats-item:nth-child(2) {
       border-left: 1px solid #eee;
       border-right: 1px solid #eee;
-    }
-
-    /* ------------------------------ */
-    /* == 6: Customer Card List == */
-    /* ------------------------------ */
-    h1 {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: #333;
     }
     .customer-card {
       background: #fff;
@@ -179,114 +157,147 @@
     .customer-card:hover {
       background: #fdfcff;
     }
-
-    /* Baris 1: Nama & Kota */
-    .card-row1 {
-      margin-bottom: 12px;
-    }
+    .card-row1 { margin-bottom: 12px; }
     .card-row1 .name {
-      font-size: 16px;
-      font-weight: 700; /* Bold */
-      color: var(--text-primary);
-      text-transform: uppercase; /* Huruf Kapital */
+      font-size: 16px; font-weight: 700;
+      color: var(--text-primary); text-transform: uppercase;
       margin-bottom: 6px;
     }
     .city-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      background: var(--light-gray-bg);
-      color: var(--text-secondary);
-      border-radius: 6px;
+      display: inline-block; font-size: 11px; font-weight: 500;
+      padding: 3px 8px; background: var(--light-gray-bg);
+      color: var(--text-secondary); border-radius: 6px;
     }
-
-    /* Baris 2: Paket, Harga, Status */
-    .card-row2 {
-      margin-bottom: 16px;
-    }
-    .card-row2 .paket {
-      font-size: 14px;
-      font-weight: 600; /* Label bold */
-      color: var(--text-primary);
-    }
-    .card-row2 .price {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
+    .card-row2 { margin-bottom: 16px; }
+    .card-row2 .paket { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .card-row2 .price { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-top: 2px; }
     .status-box {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 4px 10px;
-      background: var(--light-orange-bg);
-      color: #cc6a00;
-      border-radius: 6px;
-      margin-top: 8px;
+      display: inline-block; font-size: 11px; font-weight: 500;
+      padding: 4px 10px; background: var(--light-orange-bg);
+      color: #cc6a00; border-radius: 6px; margin-top: 8px;
     }
-
-    /* Baris 3: Tombol */
-    .card-row3 {
-      display: flex;
-      justify-content: flex-end; /* Tarik ke pojok kanan */
-    }
+    .card-row3 { display: flex; justify-content: flex-end; }
     .btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-      cursor: pointer;
-      text-align: center;
+      padding: 8px 16px; border: none; border-radius: 10px;
+      font-size: 13px; font-weight: 600; font-family: 'Poppins', sans-serif;
+      cursor: pointer; text-align: center;
     }
-    .btn-detail {
-      background: var(--myrepublic-purple);
-      color: white;
-    }
-    .btn-edit {
-      background: var(--myrepublic-orange);
-      color: white;
-    }
-    
-    /* Utility & Loading Messages */
+    .btn-detail { background: var(--myrepublic-purple); color: white; }
+    .btn-edit { background: var(--myrepublic-orange); color: white; }
     .loading-message, .error-message, .no-data-message {
-      text-align: center;
-      color: #777;
-      margin-top: 20px;
-      font-size: 14px;
+      text-align: center; color: #ccc; /* Disesuaikan dengan background gelap */
+      margin-top: 20px; font-size: 14px;
     }
-    .error-message { color: red; }
+    .error-message { color: #ff8a80; }
 
-    /* ------------------------------ */
-    /* == 7: Bottom Navigation (Fixed) == */
-    /* ------------------------------ */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
+    /* == GAYA UNTUK TAMPILAN AKUN (Dipindahkan dari akun.html) == */
+    .page-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .card {
       background: #fff;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.07);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+    .user-info {
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      z-index: 100;
-      padding: 0 10px;
+      padding-bottom: 15px;
     }
-    .nav-item {
+    .user-info .avatar { /* Lebih spesifik untuk akun */
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #8119b5;
+      color: white;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: var(--text-secondary);
-      font-size: 11px;
+      font-size: 20px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-right: 15px;
+    }
+    .user-details .name {
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      line-height: 1.2;
+      color: #333;
+    }
+    .user-details .email {
+      font-size: 13px;
+      color: #888;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 0;
+    }
+    .user-stats {
+      padding-top: 15px;
+    }
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .stat-item .label {
+      color: #555;
+    }
+    .stat-item .value {
+      font-weight: 600;
+      color: #8119b5;
+      background: #f4e8ff;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .action-list a {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      text-decoration: none;
+      color: white;
       font-weight: 500;
-      flex-grow: 1;
-      flex-basis: 0;
+      transition: background 0.2s;
+    }
+    .action-list a:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    .action-list i {
+      font-size: 18px;
+      width: 30px;
+      text-align: center;
+      margin-right: 10px;
+      opacity: 0.8;
+    }
+
+    /* == Bottom Navigation (Fixed) == */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 70px; background: #fff;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.07);
+      display: flex; align-items: center; justify-content: space-around;
+      z-index: 100; padding: 0 10px;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; color: var(--text-secondary);
+      font-size: 11px; font-weight: 500;
+      flex-grow: 1; flex-basis: 0;
+      text-decoration: none;
     }
     .nav-item.active {
       color: var(--myrepublic-purple);
@@ -295,27 +306,18 @@
       font-size: 20px;
       margin-bottom: 4px;
     }
-    /* Tombol FAB di tengah */
     .nav-fab {
-      width: 60px;
-      height: 60px;
-      background: var(--myrepublic-purple);
-      border-radius: 50%;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 32px;
-      cursor: pointer;
-      margin-top: -30px; /* Menonjol ke atas */
-      border: 4px solid #fff; /* Efek outline putih */
-      flex-shrink: 0;
+      width: 60px; height: 60px; background: var(--myrepublic-purple);
+      border-radius: 50%; box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 32px; cursor: pointer; margin-top: -30px;
+      border: 4px solid #fff; flex-shrink: 0;
     }
     .nav-fab:hover {
       background: #550a7a;
     }
-  </style>
+</style>
+  
 </head>
 <body>
 
@@ -549,6 +551,7 @@
 </script>
 </body>
 </html>
+
 
 
 
