@@ -333,33 +333,36 @@
     </div>
   </div>
 
+  <!-- ----------------DASHBOARD---------------- -->
   <div class="container">
-    
-    <div class="progress-card">
-      <div class="progress-title" id="progress-title">Progres ...</div>
-      <div class="stats-grid">
-        <div class="stats-item">
-          <div class="stats-label">Pencapaian Triwulan</div>
-          <div class="stats-value" id="triwulanCount">0</div>
-        </div>
-        <div class="stats-item">
-          <div class="stats-label">Pencapaian Bulanan</div>
-          <div class="stats-value" id="bulanIniCount">0</div>
-        </div>
-        <div class="stats-item">
-          <div class="stats-label">Pencapaian Harian</div>
-          <div class="stats-value" id="hariIniCount">0</div>
+    <div class="dashboard-view">
+      <div class="progress-card">
+        <div class="progress-title" id="progress-title">Progres ...</div>
+        <div class="stats-grid">
+          <div class="stats-item">
+            <div class="stats-label">Pencapaian Triwulan</div>
+            <div class="stats-value" id="triwulanCount">0</div>
+          </div>
+          <div class="stats-item">
+            <div class="stats-label">Pencapaian Bulanan</div>
+            <div class="stats-value" id="bulanIniCount">0</div>
+          </div>
+          <div class="stats-item">
+            <div class="stats-label">Pencapaian Harian</div>
+            <div class="stats-value" id="hariIniCount">0</div>
+          </div>
         </div>
       </div>
+      
+      <div id="pelangganList">
+        <div class="loading-message">Memuat data...</div>
+        <div class="error-message" style="display: none;"></div>
+        <div class="no-data-message" style="display: none;">Belum ada data pelanggan yang tersedia.</div>
+      </div>
     </div>
-    
-    <div id="pelangganList">
-      <div class="loading-message">Memuat data...</div>
-      <div class="error-message" style="display: none;"></div>
-      <div class="no-data-message" style="display: none;">Belum ada data pelanggan yang tersedia.</div>
-    </div>
+  </div>
 
-    </div>
+  <!-- ----------------AKUN---------------- -->
 
   <div class="bottom-nav">
     <a href="dashboard.html" class="nav-item active">
@@ -658,6 +661,7 @@
   </script>
 </body>
 </html>
+
 
 
 
