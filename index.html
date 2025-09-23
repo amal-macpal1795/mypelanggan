@@ -1,332 +1,97 @@
 <!doctype html>
-<html>
+<html lang="id">
 <head>
   <meta charset="utf-8" />
-  <title>Dashboard Sales</title>
+  <title>Sales Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
-
   <style>
+    /* ... (Seluruh CSS gabungan Anda diletakkan di sini) ... */
     :root {
-      --myrepublic-purple: #8119b5;
-      --myrepublic-orange: #ff7f00;
-      --light-gray-bg: #f0f0f0;
-      --light-orange-bg: #fff4e6;
-      --text-primary: #222;
-      --text-secondary: #666;
+      --myrepublic-purple: #8119b5; --myrepublic-orange: #ff7f00;
+      --light-gray-bg: #f0f0f0; --light-orange-bg: #fff4e6;
+      --text-primary: #222; --text-secondary: #666;
     }
     body {
-      margin: 0;
-      padding-top: 180px; /* Hanya padding atas untuk header */
-      padding-bottom: 100px; /* Padding bawah untuk bottom nav */
+      margin: 0; padding-top: 180px; padding-bottom: 100px;
       font-family: 'Poppins', sans-serif;
-      /* Background Abstrak Geometris dari index.html */
       background-color: #1a092a;
-      background-image: 
-        radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%),
-        radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
+      background-image: radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%), radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
       background-attachment: fixed;
     }
-    * {
-      box-sizing: border-box;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* == Header & Search (Fixed) == */
+    * { box-sizing: border-box; }
+    a { text-decoration: none; color: inherit; }
     .header-container {
-      background: #fff;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.05);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
+      background: #fff; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     }
-    .header-profile {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
+    .header-profile { display: flex; align-items: center; margin-bottom: 16px; }
+    .header-profile .avatar {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--myrepublic-purple);
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 600; flex-shrink: 0;
     }
-    .header-profile .avatar { /* Lebih spesifik untuk header */
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--myrepublic-purple);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-    .greeting {
-      margin-left: 12px;
-    }
-    .greeting-hello {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-    .greeting-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
-    .search-bar {
-      position: relative;
-    }
-    .search-bar input {
-      width: 100%;
-      padding: 12px 16px 12px 40px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      font-size: 14px;
-      font-family: 'Poppins', sans-serif;
-      outline: none;
-    }
-    .search-bar .fa-search {
-      position: absolute;
-      left: 14px;
-      top: 13px;
-      color: #999;
-    }
-    .container {
-      width: 100%;
-      max-width: 500px;
-      padding: 0 20px;
-      margin: 0 auto;
-    }
-
-    /* == Gaya untuk Tampilan Dashboard == */
-    #dashboard-view h1 { /* Dibuat lebih spesifik */
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: #f0f0f0; /* Warna disesuaikan dengan background gelap */
-    }
-    .progress-card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      padding: 18px;
-      margin-bottom: 24px;
-    }
-    .progress-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-    }
-    .stats-grid {
-      display: flex;
-      justify-content: space-between;
-      text-align: center;
-    }
-    .stats-item {
-      flex-basis: 33%;
-    }
-    .stats-label {
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-bottom: 4px;
-    }
-    .stats-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--myrepublic-purple);
-    }
-    .stats-item:nth-child(2) {
-      border-left: 1px solid #eee;
-      border-right: 1px solid #eee;
-    }
-    .customer-card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.05);
-      padding: 16px;
-      margin-bottom: 16px;
-      transition: background 0.2s;
-    }
-    .customer-card:hover {
-      background: #fdfcff;
-    }
+    .greeting { margin-left: 12px; }
+    .greeting-hello { font-size: 14px; color: var(--text-secondary); }
+    .greeting-name { font-size: 16px; font-weight: 600; color: var(--text-primary); text-transform: uppercase; line-height: 1.2; }
+    .search-bar { position: relative; }
+    .search-bar input { width: 100%; padding: 12px 16px 12px 40px; border-radius: 12px; border: 1px solid #ddd; font-size: 14px; font-family: 'Poppins', sans-serif; outline: none; }
+    .search-bar .fa-search { position: absolute; left: 14px; top: 13px; color: #999; }
+    .container { width: 100%; max-width: 500px; padding: 0 20px; margin: 0 auto; }
+    #dashboard-view h1 { font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #f0f0f0; }
+    .progress-card { background: #fff; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 18px; margin-bottom: 24px; }
+    .progress-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+    .stats-grid { display: flex; justify-content: space-between; text-align: center; }
+    .stats-item { flex-basis: 33%; }
+    .stats-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+    .stats-value { font-size: 20px; font-weight: 700; color: var(--myrepublic-purple); }
+    .stats-item:nth-child(2) { border-left: 1px solid #eee; border-right: 1px solid #eee; }
+    .customer-card { background: #fff; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.05); padding: 16px; margin-bottom: 16px; transition: background 0.2s; }
+    .customer-card:hover { background: #fdfcff; }
     .card-row1 { margin-bottom: 12px; }
-    .card-row1 .name {
-      font-size: 16px; font-weight: 700;
-      color: var(--text-primary); text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .city-tag {
-      display: inline-block; font-size: 11px; font-weight: 500;
-      padding: 3px 8px; background: var(--light-gray-bg);
-      color: var(--text-secondary); border-radius: 6px;
-    }
+    .card-row1 .name { font-size: 16px; font-weight: 700; color: var(--text-primary); text-transform: uppercase; margin-bottom: 6px; }
+    .city-tag { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 8px; background: var(--light-gray-bg); color: var(--text-secondary); border-radius: 6px; }
     .card-row2 { margin-bottom: 16px; }
     .card-row2 .paket { font-size: 14px; font-weight: 600; color: var(--text-primary); }
     .card-row2 .price { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-top: 2px; }
-    .status-box {
-      display: inline-block; font-size: 11px; font-weight: 500;
-      padding: 4px 10px; background: var(--light-orange-bg);
-      color: #cc6a00; border-radius: 6px; margin-top: 8px;
-    }
+    .status-box { display: inline-block; font-size: 11px; font-weight: 500; padding: 4px 10px; background: var(--light-orange-bg); color: #cc6a00; border-radius: 6px; margin-top: 8px; }
     .card-row3 { display: flex; justify-content: flex-end; }
-    .btn {
-      padding: 8px 16px; border: none; border-radius: 10px;
-      font-size: 13px; font-weight: 600; font-family: 'Poppins', sans-serif;
-      cursor: pointer; text-align: center;
-    }
+    .btn { padding: 8px 16px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer; text-align: center; }
     .btn-detail { background: var(--myrepublic-purple); color: white; }
     .btn-edit { background: var(--myrepublic-orange); color: white; }
-    .loading-message, .error-message, .no-data-message {
-      text-align: center; color: #ccc; /* Disesuaikan dengan background gelap */
-      margin-top: 20px; font-size: 14px;
-    }
+    .loading-message, .error-message, .no-data-message { text-align: center; color: #ccc; margin-top: 20px; font-size: 14px; }
     .error-message { color: #ff8a80; }
-
-    /* == GAYA UNTUK TAMPILAN AKUN (Dipindahkan dari akun.html) == */
-    .page-title {
-      font-size: 16px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.9);
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      margin-bottom: 25px;
-    }
-    .user-info {
-      display: flex;
-      align-items: center;
-      padding-bottom: 15px;
-    }
-    .user-info .avatar { /* Lebih spesifik untuk akun */
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: #8119b5;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: 600;
-      flex-shrink: 0;
-      margin-right: 15px;
-    }
-    .user-details .name {
-      font-size: 18px;
-      font-weight: 600;
-      text-transform: uppercase;
-      line-height: 1.2;
-      color: #333;
-    }
-    .user-details .email {
-      font-size: 13px;
-      color: #888;
-    }
-    .divider {
-      border: none;
-      border-top: 1px solid #eee;
-      margin: 0;
-    }
-    .user-stats {
-      padding-top: 15px;
-    }
-    .stat-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-    .stat-item .label {
-      color: #555;
-    }
-    .stat-item .value {
-      font-weight: 600;
-      color: #8119b5;
-      background: #f4e8ff;
-      padding: 2px 8px;
-      border-radius: 8px;
-      font-size: 13px;
-    }
-    .action-list a {
-      display: flex;
-      align-items: center;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      margin-bottom: 10px;
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    .action-list a:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-    .action-list i {
-      font-size: 18px;
-      width: 30px;
-      text-align: center;
-      margin-right: 10px;
-      opacity: 0.8;
-    }
-
-    /* == Bottom Navigation (Fixed) == */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: 70px; background: #fff;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.07);
-      display: flex; align-items: center; justify-content: space-around;
-      z-index: 100; padding: 0 10px;
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; color: var(--text-secondary);
-      font-size: 11px; font-weight: 500;
-      flex-grow: 1; flex-basis: 0;
-      text-decoration: none;
-    }
-    .nav-item.active {
-      color: var(--myrepublic-purple);
-    }
-    .nav-item i {
-      font-size: 20px;
-      margin-bottom: 4px;
-    }
-    .nav-fab {
-      width: 60px; height: 60px; background: var(--myrepublic-purple);
-      border-radius: 50%; box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 32px; cursor: pointer; margin-top: -30px;
-      border: 4px solid #fff; flex-shrink: 0;
-    }
-    .nav-fab:hover {
-      background: #550a7a;
-    }
-</style>
-  
+    .page-title { font-size: 16px; font-weight: 500; color: rgba(255, 255, 255, 0.9); text-align: center; margin-bottom: 15px; }
+    .card { background: #fff; border-radius: 20px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); margin-bottom: 25px; }
+    .user-info { display: flex; align-items: center; padding-bottom: 15px; }
+    .user-info .avatar { width: 52px; height: 52px; border-radius: 50%; background: #8119b5; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 600; flex-shrink: 0; margin-right: 15px; }
+    .user-details .name { font-size: 18px; font-weight: 600; text-transform: uppercase; line-height: 1.2; color: #333; }
+    .user-details .email { font-size: 13px; color: #888; }
+    .divider { border: none; border-top: 1px solid #eee; margin: 0; }
+    .user-stats { padding-top: 15px; }
+    .stat-item { display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 8px; }
+    .stat-item .label { color: #555; }
+    .stat-item .value { font-weight: 600; color: #8119b5; background: #f4e8ff; padding: 2px 8px; border-radius: 8px; font-size: 13px; }
+    .action-list a { display: flex; align-items: center; padding: 15px; background: rgba(255, 255, 255, 0.15); border-radius: 12px; margin-bottom: 10px; text-decoration: none; color: white; font-weight: 500; transition: background 0.2s; }
+    .action-list a:hover { background: rgba(255, 255, 255, 0.3); }
+    .action-list i { font-size: 18px; width: 30px; text-align: center; margin-right: 10px; opacity: 0.8; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: #fff; box-shadow: 0 -4px 12px rgba(0,0,0,0.07); display: flex; align-items: center; justify-content: space-around; z-index: 100; padding: 0 10px; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 11px; font-weight: 500; flex-grow: 1; flex-basis: 0; text-decoration: none; }
+    .nav-item.active { color: var(--myrepublic-purple); }
+    .nav-item i { font-size: 20px; margin-bottom: 4px; }
+    .nav-fab { width: 60px; height: 60px; background: var(--myrepublic-purple); border-radius: 50%; box-shadow: 0 6px 14px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; cursor: pointer; margin-top: -30px; border: 4px solid #fff; flex-shrink: 0; }
+    .nav-fab:hover { background: #550a7a; }
+  </style>
 </head>
 <body>
 
   <div class="header-container">
     <div class="header-profile">
-      <div class="avatar" id="avatar-initials">..</div>
+      <div class="avatar" id="header-avatar-initials">..</div>
       <div class="greeting">
         <div class="greeting-hello">Halo,</div>
-        <div class="greeting-name" id="user-fullname">Memuat...</div>
+        <div class="greeting-name" id="header-user-fullname">Memuat...</div>
       </div>
     </div>
     <div class="search-bar">
@@ -335,195 +100,237 @@
     </div>
   </div>
 
-  <!-- ----------------DASHBOARD---------------- -->
   <div class="container">
-    <div class="dashboard-view">
-      <div class="progress-card">
-        <div class="progress-title" id="progress-title">Progres ...</div>
-        <div class="stats-grid">
-          <div class="stats-item">
-            <div class="stats-label">Pencapaian Triwulan</div>
-            <div class="stats-value" id="triwulanCount">0</div>
-          </div>
-          <div class="stats-item">
-            <div class="stats-label">Pencapaian Bulanan</div>
-            <div class="stats-value" id="bulanIniCount">0</div>
-          </div>
-          <div class="stats-item">
-            <div class="stats-label">Pencapaian Harian</div>
-            <div class="stats-value" id="hariIniCount">0</div>
+      
+      <div id="dashboard-view" style="display: none;">
+        <div class="progress-card">
+          <div class="progress-title" id="progress-title">Progres ...</div>
+          <div class="stats-grid">
+            <div class="stats-item">
+              <div class="stats-label">Pencapaian Triwulan</div>
+              <div class="stats-value" id="dash-triwulanCount">0</div>
+            </div>
+            <div class="stats-item">
+              <div class="stats-label">Pencapaian Bulanan</div>
+              <div class="stats-value" id="dash-bulanIniCount">0</div>
+            </div>
+            <div class="stats-item">
+              <div class="stats-label">Pencapaian Harian</div>
+              <div class="stats-value" id="dash-hariIniCount">0</div>
+            </div>
           </div>
         </div>
+        <h1>Daftar Pelanggan</h1>
+        <div id="pelangganList">
+          <div class="loading-message">Memuat data...</div>
+        </div>
       </div>
-      
-      <div id="pelangganList">
-        <div class="loading-message">Memuat data...</div>
-        <div class="error-message" style="display: none;"></div>
-        <div class="no-data-message" style="display: none;">Belum ada data pelanggan yang tersedia.</div>
+
+      <div id="account-view" style="display: none;">
+        <div class="page-title">Akun</div>
+        <div class="card">
+          <div class="user-info">
+            <div class="avatar" id="akun-avatar-initials">..</div>
+            <div class="user-details">
+              <div class="name" id="akun-user-fullname">Memuat...</div>
+              <div class="email" id="akun-user-email">Memuat...</div>
+            </div>
+          </div>
+          <hr class="divider">
+          <div class="user-stats">
+            <div class="stat-item">
+              <span class="label">Pencapaian Triwulan</span>
+              <span class="value" id="akun-triwulanCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="label">Pencapaian Bulanan</span>
+              <span class="value" id="akun-bulanIniCount">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="label">Pencapaian Harian</span>
+              <span class="value" id="akun-hariIniCount">0</span>
+            </div>
+          </div>
+        </div>
+        <div class="action-list">
+          <a href="#">
+            <i class="fa-solid fa-user-pen"></i>
+            <span>Informasi Pribadi</span>
+          </a>
+          <a href="#" id="logoutBtn">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Log out</span>
+          </a>
+        </div>
       </div>
-    </div>
   </div>
 
-  <!-- ----------------AKUN---------------- -->
-
-  <div class="account-view" style="display: none;">
-    <div class="page-title">Akun</div>
-    <div class="card">
-      <div class="user-info">
-        <div class="avatar" id="avatar-initials">..</div>
-        <div class="user-details">
-          <div class="name" id="user-fullname">Memuat...</div>
-          <div class="email" id="user-email">Memuat...</div>
-        </div>
-      </div>
-      
-      <hr class="divider">
-      
-      <div class="user-stats">
-        <div class="stat-item">
-          <span class="label">Pencapaian Triwulan</span>
-          <span class="value" id="triwulanCount">0</span>
-        </div>
-        <div class="stat-item">
-          <span class="label">Pencapaian Bulanan</span>
-          <span class="value" id="bulanIniCount">0</span>
-        </div>
-        <div class="stat-item">
-          <span class="label">Pencapaian Harian</span>
-          <span class="value" id="hariIniCount">0</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-    <div class="action-list">
-      <a href="#">
-        <i class="fa-solid fa-user-pen"></i>
-        <span>Informasi Pribadi</span>
-      </a>
-      <a href="#" id="logoutBtn">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-        <span>Log out</span>
-      </a>
-    </div>
-  </div>
-
-
-  
   <div class="bottom-nav">
-  <a href="#dashboard" class="nav-item active"> <i class="fa-solid fa-house"></i>
-    <span>Dashboard</span>
-  </a>
-  <a href="input-data.html" class="nav-fab">
-    <i class="fa-solid fa-plus"></i>
-  </a>
-  <a href="#akun" class="nav-item"> <i class="fa-solid fa-person"></i>
-    <span>Akun</span>
-  </a>
-</div>
+    <a href="#dashboard" class="nav-item">
+      <i class="fa-solid fa-house"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="input-data.html" class="nav-fab">
+      <i class="fa-solid fa-plus"></i>
+    </a>
+    <a href="#akun" class="nav-item">
+      <i class="fa-solid fa-person"></i>
+      <span>Akun</span>
+    </a>
+  </div>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     // ===================================================================
-    // BAGIAN 1: INISIALISASI & REFERENSI (Harus di paling atas)
+    // BAGIAN 1: INISIALISASI & REFERENSI
     // ===================================================================
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Referensi Elemen Tampilan Utama
+    // Referensi Elemen Tampilan
     const dashboardView = document.getElementById('dashboard-view');
     const accountView = document.getElementById('account-view');
-
-    // Referensi Elemen Dashboard
     const pelangganList = document.getElementById('pelangganList');
     const searchInput = document.getElementById('search-input');
-
-    // Referensi Elemen Akun
-    const avatarInitials = document.getElementById('avatar-initials');
-    const userFullname = document.getElementById('user-fullname');
-    const userEmail = document.getElementById('user-email');
-    const triwulanCountEl = document.getElementById('triwulanCount');
-    const bulanIniCountEl = document.getElementById('bulanIniCount');
-    const hariIniCountEl = document.getElementById('hariIniCount');
-
-    let allPelanggan = []; // Variabel global
+    
+    let allPelanggan = [];
+    let currentUser = null;
 
     // ===================================================================
     // BAGIAN 2: SEMUA DEFINISI FUNGSI
     // ===================================================================
 
-    // --- FUNGSI NAVIGASI SPA (Single Page Application) ---
+    // --- FUNGSI NAVIGASI SPA ---
     function showView(viewId) {
       dashboardView.style.display = 'none';
       accountView.style.display = 'none';
       document.getElementById(viewId).style.display = 'block';
 
-      document.querySelector('.nav-item.active')?.classList.remove('active');
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
       if (viewId === 'dashboard-view') {
         document.querySelector('a[href="#dashboard"]').classList.add('active');
-        fetchData(); // Muat data saat tampilan dashboard dibuka
+        fetchData();
       } else if (viewId === 'account-view') {
         document.querySelector('a[href="#akun"]').classList.add('active');
-        loadAccountData(); // Muat data saat tampilan akun dibuka
+        loadAccountData();
       }
     }
-
-    // --- FUNGSI-FUNGSI DARI DASHBOARD ---
+    
+    // --- FUNGSI HELPER ---
     function getInitials(name) {
       if (!name) return "..";
       const parts = name.split(' ');
       let initials = parts[0].charAt(0);
-      if (parts.length > 1) {
-        initials += parts[parts.length - 1].charAt(0);
-      }
+      if (parts.length > 1) initials += parts[parts.length - 1].charAt(0);
       return initials.toUpperCase();
     }
-    // ... (Fungsi renderList, getPaketPrice, dll. jika ada, letakkan di sini) ...
+    function getPaketPrice(paketName) { return "Harga tidak diatur"; /* Implementasi Anda di sini */ }
+    
+    // --- FUNGSI UNTUK TAMPILAN DASHBOARD ---
     async function fetchData() {
-      // (Isi lengkap fungsi fetchData Anda dari index.html sebelumnya)
-      // Contoh:
-      const { data: pelangganData, error } = await client.from('pelanggan').select('*').order('created_at', { ascending: false });
+      pelangganList.innerHTML = `<div class="loading-message">Memuat data pelanggan...</div>`;
+      if (!currentUser) return;
+
+      const { data: pelangganData, error } = await client
+        .from('pelanggan')
+        .select(`*, kota:kota_id ( nama )`)
+        .eq('sales_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        pelangganList.innerHTML = `<div class="error-message">Gagal memuat data.</div>`;
+        return;
+      }
       allPelanggan = pelangganData;
-      renderList(allPelanggan); // Fungsi renderList Anda harus ada
-      // ... sisa logika fetchData ...
+      renderList(allPelanggan);
+      updateDashboardStats(allPelanggan);
     }
-    function renderList(data) { /*... Isi fungsi renderList Anda ...*/ }
+    
+    function renderList(dataToRender) {
+      pelangganList.innerHTML = '';
+      if (dataToRender.length === 0) {
+        pelangganList.innerHTML = `<div class="no-data-message">Belum ada data pelanggan.</div>`;
+        return;
+      }
+      dataToRender.forEach(pelanggan => {
+        const card = document.createElement('div');
+        card.className = 'customer-card';
+        const isComplete = pelanggan.is_complete;
+        const buttonHtml = isComplete 
+          ? `<a href="detail.html?id=${pelanggan.id}" class="btn btn-detail">Detail</a>`
+          : `<a href="input-data.html?edit_id=${pelanggan.id}" class="btn btn-edit">Edit</a>`;
+        const statusBoxHtml = !isComplete ? `<div class="status-box">Harap dilengkapi</div>` : '';
+        const cityName = pelanggan.kota ? pelanggan.kota.nama : (pelanggan.alamat || 'Luar Kota');
+        
+        card.innerHTML = `
+          <div class="card-row1">
+            <div class="name">${pelanggan.nama_lengkap.toUpperCase()}</div>
+            <div class="city-tag">${cityName}</div>
+          </div>
+          <div class="card-row2">
+            <div class="paket">${pelanggan.paket_internet || 'Paket tidak ada'}</div>
+            <div class="price">${getPaketPrice(pelanggan.paket_internet)}</div>
+            ${statusBoxHtml}
+          </div>
+          <div class="card-row3">${buttonHtml}</div>
+        `;
+        pelangganList.appendChild(card);
+      });
+    }
 
-    // --- FUNGSI DARI AKUN (DIPINDAHKAN KE SINI) ---
+    // --- FUNGSI UNTUK TAMPILAN AKUN ---
     async function loadAccountData() {
-      const { data: { user } } = await client.auth.getUser();
-      if (!user) return; // Seharusnya tidak terjadi karena sudah dicek
-
-      const userName = user.user_metadata.name || 'Nama Pengguna';
-      avatarInitials.textContent = getInitials(userName);
-      userFullname.textContent = userName.toUpperCase();
-      userEmail.textContent = user.email;
-
-      const { data: pelangganData } = await client.from('pelanggan').select('tanggal').eq('sales_id', user.id);
+      if (!currentUser) return;
+      const userName = currentUser.user_metadata.name || 'Nama Pengguna';
+      document.getElementById('akun-avatar-initials').textContent = getInitials(userName);
+      document.getElementById('akun-user-fullname').textContent = userName.toUpperCase();
+      document.getElementById('akun-user-email').textContent = currentUser.email;
       
-      // ... (kode lengkap untuk menghitung statistik) ...
-      triwulanCountEl.textContent = 0; // Ganti dengan hasil perhitungan
-      bulanIniCountEl.textContent = 0; // Ganti dengan hasil perhitungan
-      hariIniCountEl.textContent = 0; // Ganti dengan hasil perhitungan
+      // Statistik untuk halaman akun (bisa menggunakan data yang sudah di-fetch)
+      updateAccountStats(allPelanggan);
+    }
+    
+    // --- FUNGSI PENGHITUNG STATISTIK (Bisa dipakai keduanya) ---
+    function calculateStats(pelangganData) {
+      const today = new Date();
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const currentMonth = today.getMonth();
+      let quarterMonthStart;
+      if (currentMonth < 3) quarterMonthStart = 0; else if (currentMonth < 6) quarterMonthStart = 3;
+      else if (currentMonth < 9) quarterMonthStart = 6; else quarterMonthStart = 9;
+      const startOfQuarter = new Date(today.getFullYear(), quarterMonthStart, 1);
+      
+      let triwulan = 0, bulanan = 0, harian = 0;
+      pelangganData.forEach(p => {
+        const createdDate = new Date(p.created_at);
+        if (createdDate >= startOfQuarter) triwulan++;
+        if (createdDate >= startOfMonth) bulanan++;
+        if (createdDate.toDateString() === today.toDateString()) harian++;
+      });
+      return { triwulan, bulanan, harian };
     }
 
+    function updateDashboardStats(data) {
+      const stats = calculateStats(data);
+      document.getElementById('dash-triwulanCount').textContent = stats.triwulan;
+      document.getElementById('dash-bulanIniCount').textContent = stats.bulanan;
+      document.getElementById('dash-hariIniCount').textContent = stats.harian;
+    }
+
+    function updateAccountStats(data) {
+      const stats = calculateStats(data);
+      document.getElementById('akun-triwulanCount').textContent = stats.triwulan;
+      document.getElementById('akun-bulanIniCount').textContent = stats.bulanan;
+      document.getElementById('akun-hariIniCount').textContent = stats.harian;
+    }
+    
     // ===================================================================
-    // BAGIAN 3: EVENT LISTENERS (Pemroses Aksi Pengguna)
+    // BAGIAN 3: EVENT LISTENERS
     // ===================================================================
     
-    // Event Listener untuk Navigasi SPA
-    document.querySelector('a[href="#dashboard"]').addEventListener('click', (e) => {
-      e.preventDefault();
-      showView('dashboard-view');
-    });
-
-    document.querySelector('a[href="#akun"]').addEventListener('click', (e) => {
-      e.preventDefault();
-      showView('account-view');
-    });
-
-    // Event Listener untuk Logout (pastikan ID tombol logout adalah 'logoutBtn')
-    // Jika tombol logout ada di dalam #account-view, pastikan ID-nya unik
+    document.querySelector('a[href="#dashboard"]').addEventListener('click', (e) => { e.preventDefault(); showView('dashboard-view'); });
+    document.querySelector('a[href="#akun"]').addEventListener('click', (e) => { e.preventDefault(); showView('account-view'); });
     document.getElementById('logoutBtn').addEventListener('click', async (e) => {
         e.preventDefault();
         if (confirm("Apakah Anda yakin ingin keluar?")) {
@@ -532,43 +339,36 @@
             window.location.replace("login.html");
         }
     });
-
-    // Event Listener lain yang Anda punya (misal: searchInput)
-    // searchInput.addEventListener('input', () => { ... });
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const filteredData = allPelanggan.filter(p => p.nama_lengkap.toLowerCase().includes(searchTerm));
+      renderList(filteredData);
+    });
 
     // ===================================================================
     // BAGIAN 4: LOGIKA AWAL SAAT HALAMAN DIBUKA
     // ===================================================================
     (async function initPage() {
+      // Cek sesi dulu
       const { data: { user } } = await client.auth.getUser();
-      if (!user) {
+      const loginTimestamp = localStorage.getItem('loginTimestamp');
+      const sessionDuration = 3 * 60 * 60 * 1000;
+      const isSessionExpired = (new Date().getTime() - loginTimestamp > sessionDuration);
+      
+      if (!user || !loginTimestamp || isSessionExpired) {
+        client.auth.signOut(); localStorage.clear();
         window.location.replace('login.html');
-      } else {
-        // Tampilkan dashboard sebagai tampilan default saat pertama kali dibuka
-        showView('dashboard-view');
+        return;
       }
+      
+      // Jika lolos, simpan data user dan tampilkan dashboard
+      currentUser = user;
+      const userName = currentUser.user_metadata.name || 'Nama Pengguna';
+      document.getElementById('header-avatar-initials').textContent = getInitials(userName);
+      document.getElementById('header-user-fullname').textContent = userName.toUpperCase();
+      
+      showView('dashboard-view');
     })();
-</script>
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
