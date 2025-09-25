@@ -119,12 +119,14 @@
       }
     .radio-group, .checkbox-group {
       display: flex;
-      flex-direction: column; /* Mengubah jadi tumpukan ke bawah */
+      flex-direction: column;
       gap: 10px;
       background-color: #f8f9fa;
       padding: 12px;
       border-radius: 10px;
       border: 1px solid #ddd;
+      align-items: flex-start; /* <-- TAMBAHKAN BARIS INI */
+    }
     }
     .radio-group label, .checkbox-group label {
       display: flex;
@@ -546,6 +548,7 @@
 </script>
   </body>
   </html>
+
 
 
 
