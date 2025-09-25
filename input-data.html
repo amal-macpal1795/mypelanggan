@@ -141,120 +141,123 @@
       <h1 id="form-title">Input Data Pelanggan</h1>
       <div class="card">
         <form id="pelangganForm" novalidate>
-          <div class="section-title">Info Pelanggan</div>
-          <div class="form-group">
-            <label for="tanggal_pasang_display">Tanggal Pendaftaran</label>
-            <div class="date-display-container">
-              <input type="text" id="tanggal_pasang_display" placeholder="Pilih tanggal..." readonly required>
-              <input type="date" id="tanggal_pasang" required>
-            </div>
-            <div class="validation-error" id="tanggal_pasang-error"></div>
+        <div class="section-title">Info Pelanggan</div>
+        
+        <div class="form-group">
+          <label for="tanggal_pasang_display">Tanggal Pemasangan</label>
+          <div class="date-display-container">
+            <input type="text" id="tanggal_pasang_display" placeholder="Pilih tanggal..." readonly required>
+            <input type="date" id="tanggal_pasang" required autocomplete="off">
           </div>
-          <div class="form-group">
-            <label for="nik">NIK</label>
-            <input type="text" id="nik" class="nik-input" maxlength="16" required>
-            <div class="validation-error" id="nik-error"></div>
-          </div>
-          <div class="form-group">
-            <label for="nama_lengkap">Nama Lengkap</label>
-            <input type="text" id="nama_lengkap" class="uppercase-input" required>
-            <div class="validation-error" id="nama_lengkap-error"></div>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email">
-            <div class="validation-error" id="email-error"></div>
-          </div>
-          <div class="form-group">
-            <label for="hp_wa">Nomor Handphone (WA/SMS)</label>
-            <input type="text" id="hp_wa" maxlength="13">
-            <div class="validation-error" id="hp_wa-error"></div>
-          </div>
-          <div class="form-group">
-            <label for="hp_dial">Nomor Handphone (Dial Phone)</label>
-            <input type="text" id="hp_dial" maxlength="13">
-            <div class="validation-error" id="hp_dial-error"></div>
-          </div>
-          <div class="form-group">
-            <label for="kota">Kota</label>
-            <select id="kota">
-              <option value="" disabled selected>Pilih kota...</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="cluster">Perumahan/Cluster/Apartment</label>
-            <select id="cluster">
-              <option value="" disabled selected>Pilih cluster...</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="homepass">Homepass</label>
-            <input type="text" id="homepass" placeholder="Diisi jika sudah ada">
-          </div>
-          <div class="form-group">
-            <label for="alamat">Alamat Pemasangan</label>
-            <textarea id="alamat" rows="3" placeholder="Diisi jika sudah ada"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="map-link">Titik Lokasi (untuk Teknisi)
-              <button type="button" id="locate-btn" class="locate-btn">
-                <i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA
-              </button>
-            </label>
-            <div id="map">Memuat peta...</div>
-            <input type="text" id="map-link" placeholder="Geser pin di peta untuk membuat link..." readonly style="margin-top: 10px; background: #f0f0f0; color: #555;">
-          </div>
-          <div class="divider"></div>
-          <div class="section-title">Info Produk</div>
-          <div class="form-group">
-            <label for="paket_internet">Paket Layanan MyRepublic</label>
+          <div class="validation-error" id="tanggal_pasang-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="nik">NIK</label>
+          <input type="text" id="nik" class="nik-input" maxlength="16" required autocomplete="off">
+          <div class="validation-error" id="nik-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="nama_lengkap">Nama Lengkap</label>
+          <input type="text" id="nama_lengkap" class="uppercase-input" required autocomplete="name">
+          <div class="validation-error" id="nama_lengkap-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" autocomplete="email">
+          <div class="validation-error" id="email-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="hp_wa">Nomor Handphone (WA/SMS)</label>
+          <input type="text" id="hp_wa" maxlength="13" autocomplete="tel">
+          <div class="validation-error" id="hp_wa-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="hp_dial">Nomor Handphone (Dial Phone)</label>
+          <input type="text" id="hp_dial" maxlength="13" autocomplete="tel-national">
+          <div class="validation-error" id="hp_dial-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="kota">Kota</label>
+          <select id="kota" autocomplete="address-level2"></select>
+        </div>
+        
+        <div class="form-group">
+          <label for="cluster">Perumahan/Cluster/Apartment</label>
+          <select id="cluster"></select>
+        </div>
+        
+        <div class="form-group">
+          <label for="homepass">Homepass</label>
+          <input type="text" id="homepass" placeholder="Diisi jika sudah ada" autocomplete="off">
+        </div>
+        
+        <div class="form-group">
+          <label for="alamat">Alamat Pemasangan</label>
+          <textarea id="alamat" rows="3" placeholder="Diisi jika sudah ada" autocomplete="street-address"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <fieldset class="map-fieldset">
+                <legend>
+                    Titik Lokasi (untuk Teknisi)
+                    <button type="button" id="locate-btn" class="locate-btn">
+                        <i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA
+                    </button>
+                </legend>
+                <div id="map">Memuat peta...</div>
+                <input type="text" id="map-link" readonly>
+            </fieldset>
+        </div>
+        
+        <div class="divider"></div>
+        <div class="section-title">Info Produk</div>
+
+        <fieldset class="form-group">
+            <legend>Paket Internet</legend>
             <div id="paket-internet-list" class="radio-group">
-              <p style="font-size: 12px; color: #888;">Memuat pilihan paket...</p>
+                <p style="font-size: 12px; color: #888;">Memuat pilihan paket...</p>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="paket_tv">Paket TV</label>
-            <select id="paket_tv">
-              <option>Tanpa paket TV</option>
-              <option>Basic TV</option>
-              <option>Premium TV</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="addon">Add On</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <legend>Paket TV</legend>
+            <div class="radio-group">
+                <label><input type="radio" name="paket_tv" value="Tanpa paket TV" checked> Tanpa paket TV</label>
+                <label><input type="radio" name="paket_tv" value="Basic TV"> Basic TV</label>
+                <label><input type="radio" name="paket_tv" value="Premium TV"> Premium TV</label>
+            </div>
+        </fieldset>
+        
+        <fieldset class="form-group">
+            <legend>Add On</legend>
             <div id="addon-list" class="checkbox-group">
-              <p style="font-size: 12px; color: #888;">Memuat pilihan add-on...</p>
+                <p style="font-size: 12px; color: #888;">Memuat pilihan add-on...</p>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="metode_bayar">Metode Pembayaran</label>
-            <select id="metode_bayar">
-              <option>Tunai Bulanan</option>
-              <option>Kartu Kredit (Auto Debit)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="promo">Promo</label>
-            <input type="checkbox" id="promo"> Ikut Promo
-          </div>
-          <div class="divider"></div>
-          <div class="section-title">Detail Pembayaran (dari Perusahaan)</div>
-          <div class="form-group">
-            <label for="id_pelanggan">ID Pelanggan (Contoh: MR123456)</label>
-            <input type="text" id="id_pelanggan">
-          </div>
-          <div class="form-group">
-            <label for="tanggal_jatuh_tempo">Tanggal Jatuh Tempo (Angka 1-31)</label>
-            <input type="number" id="tanggal_jatuh_tempo" min="1" max="31">
-          </div>
-          <div class="form-group">
-            <label for="nominal_pembayaran">Nominal Pembayaran Bulanan</label>
-            <input type="number" id="nominal_pembayaran" placeholder="Contoh: 300000">
-          </div>
-          <button type="submit" class="submit-btn" id="submit-btn">Simpan Data</button>
-          <div class="success" id="success"></div>
-          <div class="error" id="error"></div>
-        </form>
+        </fieldset>
+        
+        <fieldset class="form-group">
+            <legend>Metode Pembayaran</legend>
+            <div class="radio-group">
+                <label><input type="radio" name="metode_bayar" value="Tunai Bulanan" checked> Tunai Bulanan</label>
+                <label><input type="radio" name="metode_bayar" value="Kartu Kredit (Auto Debit)"> Kartu Kredit</label>
+            </div>
+        </fieldset>
+        
+        <div class="form-group">
+          <label for="promo">Promo</label>
+          <input type="checkbox" id="promo"> Ikut Promo
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">Simpan Data</button>
+        <div class="success" id="success"></div>
+        <div class="error" id="error"></div>
+      </form>
       </div>
     </div>
 
@@ -543,6 +546,7 @@
 </script>
   </body>
   </html>
+
 
 
 
