@@ -434,8 +434,13 @@
         const { data: { user }, error: authError } = await client.auth.getUser();
       if (authError || !user) { /* ... kode sama ... */ }
         
+        // GANTI SELURUH BLOK 'payload' LAMA ANDA DENGAN YANG INI
         const homepassValue = document.getElementById("homepass").value.trim();
         const alamatValue = document.getElementById("alamat").value.trim();
+        const idPelangganValue = document.getElementById("id_pelanggan").value.trim();
+        const tglJatuhTempoValue = document.getElementById("tanggal_jatuh_tempo").value.trim();
+        const nominalValue = document.getElementById("nominal_pembayaran").value.trim();
+
         const payload = {
           tanggal: document.getElementById("tanggal_pasang").value,
           nik: document.getElementById("nik").value,
@@ -453,21 +458,17 @@
           metode_bayar: document.getElementById("metode_bayar").value,
           promo: document.getElementById("promo").checked,
           sales_id: user.id,
-        // Ambil nilai dari input baru
-          const idPelangganValue = document.getElementById("id_pelanggan").value.trim();
-          const tglJatuhTempoValue = document.getElementById("tanggal_jatuh_tempo").value.trim();
-          const nominalValue = document.getElementById("nominal_pembayaran").value.trim();
+          latitude: selectedLat,
+          longitude: selectedLng,
           
-      // ... di dalam 'payload' ...
+          // Kolom-kolom baru ditambahkan di sini
           id_pelanggan: idPelangganValue,
           tanggal_jatuh_tempo: tglJatuhTempoValue,
           nominal_pembayaran: nominalValue,
-
-        // Logika baru untuk is_complete
-          is_complete: idPelangganValue !== '' && tglJatuhTempoValue !== '' && nominalValue !== '',
-          latitude: selectedLat,
-          longitude: selectedLng
-        };
+        
+          // Logika is_complete yang baru ada di sini
+          is_complete: idPelangganValue !== '' && tglJatuhTempoValue !== '' && nominalValue !== ''
+      };
         
         let error;
         if (editId) { 
@@ -492,6 +493,7 @@
     </script>
   </body>
   </html>
+
 
 
 
