@@ -543,6 +543,12 @@
         errorDiv.textContent = "Gagal memuat data pelanggan.";
         return;
       }
+      // Memilih radio button Paket Internet yang sesuai
+        if (data.paket_internet) {
+            const radioPaket = document.querySelector(`input[name="paket_internet"][value="${data.paket_internet}"]`);
+            if (radioPaket) radioPaket.checked = true;
+        }
+      updateNominalDisplay();
 
       document.getElementById("tanggal_pasang").value = data.tanggal;
       document.getElementById("tanggal_pasang_display").value = formatDate(data.tanggal);
@@ -795,6 +801,7 @@
   </script>
 </body>
 </html>
+
 
 
 
