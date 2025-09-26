@@ -140,10 +140,6 @@
       opacity: 0; /* Tetap tidak terlihat */
       cursor: pointer; /* Tapi bisa diklik */ 
     }
-    /* ================================================= */
-    /* == GAYA FINAL UNTUK RADIO BUTTON & CHECKLIST == */
-    /* ================================================= */
-
     /* Wadah untuk grup pilihan */
     .radio-group, .checkbox-group {
       display: flex;
@@ -158,72 +154,13 @@
     /* Setiap baris pilihan (label) */
     .radio-group label, .checkbox-group label {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      align-items: center; /* PENTING: Untuk mensejajarkan tombol dan teks */
+      gap: 8px; /* Jarak antara tombol dan teks */
       font-size: 13px;
       font-weight: 500;
       color: #333;
       cursor: pointer;
       user-select: none;
-    }
-
-    /* Sembunyikan tampilan asli radio & checkbox */
-    .radio-group input[type="radio"],
-    .checkbox-group input[type="checkbox"] {
-      appearance: none;
-      -webkit-appearance: none;
-      margin: 0;
-      font: inherit;
-      color: currentColor;
-      width: 1.1em; /* Ukuran disesuaikan dengan teks label */
-      height: 1.1em;
-      border: 2px solid #adb5bd;
-      transform: translateY(-0.075em);
-      
-      /* Mengatur agar ::before bisa diposisikan di tengah */
-      display: grid;
-      place-content: center;
-    }
-
-    .radio-group input[type="radio"] {
-      border-radius: 50%;
-    }
-
-    .checkbox-group input[type="checkbox"] {
-      border-radius: 4px;
-    }
-
-    /* Buat elemen titik/centang (awalnya tidak terlihat) */
-    .radio-group input[type="radio"]::before,
-    .checkbox-group input[type="checkbox"]::before {
-      content: "";
-      width: 0.6em;
-      height: 0.6em;
-      transform: scale(0); /* Sembunyikan dengan skala 0 */
-      transition: 120ms transform ease-in-out;
-      box-shadow: inset 1em 1em var(--myrepublic-purple); /* Warna ungu */
-    }
-
-    .radio-group input[type="radio"]::before {
-      border-radius: 50%; /* Titik berbentuk bulat */
-    }
-    
-    .checkbox-group input[type="checkbox"]::before {
-      /* Menggambar centang dengan transform */
-      transform-origin: bottom left;
-      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-    }
-
-    /* Tampilkan titik/centang saat tombol DIPILIH */
-    .radio-group input[type="radio"]:checked::before,
-    .checkbox-group input[type="checkbox"]:checked::before {
-      transform: scale(1); /* Perbesar skala agar terlihat */
-    }
-
-    /* Ubah warna border saat DIPILIH */
-    .radio-group input[type="radio"]:checked,
-    .checkbox-group input[type="checkbox"]:checked {
-        border-color: var(--myrepublic-purple);
     }
   </style>
 </head>
@@ -637,5 +574,6 @@
   </script>
 </body>
 </html>
+
 
 
