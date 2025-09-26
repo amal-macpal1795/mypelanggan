@@ -141,14 +141,14 @@
       cursor: pointer; /* Tapi bisa diklik */ 
     }
     /* ================================================= */
-    /* == GAYA BARU UNTUK RADIO BUTTON & CHECKLIST == */
+    /* == GAYA FINAL UNTUK RADIO BUTTON & CHECKLIST == */
     /* ================================================= */
 
     /* Wadah untuk grup pilihan */
     .radio-group, .checkbox-group {
       display: flex;
       flex-direction: column;
-      gap: 12px; /* Jarak antar pilihan */
+      gap: 12px;
       background-color: #f8f9fa;
       padding: 12px;
       border-radius: 10px;
@@ -158,15 +158,12 @@
     /* Setiap baris pilihan (label) */
     .radio-group label, .checkbox-group label {
       display: flex;
-      align-items: center; /* Memastikan tombol dan teks sejajar di tengah */
-      gap: 10px; /* Jarak antara tombol dan teks */
+      align-items: center;
+      gap: 10px;
       font-size: 13px;
       font-weight: 500;
       color: #333;
       cursor: pointer;
-      -webkit-user-select: none; /* Mencegah teks terseleksi saat diklik */
-      -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
     }
 
@@ -176,38 +173,57 @@
       appearance: none;
       -webkit-appearance: none;
       margin: 0;
-      width: 1.2em;
-      height: 1.2em;
-      border: 2px solid #adb5bd; /* Warna border abu-abu */
-      transition: border 0.2s;
-      flex-shrink: 0; /* Mencegah tombol mengecil */
+      font: inherit;
+      color: currentColor;
+      width: 1.1em; /* Ukuran disesuaikan dengan teks label */
+      height: 1.1em;
+      border: 2px solid #adb5bd;
+      transform: translateY(-0.075em);
+      
+      /* Mengatur agar ::before bisa diposisikan di tengah */
+      display: grid;
+      place-content: center;
     }
 
     .radio-group input[type="radio"] {
-      border-radius: 50%; /* Membuatnya jadi bulat */
+      border-radius: 50%;
     }
 
     .checkbox-group input[type="checkbox"] {
-      border-radius: 4px; /* Membuatnya jadi kotak */
+      border-radius: 4px;
     }
 
-    /* Gaya saat tombol di-hover */
-    .radio-group input[type="radio"]:hover,
-    .checkbox-group input[type="checkbox"]:hover {
-      border-color: var(--myrepublic-purple);
+    /* Buat elemen titik/centang (awalnya tidak terlihat) */
+    .radio-group input[type="radio"]::before,
+    .checkbox-group input[type="checkbox"]::before {
+      content: "";
+      width: 0.6em;
+      height: 0.6em;
+      transform: scale(0); /* Sembunyikan dengan skala 0 */
+      transition: 120ms transform ease-in-out;
+      box-shadow: inset 1em 1em var(--myrepublic-purple); /* Warna ungu */
     }
 
-    /* Gaya saat tombol DIPILIH (checked) */
-    .radio-group input[type="radio"]:checked {
-      background-color: var(--myrepublic-purple);
-      border-color: var(--myrepublic-purple);
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e"); /* Titik putih di tengah */
+    .radio-group input[type="radio"]::before {
+      border-radius: 50%; /* Titik berbentuk bulat */
     }
     
+    .checkbox-group input[type="checkbox"]::before {
+      /* Menggambar centang dengan transform */
+      transform-origin: bottom left;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+
+    /* Tampilkan titik/centang saat tombol DIPILIH */
+    .radio-group input[type="radio"]:checked::before,
+    .checkbox-group input[type="checkbox"]:checked::before {
+      transform: scale(1); /* Perbesar skala agar terlihat */
+    }
+
+    /* Ubah warna border saat DIPILIH */
+    .radio-group input[type="radio"]:checked,
     .checkbox-group input[type="checkbox"]:checked {
-      background-color: var(--myrepublic-purple);
-      border-color: var(--myrepublic-purple);
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e"); /* Ikon centang putih */
+        border-color: var(--myrepublic-purple);
     }
   </style>
 </head>
@@ -621,4 +637,5 @@
   </script>
 </body>
 </html>
+
 
