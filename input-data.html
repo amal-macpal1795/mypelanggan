@@ -361,6 +361,22 @@
           <input type="checkbox" id="promo"> Ikut Promo
         </div>
 
+        <div class="divider"></div>
+        <div class="section-title">Detail Pembayaran (dari Perusahaan)</div>
+
+        <div class="form-group">
+          <label for="id_pelanggan">ID Pelanggan (Contoh: MR123456)</label>
+          <input type="text" id="id_pelanggan" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="tanggal_jatuh_tempo">Tanggal Jatuh Tempo (Angka 1-31)</label>
+          <input type="number" id="tanggal_jatuh_tempo" min="1" max="31">
+        </div>
+        <div class="form-group">
+          <label for="nominal_pembayaran">Nominal Pembayaran Bulanan</label>
+          <input type="number" id="nominal_pembayaran" placeholder="Contoh: 300000">
+        </div>
+
         <button type="submit" class="submit-btn" id="submit-btn">Simpan Data</button>
         <div class="success" id="success"></div>
         <div class="error" id="error"></div>
@@ -712,3 +728,4 @@
   </script>
 </body>
 </html>
+
