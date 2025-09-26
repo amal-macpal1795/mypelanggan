@@ -119,7 +119,7 @@
       }
     .radio-group, .checkbox-group {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
       background-color: #f8f9fa;
       padding: 12px;
@@ -196,18 +196,18 @@
         
         <div class="form-group">
           <label for="homepass">Homepass</label>
-          <input type="text" id="homepass" placeholder="Diisi jika sudah ada" autocomplete="off">
+          <input type="text" id="homepass" placeholder="Menunggu info dari ASM" autocomplete="off">
         </div>
         
         <div class="form-group">
           <label for="alamat">Alamat Pemasangan</label>
-          <textarea id="alamat" rows="3" placeholder="Diisi jika sudah ada" autocomplete="street-address"></textarea>
+          <textarea id="alamat" rows="3" placeholder="Menunggu info dari ASM" autocomplete="street-address"></textarea>
         </div>
         
         <div class="form-group">
             <fieldset class="map-fieldset">
                 <legend>
-                    Titik Lokasi (untuk Teknisi)
+                    Titik Lokasi Pemasangan
                     <button type="button" id="locate-btn" class="locate-btn">
                         <i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA
                     </button>
@@ -548,6 +548,7 @@
 </script>
   </body>
   </html>
+
 
 
 
