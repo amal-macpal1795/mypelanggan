@@ -140,28 +140,106 @@
       opacity: 0; /* Tetap tidak terlihat */
       cursor: pointer; /* Tapi bisa diklik */ 
     }
-    /* Wadah untuk grup pilihan */
+    /* ================================================= */
+    /* == GAYA FINAL CUSTOM UNTUK RADIO & CHECKLIST == */
+    /* ================================================= */
+
     .radio-group, .checkbox-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
       background-color: #f8f9fa;
       padding: 12px;
       border-radius: 10px;
       border: 1px solid #ddd;
-      align-items: flex-start;
     }
 
-    /* Setiap baris pilihan (label) */
     .radio-group label, .checkbox-group label {
-      display: flex;
-      align-items: center; /* PENTING: Untuk mensejajarkan tombol dan teks */
-      gap: 8px; /* Jarak antara tombol dan teks */
+      display: block; /* Bukan flex lagi */
+      position: relative; /* Penting untuk posisi custom */
+      padding-left: 30px; /* Ruang untuk tombol custom */
+      margin-bottom: 12px; /* Jarak antar pilihan */
+      cursor: pointer;
       font-size: 13px;
       font-weight: 500;
       color: #333;
-      cursor: pointer;
       user-select: none;
+      min-height: 20px; /* Pastikan tinggi cukup */
+      line-height: 20px; /* Sejajarkan teks secara vertikal */
+    }
+    .radio-group label:last-child, .checkbox-group label:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Sembunyikan tombol asli */
+    .radio-group input, .checkbox-group input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    /* Buat tombol palsu (span) */
+    .custom-radio, .custom-checkbox {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 20px;
+      width: 20px;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      transition: all 0.2s;
+    }
+    .custom-radio {
+      border-radius: 50%;
+    }
+    .custom-checkbox {
+      border-radius: 4px;
+    }
+
+    /* Efek hover */
+    .radio-group label:hover input ~ .custom-radio,
+    .checkbox-group label:hover input ~ .custom-checkbox {
+      background-color: #ddd;
+    }
+
+    /* Warna saat terpilih */
+    .radio-group input:checked ~ .custom-radio,
+    .checkbox-group input:checked ~ .custom-checkbox {
+      background-color: var(--myrepublic-purple);
+      border-color: var(--myrepublic-purple);
+    }
+
+    /* Buat indikator (titik/centang) */
+    .custom-radio:after, .custom-checkbox:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    /* Tampilkan indikator saat terpilih */
+    .radio-group input:checked ~ .custom-radio:after,
+    .checkbox-group input:checked ~ .custom-checkbox:after {
+      display: block;
+    }
+
+    /* Gaya indikator radio (titik) */
+    .radio-group .custom-radio:after {
+      top: 5px;
+      left: 5px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+    }
+    
+    /* Gaya indikator checkbox (centang) */
+    .checkbox-group .custom-checkbox:after {
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
     }
   </style>
 </head>
@@ -257,9 +335,9 @@
         <fieldset class="form-group">
           <legend>Paket TV</legend>
           <div class="radio-group">
-            <label><input type="radio" name="paket_tv" value="Tanpa paket TV" checked> Tanpa paket TV</label>
-            <label><input type="radio" name="paket_tv" value="Basic TV"> Basic TV</label>
-            <label><input type="radio" name="paket_tv" value="Premium TV"> Premium TV</label>
+            <label><input type="radio" name="paket_tv" value="Tanpa paket TV" checked><span class="custom-radio"></span> Tanpa paket TV</label>
+            <label><input type="radio" name="paket_tv" value="Basic TV"><span class="custom-radio"></span> Basic TV</label>
+            <label><input type="radio" name="paket_tv" value="Premium TV"><span class="custom-radio"></span> Premium TV</label>
           </div>
         </fieldset>
         
@@ -273,8 +351,8 @@
         <fieldset class="form-group">
           <legend>Metode Pembayaran</legend>
           <div class="radio-group">
-            <label><input id="option" type="radio" name="metode_bayar" value="Tunai Bulanan" checked> Tunai Bulanan</label>
-            <label><input type="radio" name="metode_bayar" value="Kartu Kredit (Auto Debit)"> Kartu Kredit</label>
+            <label><input id="option" type="radio" name="metode_bayar" value="Tunai Bulanan" checked><span class="custom-radio"></span> Tunai Bulanan</label>
+            <label><input type="radio" name="metode_bayar" value="Kartu Kredit (Auto Debit)"><span class="custom-radio"></span> Kartu Kredit</label>
           </div>
         </fieldset>
         
@@ -372,7 +450,7 @@
       data.forEach((paket, index) => {
         const label = document.createElement('label');
         const isChecked = index === 0 ? 'checked' : '';
-        label.innerHTML = `<input type="radio" name="paket_internet" value="${paket.nama_paket}" ${isChecked}> ${paket.nama_paket}`;
+        label.innerHTML = `<input type="radio" name="paket_internet" value="${paket.nama_paket}" ${isChecked}> <span class="custom-radio"></span> ${paket.nama_paket}`;
         listContainer.appendChild(label);
       });
     }
@@ -388,7 +466,7 @@
       listContainer.innerHTML = '';
       data.forEach(addon => {
         const label = document.createElement('label');
-        label.innerHTML = `<input type="checkbox" name="addon" value="${addon.nama_addon}"> ${addon.nama_addon}`;
+        label.innerHTML = `<input type="checkbox" name="addon" value="${addon.nama_addon}"> <span class="custom-checkbox"></span> ${addon.nama_addon}`;
         listContainer.appendChild(label);
       });
     }
@@ -575,6 +653,7 @@
   </script>
 </body>
 </html>
+
 
 
 
