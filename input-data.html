@@ -9,261 +9,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
   <style>
-    body { 
-      margin:0; 
-      font-family:'Poppins',sans-serif; 
-      background:#fafafa; 
-      display:flex; 
-      justify-content:center; 
-      padding:20px; 
-    }
-    .container { 
-      width:100%; 
-      max-width:500px; 
-    }
-    h1 { 
-      font-size:22px; 
-      font-weight:600; 
-      margin-bottom:20px; 
-      color:#333; 
-      text-align:center; 
-    }
+    body { margin:0; font-family:'Poppins',sans-serif; background:#fafafa; display:flex; justify-content:center; padding:20px; }
+    .container { width:100%; max-width:500px; }
+    h1 { font-size:22px; font-weight:600; margin-bottom:20px; color:#333; text-align:center; }
     .card { /* Dibiarkan kosong */ }
-    
-    .section-title { 
-      font-size:16px; 
-      font-weight:600; 
-      margin-bottom:12px; 
-      color:#222; 
-    }
-    .form-group { 
-      margin-bottom:14px; 
-    }
-    label { 
-      font-size:13px;
-      font-weight:500; 
-      color:#333; 
-      display:block; 
-      margin-bottom:6px; 
-    }
-    input, select, textarea { 
-      width:100%; 
-      padding:12px; 
-      border-radius:10px; 
-      border:1px solid #ddd; 
-      font-size:13px; 
-      font-family:'Poppins',sans-serif; 
-      outline:none; 
-      transition:border 0.2s; 
-      box-sizing: border-box; 
-    }
-    .nik-input { 
-      font-family: 'OCR A Extended', 'SF Mono', 'Courier New', monospace; 
-      font-weight: 800; 
-      letter-spacing: 1.5px; 
-      font-size: 15px; 
-    }
-    .uppercase-input { 
-      text-transform: uppercase; 
-    }
-    input:focus, select:focus, textarea:focus { 
-      border-color:#8119b5; 
-    }
-    .divider { 
-      border-top:1px solid #e5e5e5; 
-      margin:20px 0; 
-    }
-    .submit-btn { 
-      width:100%; 
-      padding:14px; 
-      background:#8119b5; 
-      color:#fff; 
-      border:none; 
-      border-radius:12px; 
-      font-size:15px; 
-      font-weight:500; 
-      cursor:pointer; 
-      transition:background 0.2s; 
-    }
-    .submit-btn:hover { 
-      background: #550a7a; 
-    }
-    .success, .error { 
-      font-size:14px; 
-      margin-top:10px; 
-      text-align:center; 
-    }
+    .section-title { font-size:16px; font-weight:600; margin-bottom:12px; color:#222; }
+    .form-group { margin-bottom:14px; }
+    label { font-size:13px; font-weight:500; color:#333; display:block; margin-bottom:6px; }
+    input, select, textarea { width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-size:13px; font-family:'Poppins',sans-serif; outline:none; transition:border 0.2s; box-sizing: border-box; }
+    .nik-input { font-family: 'OCR A Extended', 'SF Mono', 'Courier New', monospace; font-weight: 600; letter-spacing: 1.5px; font-size: 15px; }
+    .uppercase-input { text-transform: uppercase; }
+    input:focus, select:focus, textarea:focus { border-color:#8119b5; }
+    .divider { border-top:1px solid #e5e5e5; margin:20px 0; }
+    .submit-btn { width:100%; padding:14px; background:#8119b5; color:#fff; border:none; border-radius:12px; font-size:15px; font-weight:500; cursor:pointer; transition:background 0.2s; }
+    .submit-btn:hover { background: #550a7a; }
+    .success, .error { font-size:14px; margin-top:10px; text-align:center; }
     .success { color:green; }
     .error { color:red; }
-    .validation-error { 
-      color: #d92d20; 
-      font-size: 11px; 
-      font-weight: 500; 
-      margin-top: 4px; 
-      display: none; 
-    }
-    #map { 
-      height: 300px; 
-      width: 100%; 
-      border-radius: 10px; 
-      margin-top: 10px; 
-      border: 1px solid #ddd; 
-    }
-    .locate-btn { 
-      margin-left: 10px; 
-      padding: 4px 8px; 
-      font-size: 10px; 
-      font-weight: 600; 
-      border-radius: 6px; 
-      border: 1px solid #8119b5; 
-      background: #f4e8ff; 
-      color: #8119b5; 
-      cursor: pointer; 
-    }
-    .locate-btn:hover { 
-      background: #8119b5; 
-      color: white; 
-    }
-    .date-display-container { 
-      position: relative; 
-    }
-    #tanggal_pasang_display { 
-      background-color: #fff; 
-      pointers-event:none;
-    } /* Diubah agar background putih */
-    #tanggal_pasang { 
-      position: absolute; 
-      top: 0; 
-      left: 0; 
-      width: 100%; 
-      height: 100%; 
-      opacity: 0; /* Tetap tidak terlihat */
-      cursor: pointer; /* Tapi bisa diklik */ 
-    }
-    /* ================================================= */
-    /* == GAYA FINAL CUSTOM UNTUK RADIO & CHECKLIST == */
-    /* ================================================= */
-
-    .radio-group, .checkbox-group {
-      background-color: #f8f9fa;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-    }
-
-    .radio-group label, .checkbox-group label {
-      display: block; /* Bukan flex lagi */
-      position: relative; /* Penting untuk posisi custom */
-      padding-left: 30px; /* Ruang untuk tombol custom */
-      margin-bottom: 12px; /* Jarak antar pilihan */
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      color: #333;
-      user-select: none;
-      min-height: 20px; /* Pastikan tinggi cukup */
-      line-height: 20px; /* Sejajarkan teks secara vertikal */
-    }
-    .radio-group label:last-child, .checkbox-group label:last-child {
-      margin-bottom: 0;
-    }
-
-    /* Sembunyikan tombol asli */
-    .radio-group input, .checkbox-group input {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
-
-    /* Buat tombol palsu (span) */
-    .custom-radio, .custom-checkbox {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 20px;
-      width: 20px;
-      background-color: #eee;
-      border: 1px solid #ccc;
-      transition: all 0.2s;
-    }
-    .custom-radio {
-      border-radius: 50%;
-    }
-    .custom-checkbox {
-      border-radius: 4px;
-    }
-
-    /* Efek hover */
-    .radio-group label:hover input ~ .custom-radio,
-    .checkbox-group label:hover input ~ .custom-checkbox {
-      background-color: #ddd;
-    }
-
-    /* Warna saat terpilih */
-    .radio-group input:checked ~ .custom-radio,
-    .checkbox-group input:checked ~ .custom-checkbox {
-      background-color: purple;
-      border-color: purple;
-    }
-
-    /* Buat indikator (titik/centang) */
-    .custom-radio:after, .custom-checkbox:after {
-      content: "";
-      position: absolute;
-      display: none;
-    }
-
-    /* Tampilkan indikator saat terpilih */
-    .radio-group input:checked ~ .custom-radio:after,
-    .checkbox-group input:checked ~ .custom-checkbox:after {
-      display: block;
-    }
-
-    /* Gaya indikator radio (titik) */
-    .radio-group .custom-radio:after {
-      top: 5px;
-      left: 5px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: white;
-    }
-    
-    /* Gaya indikator checkbox (centang) */
-    .checkbox-group .custom-checkbox:after {
-      left: 6px;
-      top: 2px;
-      width: 5px;
-      height: 10px;
-      border: solid white;
-      border-width: 0 3px 3px 0;
-      transform: rotate(45deg);
-    }
-
-    .auto-info {
-      padding: 10px 12px;
-      background-color: #f8f9fa;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .auto-info-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: #555;
-    }
-    .auto-info-value, .auto-info-value-placeholder {
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .auto-info-value-placeholder {
-      color: #999;
-      font-style: italic;
-    }
+    .validation-error { color: #d92d20; font-size: 11px; font-weight: 500; margin-top: 4px; display: none; }
+    #map { height: 300px; width: 100%; border-radius: 10px; margin-top: 10px; border: 1px solid #ddd; }
+    .locate-btn { margin-left: 10px; padding: 4px 8px; font-size: 10px; font-weight: 600; border-radius: 6px; border: 1px solid #8119b5; background: #f4e8ff; color: #8119b5; cursor: pointer; }
+    .locate-btn:hover { background: #8119b5; color: white; }
+    .date-display-container { position: relative; }
+    #tanggal_pasang_display, #tanggal_pemasangan_wifi_display { background-color: #fff; cursor: pointer; }
+    #tanggal_pasang, #tanggal_pemasangan_wifi { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .auto-info { padding: 10px 12px; background-color: #f8f9fa; border-radius: 10px; border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+    .auto-info-label { font-size: 13px; font-weight: 500; color: #555; }
+    .auto-info-value, .auto-info-value-placeholder { font-size: 14px; font-weight: 600; }
+    .auto-info-value-placeholder { color: #999; font-style: italic; }
   </style>
 </head>
 <body>
@@ -272,143 +45,119 @@
     <div class="card">
       <form id="pelangganForm" novalidate>
         <div class="section-title">Info Pelanggan</div>
-        
         <div class="form-group">
-          <label for="tanggal_pasang_display">Tanggal Pemesanan</label>
+          <label for="tanggal_pasang">Tanggal Pemesanan</label>
           <div class="date-display-container">
             <input type="text" id="tanggal_pasang_display" placeholder="Pilih tanggal..." readonly required>
-            <input type="date" id="tanggal_pasang" required autocomplete="off">
+            <input type="date" id="tanggal_pasang" required>
           </div>
           <div class="validation-error" id="tanggal_pasang-error"></div>
         </div>
-
         <div class="form-group">
           <label for="nik">NIK</label>
-          <input type="text" id="nik" class="nik-input" maxlength="16" required autocomplete="off">
+          <input type="text" id="nik" class="nik-input" maxlength="16" required>
           <div class="validation-error" id="nik-error"></div>
         </div>
-        
         <div class="form-group">
           <label for="nama_lengkap">Nama Lengkap</label>
-          <input type="text" id="nama_lengkap" class="uppercase-input" required autocomplete="name">
-          <div class="validation-error" id="nama_lengkap-error"></div>
+           <input type="text" id="nama_lengkap" class="uppercase-input" required>
+           <div class="validation-error" id="nama_lengkap-error"></div>
         </div>
-        
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" autocomplete="email">
+          <input type="email" id="email">
           <div class="validation-error" id="email-error"></div>
         </div>
-        
         <div class="form-group">
           <label for="hp_wa">Nomor Handphone (WA/SMS)</label>
-          <input type="text" id="hp_wa" maxlength="13" autocomplete="tel">
+          <input type="text" id="hp_wa" maxlength="13">
           <div class="validation-error" id="hp_wa-error"></div>
         </div>
-        
         <div class="form-group">
           <label for="hp_dial">Nomor Handphone (Dial Phone)</label>
-          <input type="text" id="hp_dial" maxlength="13" autocomplete="tel-national">
-          <div class="validation-error" id="hp_dial-error"></div>
+           <input type="text" id="hp_dial" maxlength="13">
+           <div class="validation-error" id="hp_dial-error"></div>
         </div>
-        
         <div class="form-group">
           <label for="kota">Kota</label>
-          <select id="kota" autocomplete="address-level2"></select>
+          <select id="kota"></select>
         </div>
-        
         <div class="form-group">
           <label for="cluster">Perumahan/Cluster/Apartment</label>
           <select id="cluster"></select>
         </div>
-        
         <div class="form-group">
           <label for="homepass">Homepass</label>
-          <input type="text" id="homepass" placeholder="Menunggu info dari ASM" autocomplete="off">
+          <input type="text" id="homepass" placeholder="Diisi setelah WiFi aktif">
         </div>
-
         <div class="form-group">
           <label for="alamat">Alamat Pemasangan</label>
-          <textarea id="alamat" rows="3" placeholder="Menunggu info dari ASM" autocomplete="street-address"></textarea>
+          <textarea id="alamat" rows="3" placeholder="Diisi setelah WiFi aktif"></textarea>
         </div>
-        
         <div class="form-group">
-          <fieldset class="map-fieldset">
-            <legend>
-              Titik Lokasi Pemasangan
-              <button type="button" id="locate-btn" class="locate-btn">
-                <i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA
-              </button>
-            </legend>
-            <div id="map">Memuat peta...</div>
-            <input type="text" id="map-link" readonly>
-          </fieldset>
+            <fieldset style="border:none; padding:0; margin:0;">
+                <legend>
+                    Titik Lokasi Pemasangan
+                    <button type="button" id="locate-btn" class="locate-btn">
+                        <i class="fa-solid fa-location-crosshairs"></i> LOKASI SAYA
+                    </button>
+                </legend>
+                <div id="map">Memuat peta...</div>
+                <input type="text" id="map-link" readonly>
+            </fieldset>
         </div>
-        
         <div class="divider"></div>
         <div class="section-title">Info Produk</div>
-
         <fieldset class="form-group">
-          <legend>Paket Internet</legend>
-          <div id="paket-internet-list" class="radio-group">
-            <p style="font-size: 12px; color: #888;">Memuat pilihan paket...</p>
-          </div>
+            <legend>Paket Internet</legend>
+            <div id="paket-internet-list" class="radio-group">
+                <p style="font-size: 12px; color: #888;">Memuat pilihan paket...</p>
+            </div>
         </fieldset>
-
         <fieldset class="form-group">
-          <legend>Paket TV</legend>
-          <div class="radio-group">
-            <label><input type="radio" name="paket_tv" value="Tanpa paket TV" checked><span class="custom-radio"></span> Tanpa paket TV</label>
-            <label><input type="radio" name="paket_tv" value="Basic TV"><span class="custom-radio"></span> Basic TV</label>
-            <label><input type="radio" name="paket_tv" value="Premium TV"><span class="custom-radio"></span> Premium TV</label>
-          </div>
+            <legend>Paket TV</legend>
+            <div class="radio-group">
+                <label><input type="radio" name="paket_tv" value="Tanpa paket TV" checked><span class="custom-radio"></span> Tanpa paket TV</label>
+                <label><input type="radio" name="paket_tv" value="Basic TV"><span class="custom-radio"></span> Basic TV</label>
+                <label><input type="radio" name="paket_tv" value="Premium TV"><span class="custom-radio"></span> Premium TV</label>
+            </div>
         </fieldset>
-        
         <fieldset class="form-group">
-          <legend>Add On</legend>
-          <div id="addon-list" class="checkbox-group">
-            <p style="font-size: 12px; color: #888;">Memuat pilihan add-on...</p>
-          </div>
+            <legend>Add On</legend>
+            <div id="addon-list" class="checkbox-group">
+                <p style="font-size: 12px; color: #888;">Memuat pilihan add-on...</p>
+            </div>
         </fieldset>
-        
         <fieldset class="form-group">
-          <legend>Metode Pembayaran</legend>
-          <div class="radio-group">
-            <label><input id="option" type="radio" name="metode_bayar" value="Tunai Bulanan" checked><span class="custom-radio"></span> Tunai Bulanan</label>
-            <label><input type="radio" name="metode_bayar" value="Kartu Kredit (Auto Debit)"><span class="custom-radio"></span> Kartu Kredit</label>
-          </div>
+            <legend>Metode Pembayaran</legend>
+            <div class="radio-group">
+                <label><input type="radio" name="metode_bayar" value="Tunai Bulanan" checked><span class="custom-radio"></span> Tunai Bulanan</label>
+                <label><input type="radio" name="metode_bayar" value="Kartu Kredit (Auto Debit)"><span class="custom-radio"></span> Kartu Kredit</label>
+            </div>
         </fieldset>
-        
         <div class="form-group">
-          <label for="promo">Promo</label>
-          <input type="checkbox" id="promo"> Ikut Promo
+          <label style="display:inline-flex; align-items:center; gap:8px;"><input type="checkbox" id="promo"> Ikut Promo</label>
         </div>
-
         <div class="divider"></div>
+        <div class="section-title">Detail Pemasangan & Pembayaran</div>
         <div class="form-group">
-          <label for="tanggal_pemasangan_wifi_display">Tanggal Pemasangan WiFi</label>
+          <label for="tanggal_pemasangan_wifi">Tanggal Pemasangan WiFi</label>
           <div class="date-display-container">
             <input type="text" id="tanggal_pemasangan_wifi_display" placeholder="Pilih tanggal pemasangan..." readonly>
             <input type="date" id="tanggal_pemasangan_wifi">
           </div>
         </div>
-
-        <div class="divider"></div>
-        <div class="section-title">Detail Pembayaran (dari Perusahaan)</div>
-
         <div class="form-group">
           <label for="id_pelanggan">ID Pelanggan</label>
           <input type="text" id="id_pelanggan" placeholder="Diisi setelah WiFi aktif">
         </div>
-        
         <div class="form-group auto-info">
           <span class="auto-info-label">Tanggal Jatuh Tempo:</span>
-          <span id="jatuh-tempo-display" class="auto-info-value-placeholder">Pilih tanggal pemasangan</span>
+          <span id="jatuh-tempo-display" class="auto-info-value-placeholder">Pilih tanggal pemasangan WiFi</span>
         </div>
-        
         <div class="form-group auto-info">
           <span class="auto-info-label">Nominal Pembayaran:</span>
-          <span id="nominal-display" class="auto-info-value">Memuat...</span>
+          <span id="nominal-display" class="auto-info-value-placeholder">Pilih paket internet</span>
         </div>
 
         <button type="submit" class="submit-btn" id="submit-btn">Simpan Data</button>
@@ -424,7 +173,6 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // --- Referensi Elemen HTML ---
     const form = document.getElementById("pelangganForm");
     const pageTitle = document.getElementById("page-title");
     const formTitle = document.getElementById("form-title");
@@ -432,13 +180,11 @@
     const errorDiv = document.getElementById("error");
     const successDiv = document.getElementById("success");
     
-    // --- Variabel Global ---
     let editId = null;
     let map, marker;
     let selectedLat, selectedLng;
     let daftarHarga = {};
 
-    // --- FUNGSI-FUNGSI PETA ---
     function locateUser() {
       if (!navigator.geolocation) {
         alert("Browser Anda tidak mendukung Geolocation.");
@@ -480,22 +226,20 @@
       selectedLat = lat;
       selectedLng = lng;
     }
-
-    // --- FUNGSI-FUNGSI FORM ---
+    
     function formatDate(dateString) {
       if (!dateString) return "";
       const date = new Date(dateString);
       const options = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' };
       return date.toLocaleDateString('id-ID', options);
     }
-
     async function loadPaketInternet() {
       const listContainer = document.getElementById('paket-internet-list');
       const { data, error } = await client.from('paket_internet').select('*').order('id');
       if (error) {
         listContainer.innerHTML = '<p style="color: red;">Gagal memuat paket.</p>';
         return;
-      }
+        }
       listContainer.innerHTML = '';
       data.forEach((paket, index) => {
         const label = document.createElement('label');
@@ -504,7 +248,6 @@
         listContainer.appendChild(label);
       });
     }
-
     async function loadAddons() {
       const listContainer = document.getElementById('addon-list');
       const { data, error } = await client.from('addon').select('*').order('id');
@@ -519,21 +262,6 @@
         listContainer.appendChild(label);
       });
     }
-
-    // (BARU) Fungsi untuk update tampilan Nominal Pembayaran
-    function updateNominalDisplay() {
-        const nominalDisplay = document.getElementById('nominal-display');
-        const selectedPaket = document.querySelector('input[name="paket_internet"]:checked');
-        if (selectedPaket && daftarHarga[selectedPaket.value]) {
-            const harga = daftarHarga[selectedPaket.value];
-            nominalDisplay.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(harga);
-            nominalDisplay.className = 'auto-info-value';
-        } else {
-            nominalDisplay.textContent = "Pilih paket internet";
-            nominalDisplay.className = 'auto-info-value-placeholder';
-        }
-    }
-    
     async function populateForm(id) {
       await Promise.all([loadPaketInternet(), loadAddons(), loadKota()]);
 
@@ -587,7 +315,6 @@
       await loadCluster(data.kota_id, data.cluster_id);
       initMap(data.latitude, data.longitude);
     }
-    
     async function loadKota(selectedKotaId = null) {
       const { data, error } = await client.from("kota").select("id,nama");
       if (error) { console.error("Error loading kota:", error.message); return; }
@@ -603,7 +330,6 @@
         kotaSelect.appendChild(opt);
       });
     }
-    
     async function loadCluster(kotaId, selectedClusterId = null) {
       if (!kotaId) return;
       const { data, error } = await client.from("cluster").select("id,nama").eq("kota_id", kotaId);
@@ -620,88 +346,92 @@
         clusterSelect.appendChild(opt);
       });
     }
+    function updateNominalDisplay() {
+      const nominalDisplay = document.getElementById('nominal-display');
+        const selectedPaket = document.querySelector('input[name="paket_internet"]:checked');
+        if (selectedPaket && daftarHarga[selectedPaket.value]) {
+            const harga = daftarHarga[selectedPaket.value];
+            nominalDisplay.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(harga);
+            nominalDisplay.className = 'auto-info-value';
+        } else {
+            nominalDisplay.textContent = "Pilih paket internet";
+            nominalDisplay.className = 'auto-info-value-placeholder';
+        }
+    }
+    
+    // --- EVENT LISTENERS DENGAN PERBAIKAN ---
 
-    // --- EVENT LISTENERS UNTUK VALIDASI REAL-TIME & FUNGSI LAINNYA ---
-
-    // (BARU) Event listener untuk Tanggal Pemasangan WiFi
+    // (No. 1) Event listener untuk memunculkan kalender
+    document.getElementById('tanggal_pasang_display').addEventListener('click', () => { document.getElementById('tanggal_pasang').showPicker(); });
+    document.getElementById('tanggal_pemasangan_wifi_display').addEventListener('click', () => { document.getElementById('tanggal_pemasangan_wifi').showPicker(); });
+    
+    document.getElementById('tanggal_pasang').addEventListener('change', function() {
+        document.getElementById('tanggal_pasang_display').value = formatDate(this.value);
+    });
     document.getElementById('tanggal_pemasangan_wifi').addEventListener('change', function() {
         const display = document.getElementById('tanggal_pemasangan_wifi_display');
         const jatuhTempoDisplay = document.getElementById('jatuh-tempo-display');
-        
         display.value = formatDate(this.value);
         if(this.value) {
             jatuhTempoDisplay.textContent = new Date(this.value).getDate();
             jatuhTempoDisplay.className = 'auto-info-value';
         } else {
-            jatuhTempoDisplay.textContent = "Pilih tanggal pemasangan";
+            jatuhTempoDisplay.textContent = "Pilih tanggal pemasangan WiFi";
             jatuhTempoDisplay.className = 'auto-info-value-placeholder';
         }
     });
 
-    // (BARU) Event listener untuk perubahan Paket Internet
-    document.getElementById('paket-internet-list').addEventListener('change', updateNominalDisplay);
-    
-    // Event listener untuk Kalender
-    document.getElementById('tanggal_pasang_display').addEventListener('click', function() {
-      document.getElementById('tanggal_pasang').showPicker();
-    });
-    document.getElementById('tanggal_pasang').addEventListener('change', function() {
-      document.getElementById('tanggal_pasang_display').value = formatDate(this.value);
-    });
-
-    // PERBAIKAN: Validasi NIK Real-time
+    // (No. 2) Validasi NIK Real-time
     const nikInput = document.getElementById('nik');
     nikInput.addEventListener('input', () => {
-      const nikError = document.getElementById('nik-error');
-      nikError.style.display = 'none';
-      const value = nikInput.value;
-      if (/[^\d]/.test(value)) {
-        nikError.textContent = "NIK hanya boleh berisi angka.";
-        nikError.style.display = 'block';
-      } else if (value.length > 0 && value.length < 16) {
-        nikError.textContent = "NIK harus terdiri dari 16 angka.";
-        nikError.style.display = 'block';
-      }
+        const nikError = document.getElementById('nik-error');
+        nikError.style.display = 'none';
+        const value = nikInput.value;
+        if (/[^\d]/.test(value)) {
+            nikError.textContent = "NIK hanya boleh berisi angka.";
+            nikError.style.display = 'block';
+        } else if (value.length > 0 && value.length < 16) {
+            nikError.textContent = "NIK harus terdiri dari 16 angka.";
+            nikError.style.display = 'block';
+        }
     });
 
-    // Kapital Otomatis
     document.getElementById("nama_lengkap").addEventListener('input', function() { this.value = this.value.toUpperCase(); });
 
-    // PERBAIKAN: Validasi Email Real-time
     const emailInput = document.getElementById('email');
     emailInput.addEventListener('input', () => {
-      const emailError = document.getElementById('email-error');
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (emailInput.value && !emailRegex.test(emailInput.value)) {
-        emailError.textContent = "Format email tidak valid (contoh: user@google.com).";
-        emailError.style.display = 'block';
-      } else {
-        emailError.style.display = 'none';
-      }
+        const emailError = document.getElementById('email-error');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailInput.value && !emailRegex.test(emailInput.value)) {
+            emailError.textContent = "Format email tidak valid (contoh: user@google.com).";
+            emailError.style.display = 'block';
+        } else {
+            emailError.style.display = 'none';
+        }
     });
 
-    // PERBAIKAN: Validasi Telepon Real-time
+    // (No. 3) Validasi Telepon Real-time
     function validatePhoneNumber(inputId, errorId) {
-      const input = document.getElementById(inputId);
-      const error = document.getElementById(errorId);
-      const phoneValue = input.value;
-      error.style.display = 'none';
-      if (phoneValue) {
-        if (/[^\d]/.test(phoneValue)) {
-          error.textContent = "Nomor hanya boleh berisi angka.";
-          error.style.display = 'block';
-        } else if (phoneValue.length > 0 && (phoneValue.length < 10 || phoneValue.length > 13)) {
-          error.textContent = "Panjang nomor harus antara 10 hingga 13 angka.";
-          error.style.display = 'block';
+        const input = document.getElementById(inputId);
+        const error = document.getElementById(errorId);
+        const phoneValue = input.value;
+        error.style.display = 'none';
+        if (phoneValue) {
+            if (/[^\d]/.test(phoneValue)) {
+                error.textContent = "Nomor hanya boleh berisi angka.";
+                error.style.display = 'block';
+            } else if (phoneValue.length > 0 && phoneValue.length < 10) {
+                error.textContent = "Panjang nomor minimal 10 angka.";
+                error.style.display = 'block';
+            }
         }
-      }
     }
     document.getElementById('hp_wa').addEventListener('input', () => validatePhoneNumber('hp_wa', 'hp_wa-error'));
     document.getElementById('hp_dial').addEventListener('input', () => validatePhoneNumber('hp_dial', 'hp_dial-error'));
 
-    // Event listener lainnya
     document.getElementById("kota").addEventListener("change", (e) => { loadCluster(e.target.value); });
     document.getElementById("locate-btn").addEventListener("click", locateUser);
+    document.getElementById('paket-internet-list').addEventListener('change', updateNominalDisplay);
 
     // --- LOGIKA UTAMA SAAT HALAMAN DIMUAT ---
     document.addEventListener("DOMContentLoaded", async () => {
@@ -721,21 +451,21 @@
 
     // --- LOGIKA SAAT FORM DISUBMIT ---
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+        e.preventDefault();
       
-      let hasRealtimeError = false;
-      document.querySelectorAll('.validation-error').forEach(el => {
-        if (el.style.display === 'block' && el.textContent !== '') {
-          hasRealtimeError = true;
+        // (No. 4) Validasi saat submit DIHAPUS
+        let hasRealtimeError = false;
+        document.querySelectorAll('.validation-error').forEach(el => {
+            if (el.style.display === 'block' && el.textContent !== '') {
+                hasRealtimeError = true;
+            }
+        });
+        if (hasRealtimeError) {
+            errorDiv.textContent = "Harap perbaiki semua isian yang salah sebelum menyimpan.";
+            return; 
         }
-      });
-
-      if (hasRealtimeError) {
-        errorDiv.textContent = "Harap perbaiki semua isian yang salah sebelum menyimpan.";
-        return; 
-      }
-      
-      successDiv.textContent = "";
+        
+        successDiv.textContent = "";
       errorDiv.textContent = "";
       submitBtn.disabled = true;
       submitBtn.textContent = "Menyimpan...";
@@ -798,11 +528,6 @@
         setTimeout(() => { window.location.href = "index.html"; }, 1500);
       }
     });
-  </script>
+</script>
 </body>
 </html>
-
-
-
-
-
