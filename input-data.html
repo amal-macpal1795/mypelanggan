@@ -251,7 +251,7 @@
         <div class="section-title">Info Pelanggan</div>
         
         <div class="form-group">
-          <label for="tanggal_pasang_display">Tanggal Pemasangan</label>
+          <label for="tanggal_pasang_display">Tanggal Daftar</label>
           <div class="date-display-container">
             <input type="text" id="tanggal_pasang_display" placeholder="Pilih tanggal..." readonly required>
             <input type="date" id="tanggal_pasang" required autocomplete="off">
@@ -369,7 +369,7 @@
   </div>
 
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script>
+<script>
     const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
     const client = supabase.createClient(supabaseUrl, supabaseKey);
@@ -438,7 +438,6 @@
       return date.toLocaleDateString('id-ID', options);
     }
 
-    // (BARU) Fungsi untuk memuat Paket Internet dari Supabase
     async function loadPaketInternet() {
       const listContainer = document.getElementById('paket-internet-list');
       const { data, error } = await client.from('paket_internet').select('*').order('id');
@@ -455,7 +454,6 @@
       });
     }
 
-    // (BARU) Fungsi untuk memuat Add On dari Supabase
     async function loadAddons() {
       const listContainer = document.getElementById('addon-list');
       const { data, error } = await client.from('addon').select('*').order('id');
@@ -472,187 +470,194 @@
     }
     
     async function populateForm(id) {
-        // PENTING: Muat pilihan dinamis terlebih dahulu
-      await Promise.all([loadPaketInternet(), loadAddons(), loadKota()]);
-      
-      const { data, error } = await client.from("pelanggan").select("*").eq("id", id).single();
-      if (error) {
-        console.error("Gagal mengambil data untuk diedit:", error);
-        errorDiv.textContent = "Gagal memuat data pelanggan.";
-        return;
-      }
-      
-        // Mengisi input-input teks dan tanggal
-      document.getElementById("tanggal_pasang").value = data.tanggal;
-      document.getElementById("tanggal_pasang_display").value = formatDate(data.tanggal);
-      document.getElementById("nik").value = data.nik;
-      document.getElementById("nama_lengkap").value = data.nama_lengkap;
-      document.getElementById("email").value = data.email;
-      document.getElementById("hp_wa").value = data.hp_wa;
-      document.getElementById("hp_dial").value = data.hp_dial;
-      document.getElementById("homepass").value = data.homepass;
-      document.getElementById("alamat").value = data.alamat;
-      document.getElementById("promo").checked = data.promo;
-      document.getElementById("id_pelanggan").value = data.id_pelanggan;
-      document.getElementById("tanggal_jatuh_tempo").value = data.tanggal_jatuh_tempo;
-      document.getElementById("nominal_pembayaran").value = data.nominal_pembayaran;
+        await Promise.all([loadPaketInternet(), loadAddons(), loadKota()]);
+        
+        const { data, error } = await client.from("pelanggan").select("*").eq("id", id).single();
+        if (error) {
+            console.error("Gagal mengambil data untuk diedit:", error);
+            errorDiv.textContent = "Gagal memuat data pelanggan.";
+            return;
+        }
+        
+        document.getElementById("tanggal_pasang").value = data.tanggal;
+        document.getElementById("tanggal_pasang_display").value = formatDate(data.tanggal);
+        document.getElementById("nik").value = data.nik;
+        document.getElementById("nama_lengkap").value = data.nama_lengkap;
+        document.getElementById("email").value = data.email;
+        document.getElementById("hp_wa").value = data.hp_wa;
+        document.getElementById("hp_dial").value = data.hp_dial;
+        document.getElementById("homepass").value = data.homepass;
+        document.getElementById("alamat").value = data.alamat;
+        document.getElementById("promo").checked = data.promo;
+        // Kolom tambahan
+        document.getElementById("id_pelanggan").value = data.id_pelanggan || '';
+        document.getElementById("tanggal_jatuh_tempo").value = data.tanggal_jatuh_tempo || '';
+        document.getElementById("nominal_pembayaran").value = data.nominal_pembayaran || '';
 
-        // Memilih radio button Paket Internet yang sesuai
-      if (data.paket_internet) {
-        const radioPaket = document.querySelector(`input[name="paket_internet"][value="${data.paket_internet}"]`);
-        if (radioPaket) radioPaket.checked = true;
-      }
-
-        // Memilih radio button Paket TV yang sesuai
-      if (data.paket_tv) {
-        const radioTv = document.querySelector(`input[name="paket_tv"][value="${data.paket_tv}"]`);
-        if(radioTv) radioTv.checked = true;
-      }
-
-        // Memilih radio button Metode Bayar yang sesuai
-      if (data.metode_bayar) {
-        const radioBayar = document.querySelector(`input[name="metode_bayar"][value="${data.metode_bayar}"]`);
-        if(radioBayar) radioBayar.checked = true;
-      }
-
-        // Memilih checkbox Add On yang sesuai
-      if (data.addon && Array.isArray(data.addon)) {
-        data.addon.forEach(addonValue => {
-          const checkbox = document.querySelector(`input[name="addon"][value="${addonValue}"]`);
-          if (checkbox) checkbox.checked = true;
-        });
-      }
-
-      await loadKota(data.kota_id);
-      await loadCluster(data.kota_id, data.cluster_id);
-      initMap(data.latitude, data.longitude);
+        if (data.paket_internet) {
+            const radioPaket = document.querySelector(`input[name="paket_internet"][value="${data.paket_internet}"]`);
+            if (radioPaket) radioPaket.checked = true;
+        }
+        if (data.paket_tv) {
+            const radioTv = document.querySelector(`input[name="paket_tv"][value="${data.paket_tv}"]`);
+            if(radioTv) radioTv.checked = true;
+        }
+        if (data.metode_bayar) {
+            const radioBayar = document.querySelector(`input[name="metode_bayar"][value="${data.metode_bayar}"]`);
+            if(radioBayar) radioBayar.checked = true;
+        }
+        if (data.addon && Array.isArray(data.addon)) {
+            data.addon.forEach(addonValue => {
+                const checkbox = document.querySelector(`input[name="addon"][value="${addonValue}"]`);
+                if (checkbox) checkbox.checked = true;
+            });
+        }
+        await loadKota(data.kota_id);
+        await loadCluster(data.kota_id, data.cluster_id);
+        initMap(data.latitude, data.longitude);
     }
     
     async function loadKota(selectedKotaId = null) {
-      const { data, error } = await client.from("kota").select("id,nama");
-      if (error) { console.error("Error loading kota:", error.message); return; }
-      const kotaSelect = document.getElementById("kota");
-      kotaSelect.innerHTML = '<option value="" disabled selected>Pilih kota...</option>';
-      data.forEach(k => {
-        const opt = document.createElement("option");
-        opt.value = k.id;
-        opt.textContent = k.nama;
-        if (k.id == selectedKotaId) {
-          opt.selected = true;
-        }
-        kotaSelect.appendChild(opt);
-      });
+        const { data, error } = await client.from("kota").select("id,nama");
+        if (error) { console.error("Error loading kota:", error.message); return; }
+        const kotaSelect = document.getElementById("kota");
+        kotaSelect.innerHTML = '<option value="" disabled selected>Pilih kota...</option>';
+        data.forEach(k => {
+            const opt = document.createElement("option");
+            opt.value = k.id;
+            opt.textContent = k.nama;
+            if (k.id == selectedKotaId) {
+                opt.selected = true;
+            }
+            kotaSelect.appendChild(opt);
+        });
     }
     
     async function loadCluster(kotaId, selectedClusterId = null) {
-      if (!kotaId) return;
-      const { data, error } = await client.from("cluster").select("id,nama").eq("kota_id", kotaId);
-      const clusterSelect = document.getElementById("cluster");
-      clusterSelect.innerHTML = '<option value="" disabled selected>Pilih cluster...</option>';
-      if (error) { console.error("Error loading cluster:", error.message); return; }
-      data.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = c.nama;
-        if (c.id == selectedClusterId) {
-          opt.selected = true;
-        }
-        clusterSelect.appendChild(opt);
-      });
+        if (!kotaId) return;
+        const { data, error } = await client.from("cluster").select("id,nama").eq("kota_id", kotaId);
+        const clusterSelect = document.getElementById("cluster");
+        clusterSelect.innerHTML = '<option value="" disabled selected>Pilih cluster...</option>';
+        if (error) { console.error("Error loading cluster:", error.message); return; }
+        data.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c.id;
+            opt.textContent = c.nama;
+            if (c.id == selectedClusterId) {
+                opt.selected = true;
+            }
+            clusterSelect.appendChild(opt);
+        });
     }
 
-    // --- EVENT LISTENERS UNTUK VALIDASI REAL-TIME & FUNGSI LAINNYA ---
-    document.getElementById('tanggal_pasang_display').addEventListener('click', function() {
-      document.getElementById('tanggal_pasang').showPicker();
-    });
-    document.getElementById('tanggal_pasang').addEventListener('change', function() {
-      document.getElementById('tanggal_pasang_display').value = formatDate(this.value);
-    });
-    const nikInput = document.getElementById('nik');
-    nikInput.addEventListener('input', () => { /* ... kode validasi NIK ... */ });
+    // --- EVENT LISTENERS ---
+
+    // Kapital Otomatis untuk Nama
     document.getElementById("nama_lengkap").addEventListener('input', function() { this.value = this.value.toUpperCase(); });
-    const emailInput = document.getElementById('email');
-    emailInput.addEventListener('input', () => { /* ... kode validasi Email ... */ });
-    function validatePhoneNumber(inputId, errorId) { /* ... kode validasi Telepon ... */ }
-    document.getElementById('hp_wa').addEventListener('input', () => validatePhoneNumber('hp_wa', 'hp_wa-error'));
-    document.getElementById('hp_dial').addEventListener('input', () => validatePhoneNumber('hp_dial', 'hp_dial-error'));
+
+    // Event listener lain untuk dropdown kota dan tombol locate
     document.getElementById("kota").addEventListener("change", (e) => { loadCluster(e.target.value); });
+    document.getElementById("locate-btn").addEventListener("click", locateUser);
 
+    // --- LOGIKA UTAMA SAAT HALAMAN DIMUAT ---
     document.addEventListener("DOMContentLoaded", async () => {
-      const params = new URLSearchParams(window.location.search);
-      editId = params.get('edit_id');
-      document.getElementById("locate-btn").addEventListener("click", locateUser);
-      if (editId) {
-        pageTitle.textContent = "Edit Data Pelanggan";
-        formTitle.textContent = "Edit Data Pelanggan";
-        submitBtn.textContent = "Update Data";
-        await populateForm(editId);
-      } else {
-        await Promise.all([loadPaketInternet(), loadAddons(), loadKota()]);
-        initMap();
-      }
+        const params = new URLSearchParams(window.location.search);
+        editId = params.get('edit_id');
+
+        if (editId) {
+            pageTitle.textContent = "Edit Data Pelanggan";
+            formTitle.textContent = "Edit Data Pelanggan";
+            submitBtn.textContent = "Update Data";
+            await populateForm(editId);
+        } else {
+            await Promise.all([loadPaketInternet(), loadAddons(), loadKota()]);
+            initMap();
+        }
     });
 
+    // --- LOGIKA SAAT FORM DISUBMIT ---
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      // ... (validasi saat submit tidak diubah) ...
-      
-      const paketInternetValue = document.querySelector('input[name="paket_internet"]:checked')?.value || "";
-      const paketTvValue = document.querySelector('input[name="paket_tv"]:checked')?.value || "";
-      const metodeBayarValue = document.querySelector('input[name="metode_bayar"]:checked')?.value || "";
-      const addonValues = [];
-      document.querySelectorAll('input[name="addon"]:checked').forEach(checkbox => {
-        addonValues.push(checkbox.value);
-      });
-      
-      const payload = {
-        tanggal: document.getElementById("tanggal_pasang").value,
-        nik: document.getElementById("nik").value,
-        nama_lengkap: document.getElementById("nama_lengkap").value,
-        email: document.getElementById("email").value,
-        hp_wa: document.getElementById("hp_wa").value,
-        hp_dial: document.getElementById("hp_dial").value,
-        kota_id: document.getElementById("kota").value,
-        cluster_id: document.getElementById("cluster").value,
-        homepass: document.getElementById("homepass").value.trim(),
-        alamat: document.getElementById("alamat").value.trim(),
-        paket_internet: paketInternetValue,
-        paket_tv: paketTvValue,
-        addon: addonValues,
-        metode_bayar: metodeBayarValue,
-        promo: document.getElementById("promo").checked,
-        sales_id: (await client.auth.getUser()).data.user.id,
-        latitude: selectedLat,
-        longitude: selectedLng,
-        id_pelanggan: document.getElementById("id_pelanggan").value.trim(),
-        tanggal_jatuh_tempo: document.getElementById("tanggal_jatuh_tempo").value.trim(),
-        nominal_pembayaran: document.getElementById("nominal_pembayaran").value.trim(),
-        is_complete: document.getElementById("id_pelanggan").value.trim() !== '' && document.getElementById("tanggal_jatuh_tempo").value.trim() !== '' && document.getElementById("nominal_pembayaran").value.trim() !== ''
-      };
-      
-      let error;
-      if (editId) { 
-        const { error: updateError } = await client.from("pelanggan").update(payload).eq("id", editId);
-        error = updateError;
-      } else { 
-        const { error: insertError } = await client.from("pelanggan").insert([payload]);
-        error = insertError;
-      }
-      
-      submitBtn.disabled = false;
-      submitBtn.textContent = editId ? "Update Data" : "Simpan Data";
+        e.preventDefault();
+        
+        let hasRealtimeError = false;
+        document.querySelectorAll('.validation-error').forEach(el => {
+            if (el.style.display === 'block' && el.textContent !== '') {
+                hasRealtimeError = true;
+            }
+        });
 
-      if (error) { 
-        console.error(error);
-        errorDiv.textContent = "Gagal menyimpan: " + error.message;
-      } else { 
-        successDiv.textContent = "Data berhasil disimpan!";
-        setTimeout(() => { window.location.href = "index.html"; }, 1500);
-      }
+        if (hasRealtimeError) {
+            errorDiv.textContent = "Harap perbaiki semua isian yang salah sebelum menyimpan.";
+            return; 
+        }
+        
+        successDiv.textContent = "";
+        errorDiv.textContent = "";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Menyimpan...";
+
+        const { data: { user } } = await client.auth.getUser();
+        if (!user) {
+            errorDiv.textContent = "Sesi Anda berakhir. Silakan login kembali.";
+            submitBtn.disabled = false;
+            submitBtn.textContent = editId ? "Update Data" : "Simpan Data";
+            return;
+        }
+        
+        const paketInternetValue = document.querySelector('input[name="paket_internet"]:checked')?.value || "";
+        const paketTvValue = document.querySelector('input[name="paket_tv"]:checked')?.value || "";
+        const metodeBayarValue = document.querySelector('input[name="metode_bayar"]:checked')?.value || "";
+        const addonValues = Array.from(document.querySelectorAll('input[name="addon"]:checked')).map(cb => cb.value);
+        
+        const payload = {
+            tanggal: document.getElementById("tanggal_pasang").value,
+            nik: document.getElementById("nik").value,
+            nama_lengkap: document.getElementById("nama_lengkap").value,
+            email: document.getElementById("email").value,
+            hp_wa: document.getElementById("hp_wa").value,
+            hp_dial: document.getElementById("hp_dial").value,
+            kota_id: document.getElementById("kota").value,
+            cluster_id: document.getElementById("cluster").value,
+            homepass: document.getElementById("homepass").value.trim(),
+            alamat: document.getElementById("alamat").value.trim(),
+            paket_internet: paketInternetValue,
+            paket_tv: paketTvValue,
+            addon: addonValues,
+            metode_bayar: metodeBayarValue,
+            promo: document.getElementById("promo").checked,
+            sales_id: user.id,
+            latitude: selectedLat,
+            longitude: selectedLng,
+            id_pelanggan: document.getElementById("id_pelanggan").value.trim(),
+            tanggal_jatuh_tempo: document.getElementById("tanggal_jatuh_tempo").value.trim(),
+            nominal_pembayaran: document.getElementById("nominal_pembayaran").value.trim(),
+            is_complete: document.getElementById("id_pelanggan").value.trim() !== '' && document.getElementById("tanggal_jatuh_tempo").value.trim() !== '' && document.getElementById("nominal_pembayaran").value.trim() !== ''
+        };
+        
+        let error;
+        if (editId) { 
+            const { error: updateError } = await client.from("pelanggan").update(payload).eq("id", editId);
+            error = updateError;
+        } else { 
+            const { error: insertError } = await client.from("pelanggan").insert([payload]);
+            error = insertError;
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = editId ? "Update Data" : "Simpan Data";
+
+        if (error) { 
+            console.error(error);
+            errorDiv.textContent = "Gagal menyimpan: " + error.message;
+        } else { 
+            successDiv.textContent = "Data berhasil disimpan!";
+            setTimeout(() => { window.location.href = "index.html"; }, 1500);
+        }
     });
-  </script>
+</script>
 </body>
 </html>
+
 
 
 
