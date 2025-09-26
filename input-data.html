@@ -550,12 +550,67 @@
         });
     }
 
-    // --- EVENT LISTENERS ---
+    // --- EVENT LISTENERS UNTUK VALIDASI REAL-TIME & FUNGSI LAINNYA ---
+    
+    // Event listener untuk Kalender
+    document.getElementById('tanggal_pasang_display').addEventListener('click', function() {
+        document.getElementById('tanggal_pasang').showPicker();
+    });
+    document.getElementById('tanggal_pasang').addEventListener('change', function() {
+        document.getElementById('tanggal_pasang_display').value = formatDate(this.value);
+    });
 
-    // Kapital Otomatis untuk Nama
+    // PERBAIKAN: Validasi NIK Real-time
+    const nikInput = document.getElementById('nik');
+    nikInput.addEventListener('input', () => {
+        const nikError = document.getElementById('nik-error');
+        nikError.style.display = 'none';
+        const value = nikInput.value;
+        if (/[^\d]/.test(value)) {
+            nikError.textContent = "NIK hanya boleh berisi angka.";
+            nikError.style.display = 'block';
+        } else if (value.length > 0 && value.length < 16) {
+            nikError.textContent = "NIK harus terdiri dari 16 angka.";
+            nikError.style.display = 'block';
+        }
+    });
+
+    // Kapital Otomatis
     document.getElementById("nama_lengkap").addEventListener('input', function() { this.value = this.value.toUpperCase(); });
 
-    // Event listener lain untuk dropdown kota dan tombol locate
+    // PERBAIKAN: Validasi Email Real-time
+    const emailInput = document.getElementById('email');
+    emailInput.addEventListener('input', () => {
+        const emailError = document.getElementById('email-error');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailInput.value && !emailRegex.test(emailInput.value)) {
+            emailError.textContent = "Format email tidak valid (contoh: user@google.com).";
+            emailError.style.display = 'block';
+        } else {
+            emailError.style.display = 'none';
+        }
+    });
+
+    // PERBAIKAN: Validasi Telepon Real-time
+    function validatePhoneNumber(inputId, errorId) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      const phoneValue = input.value;
+      error.style.display = 'none';
+      if (phoneValue) {
+        if (/[^\d]/.test(phoneValue)) {
+            error.textContent = "Nomor hanya boleh berisi angka.";
+            error.style.display = 'block';
+        } else if (phoneValue.length > 0 && (phoneValue.length < 10 || phoneValue.length > 13)) {
+            error.textContent = "Panjang nomor harus antara 10 hingga 13 angka.";
+            error.style.display = 'block';
+        }
+      }
+    }
+    document.getElementById('hp_wa').addEventListener('input', () => validatePhoneNumber('hp_wa', 'hp_wa-error'));
+    document.getElementById('hp_dial').addEventListener('input', () => validatePhoneNumber('hp_dial', 'hp_dial-error'));
+
+    // Event listener lainnya
     document.getElementById("kota").addEventListener("change", (e) => { loadCluster(e.target.value); });
     document.getElementById("locate-btn").addEventListener("click", locateUser);
 
@@ -657,6 +712,7 @@
 </script>
 </body>
 </html>
+
 
 
 
