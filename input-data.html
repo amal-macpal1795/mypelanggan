@@ -241,6 +241,29 @@
       border-width: 0 3px 3px 0;
       transform: rotate(45deg);
     }
+
+    .auto-info {
+      padding: 10px 12px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .auto-info-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #555;
+    }
+    .auto-info-value, .auto-info-value-placeholder {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .auto-info-value-placeholder {
+      color: #999;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -251,7 +274,7 @@
         <div class="section-title">Info Pelanggan</div>
         
         <div class="form-group">
-          <label for="tanggal_pasang_display">Tanggal Daftar</label>
+          <label for="tanggal_pasang_display">Tanggal Pemesanan</label>
           <div class="date-display-container">
             <input type="text" id="tanggal_pasang_display" placeholder="Pilih tanggal..." readonly required>
             <input type="date" id="tanggal_pasang" required autocomplete="off">
@@ -362,19 +385,30 @@
         </div>
 
         <div class="divider"></div>
+        <div class="form-group">
+          <label for="tanggal_pemasangan_wifi_display">Tanggal Pemasangan WiFi</label>
+          <div class="date-display-container">
+            <input type="text" id="tanggal_pemasangan_wifi_display" placeholder="Pilih tanggal pemasangan..." readonly>
+            <input type="date" id="tanggal_pemasangan_wifi">
+          </div>
+        </div>
+
+        <div class="divider"></div>
         <div class="section-title">Detail Pembayaran (dari Perusahaan)</div>
 
         <div class="form-group">
-          <label for="id_pelanggan">ID Pelanggan (Contoh: MR123456)</label>
-          <input type="text" id="id_pelanggan" autocomplete="off">
+          <label for="id_pelanggan">ID Pelanggan</label>
+          <input type="text" id="id_pelanggan" placeholder="Diisi setelah WiFi aktif">
         </div>
-        <div class="form-group">
-          <label for="tanggal_jatuh_tempo">Tanggal Jatuh Tempo (Angka 1-31)</label>
-          <input type="number" id="tanggal_jatuh_tempo" min="1" max="31">
+        
+        <div class="form-group auto-info">
+          <span class="auto-info-label">Tanggal Jatuh Tempo:</span>
+          <span id="jatuh-tempo-display" class="auto-info-value-placeholder">Pilih tanggal pemasangan</span>
         </div>
-        <div class="form-group">
-          <label for="nominal_pembayaran">Nominal Pembayaran Bulanan</label>
-          <input type="number" id="nominal_pembayaran" placeholder="Contoh: 300000">
+        
+        <div class="form-group auto-info">
+          <span class="auto-info-label">Nominal Pembayaran:</span>
+          <span id="nominal-display" class="auto-info-value">Memuat...</span>
         </div>
 
         <button type="submit" class="submit-btn" id="submit-btn">Simpan Data</button>
@@ -484,6 +518,20 @@
         listContainer.appendChild(label);
       });
     }
+
+    // (BARU) Fungsi untuk update tampilan Nominal Pembayaran
+    function updateNominalDisplay() {
+        const nominalDisplay = document.getElementById('nominal-display');
+        const selectedPaket = document.querySelector('input[name="paket_internet"]:checked');
+        if (selectedPaket && daftarHarga[selectedPaket.value]) {
+            const harga = daftarHarga[selectedPaket.value];
+            nominalDisplay.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(harga);
+            nominalDisplay.className = 'auto-info-value';
+        } else {
+            nominalDisplay.textContent = "Pilih paket internet";
+            nominalDisplay.className = 'auto-info-value-placeholder';
+        }
+    }
     
     async function populateForm(id) {
       await Promise.all([loadPaketInternet(), loadAddons(), loadKota()]);
@@ -567,6 +615,24 @@
     }
 
     // --- EVENT LISTENERS UNTUK VALIDASI REAL-TIME & FUNGSI LAINNYA ---
+
+    // (BARU) Event listener untuk Tanggal Pemasangan WiFi
+    document.getElementById('tanggal_pemasangan_wifi').addEventListener('change', function() {
+        const display = document.getElementById('tanggal_pemasangan_wifi_display');
+        const jatuhTempoDisplay = document.getElementById('jatuh-tempo-display');
+        
+        display.value = formatDate(this.value);
+        if(this.value) {
+            jatuhTempoDisplay.textContent = new Date(this.value).getDate();
+            jatuhTempoDisplay.className = 'auto-info-value';
+        } else {
+            jatuhTempoDisplay.textContent = "Pilih tanggal pemasangan";
+            jatuhTempoDisplay.className = 'auto-info-value-placeholder';
+        }
+    });
+
+    // (BARU) Event listener untuk perubahan Paket Internet
+    document.getElementById('paket-internet-list').addEventListener('change', updateNominalDisplay);
     
     // Event listener untuk Kalender
     document.getElementById('tanggal_pasang_display').addEventListener('click', function() {
@@ -728,4 +794,5 @@
   </script>
 </body>
 </html>
+
 
