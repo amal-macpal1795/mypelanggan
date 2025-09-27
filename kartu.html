@@ -7,46 +7,130 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; font-family: 'Poppins', sans-serif; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- DESAIN KARTU PELANGGAN --- */
+
         .kartu-pelanggan {
-            width: 560px; height: 350px; font-family: 'Poppins', sans-serif; border-radius: 18px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); overflow: hidden; display: flex; flex-direction: column;
+            /* Ukuran seperti KTP/ID Card (rasio ~1.58) */
+            width: 560px;
+            height: 350px; 
+            font-family: 'Poppins', sans-serif;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* Penting agar semua elemen mengikuti border-radius */
+            display: flex;
+            flex-direction: column; /* Menyusun baris secara vertikal */
         }
+
+        /* Baris Pertama (Header) */
         .kartu-header {
-            flex: 0 0 18%; background: #ffffff; color: #333; display: flex;
-            justify-content: space-between; align-items: center; padding: 0 25px;
+            flex: 0 0 18%; /* Tinggi 18% dari total kartu */
+            background: #ffffff;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
         }
-        .header-title { font-size: 16px; font-weight: 600; }
-        .header-logo { height: 30px; }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .header-logo {
+            height: 30px; /* Sesuaikan ukuran logo */
+        }
+
+        /* Wrapper untuk Baris Kedua dan Ketiga agar background menyatu */
         .main-content {
-            flex: 1;
+            flex: 1; /* Mengisi sisa ruang kartu */
             background-color: #1a092a;
             background-image: radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%), 
                               radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
-            background-attachment: fixed; color: #ffffff; padding: 25px;
-            display: flex; flex-direction: column;
+            background-attachment: fixed;
+            color: #ffffff;
+            padding: 25px;
+            display: flex;
+            flex-direction: column; /* Menyusun baris 2 & 3 */
         }
-        .kartu-body { display: flex; flex: 1; }
+
+        /* Baris Kedua (Body) */
+        .kartu-body {
+            display: flex;
+            flex: 1; /* Mengisi sisa ruang di main-content */
+        }
+
+        /* Kolom Pertama (Monogram) */
         .monogram-container {
-            flex: 0 0 30%; display: flex; justify-content: center; align-items: center;
+            flex: 0 0 30%; /* Lebar kolom monogram */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
         .monogram-text {
-            font-family: 'Times New Roman', Times, serif; font-size: 80px; font-weight: bold;
-            line-height: 1; border: 3px solid rgba(255, 255, 255, 0.7); border-radius: 50%;
-            width: 120px; height: 120px; display: flex; justify-content: center;
-            align-items: center; background: rgba(255, 255, 255, 0.1);
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 80px;
+            font-weight: bold;
+            line-height: 1;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
+
+        /* Kolom Kedua (Detail Pelanggan) */
         .detail-pelanggan {
-            flex: 1; padding-left: 25px; border-left: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex; flex-direction: column; justify-content: center;
+            flex: 1; /* Mengisi sisa lebar di baris kedua */
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        .nama-pelanggan { font-size: 24px; font-weight: 700; text-transform: uppercase; margin: 0 0 15px 0; }
-        .info-list p { font-size: 13px; margin: 8px 0; font-weight: 400; opacity: 0.9; }
-        .info-list .label-info { font-weight: 600; opacity: 0.8; }
+        
+        .nama-pelanggan {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0 0 15px 0; /* Jarak dari nama ke detail lain */
+        }
+
+        .info-list p {
+            font-size: 13px;
+            margin: 8px 0;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .info-list .label-info {
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        /* Baris Ketiga (Footer) */
         .kartu-footer {
-            font-size: 10px; text-align: center; opacity: 0.7; padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: auto;
+            font-size: 10px;
+            text-align: center;
+            opacity: 0.7;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: auto; /* Mendorong footer ke bawah */
         }
     </style>
 </head>
@@ -54,7 +138,7 @@
     <div id="kartu-container" class="kartu-pelanggan">
         <div class="kartu-header">
             <span class="header-title">Kartu Pelanggan Setia</span>
-            <img src="---URL_LOGO---" alt="Logo MyRepublic" class="header-logo">
+            <img src="logo_myrepublic.png" alt="Logo MyRepublic" class="header-logo">
         </div>
         <div class="main-content">
             <div class="kartu-body">
