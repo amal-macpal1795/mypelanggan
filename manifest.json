@@ -1,0 +1,21 @@
+{
+  "name": "MyPelanggan",
+  "short_name": "MyPelanggan",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8119b5",
+  "description": "Aplikasi pencatatan pelanggan MyRepublic untuk sales.",
+  "icons": [
+    {
+      "src": "/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
