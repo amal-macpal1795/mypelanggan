@@ -261,10 +261,6 @@
       });
     }
 
-    const supabaseUrl = "https://jewyknkcquolyguipxhr.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impld3lrbmtjcXVvbHlndWlweGhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjA2MzQsImV4cCI6MjA3MzczNjYzNH0.WX8a-wqR5mtKrULGcmd2JrgsDktM-wBYTT7zpC-v6Vw";
-    const client = supabase.createClient(supabaseUrl, supabaseKey);
-
     async function loadCustomerDetail() {
       const params = new URLSearchParams(window.location.search);
       const customerId = params.get('id');
@@ -357,4 +353,5 @@
   </script>
 </body>
 </html>
+
 
