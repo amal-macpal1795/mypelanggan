@@ -336,87 +336,117 @@
         }
       }
 
-      // --- GANTI DENGAN BLOK BARU INI ---
-      const notifButton = document.getElementById('kirimNotifBtn');
-      notifButton.addEventListener('click', async () => {
-    // 1. Ambil semua data yang diperlukan dari halaman
-        const namaLengkap = document.getElementById('nama_lengkap').textContent;
-        const idPelanggan = document.getElementById('id_pelanggan').textContent;
-        const jatuhTempoText = document.getElementById('jatuh_tempo').textContent;
-        const nominalPembayaran = document.getElementById('nominal_pembayaran').textContent;
-        const noHpWa = document.getElementById('hp_wa').textContent;
+      // --- GANTI SELURUH BLOK EVENT LISTENER TOMBOL DENGAN YANG INI ---
 
-    // Cek jika data penting belum ada
-        if (!idPelanggan || idPelanggan === 'Belum Ada' || !noHpWa) {
-          alert('ID Pelanggan atau Nomor WA belum lengkap. Harap isi terlebih dahulu.');
-          return;
-        }
+const notifButton = document.getElementById('kirimNotifBtn');
+notifButton.addEventListener('click', async () => {
+    // 1. Ambil semua data yang diperlukan
+    const namaLengkap = document.getElementById('nama_lengkap').textContent;
+    const idPelanggan = document.getElementById('id_pelanggan').textContent;
+    const jatuhTempoText = document.getElementById('jatuh_tempo').textContent;
+    const nominalPembayaran = document.getElementById('nominal_pembayaran').textContent;
+    const alamat = document.getElementById('alamat').textContent; // Data baru
+    const noHpWa = document.getElementById('hp_wa').textContent;
 
-    // Ubah "Setiap tanggal 26" menjadi "26"
-        const tanggalJatuhTempo = jatuhTempoText.replace(/\D/g, '');
+    // Cek jika data penting belum lengkap
+    if (!idPelanggan || idPelanggan === 'Belum Ada' || !noHpWa || noHpWa === '-') {
+        alert('ID Pelanggan atau Nomor WA belum lengkap. Harap isi terlebih dahulu.');
+        return;
+    }
+
+    // 2. LOGIKA MEMBUAT MONOGRAM
+    let monogram = '';
+    const namaSplit = namaLengkap.trim().split(' ');
+    if (namaSplit.length > 1) {
+        // Jika nama lebih dari satu kata (Budi Santoso -> BS)
+        monogram = namaSplit[0].charAt(0) + namaSplit[namaSplit.length - 1].charAt(0);
+    } else if (namaLengkap.length > 1) {
+        // Jika nama hanya satu kata (Budi -> BU)
+        monogram = namaLengkap.substring(0, 2);
+    } else {
+        // Jika nama hanya satu huruf
+        monogram = namaLengkap;
+    }
 
     // Tampilkan status loading di tombol
-        notifButton.disabled = true;
-        notifButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Membuat Kartu...';
+    notifButton.disabled = true;
+    notifButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Membuat Kartu...';
 
-    // 2. Ambil template kartu.html
-        const response = await fetch('kartu.html');
-        let kartuHtml = await response.text();
+    // 3. Ambil template kartu.html
+    const response = await fetch('kartu.html');
+    let kartuHtml = await response.text();
 
-    // 3. Ganti placeholder di template dengan data asli
-        kartuHtml = kartuHtml.replace('---NAMA_LENGKAP---', namaLengkap)
-        .replace('---ID_PELANGGAN---', idPelanggan)
-        .replace('---TANGGAL_JATUH_TEMPO---', tanggalJatuhTempo)
-        .replace('---NOMINAL_PEMBAYARAN---', nominalPembayaran);
-        
-    // 4. Buat elemen sementara untuk dirender menjadi gambar
-        const tempContainer = document.createElement('div');
-        tempContainer.style.position = 'absolute';
-    tempContainer.style.left = '-9999px'; // Sembunyikan di luar layar
+    // 4. Ganti semua placeholder dengan data asli
+    // PENTING: Ganti URL logo Anda di sini
+    const urlLogo = 'logo_myrepublic.png';
+
+    kartuHtml = kartuHtml.replace('---URL_LOGO---', urlLogo)
+                         .replace('---MONOGRAM---', monogram.toUpperCase())
+                         .replace('---NAMA_LENGKAP---', namaLengkap)
+                         .replace('---ID_PELANGGAN---', idPelanggan)
+                         .replace('---TANGGAL_JATUH_TEMPO---', jatuhTempoText)
+                         .replace('---NOMINAL_PEMBAYARAN---', nominalPembayaran)
+                         .replace('---ALAMAT---', alamat);
+    
+    // 5. Buat elemen sementara untuk dirender (tidak ada perubahan di sini)
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.left = '-9999px';
     tempContainer.innerHTML = kartuHtml;
     document.body.appendChild(tempContainer);
 
-    // 5. Gunakan html2canvas untuk "screenshot" elemen kartu
+    // 6. Gunakan html2canvas dan proses pengiriman (tidak ada perubahan di sini)
     try {
-      const canvas = await html2canvas(tempContainer.querySelector('#kartu-container'));
-      const imageUrl = canvas.toDataURL('image/jpeg', 0.9);
+        const kartuNode = tempContainer.querySelector('#kartu-container');
+        // Setting scale untuk hasil gambar yang lebih tajam/HD
+        const canvas = await html2canvas(kartuNode, { scale: 2 });
+        const imageUrl = canvas.toDataURL('image/jpeg', 0.9);
 
-        // 6. Buat link untuk men-download gambar
-      const link = document.createElement('a');
-      link.href = imageUrl;
-      link.download = `kartu-pelanggan-${namaLengkap.replace(/\s/g, '-')}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = `kartu-pelanggan-${namaLengkap.replace(/\s/g, '-')}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-        // 7. Siapkan pesan WhatsApp
-      let pesanWa = `Halo Kak ${namaLengkap},\n\nTerima kasih telah menjadi pelanggan setia MyRepublic. Berikut kami kirimkan detail informasi akun Anda dalam bentuk kartu pelanggan.\n\nMohon untuk melakukan pembayaran sebelum tanggal jatuh tempo ya. Terima kasih! 🙏`;
-      
-        // Format nomor HP (ganti 0 di depan dengan 62)
-      const noHpFormatted = noHpWa.startsWith('0') ? '62' + noHpWa.substring(1) : noHpWa;
-      
-        // Encode pesan untuk URL
-      const encodedPesan = encodeURIComponent(pesanWa);
-      const whatsappUrl = `https://wa.me/${noHpFormatted}?text=${encodedPesan}`;
+        let pesanWa = `Pemberitahuan Pembayaran Layanan Internet MyRepublic\n\nYth. Bapak/Ibu ${namaLengkap},\n\nKami informasikan bahwa tagihan 
+        layanan internet Anda akan jatuh tempo pada:\n
+        Setiap tanggal: ${jatuh_tempo}\n\nMohon untuk melakukan pembayaran sebelum atau pada tanggal tersebut agar layanan tetap aktif.\n
+        Pembayaran dapat dilakukan dengan mudah melalu:\n\n
+        Indomaret\n
+        Alfamart\n
+        OVO\n
+        DANA\n
+        GoPay\n
+        Mobile Banking\n
+        Aplikasi MyRepublic\n
+        Kios yang menyediahkan layanan pembayaran digital\n\n
+        Terimakasih telah memilih MyRepublic untuk layanan internet Anda sekeluarga. Semoga layanan kami terus memberikan kenyamanan
+        dalam aktivitas digital Anda sekeluarga sehari-hari\n]n
+        Hormat kami,\n
+        MyRepublic;
+        
+        const noHpFormatted = noHpWa.startsWith('0') ? '62' + noHpWa.substring(1) : noHpWa;
+        const encodedPesan = encodeURIComponent(pesanWa);
+        const whatsappUrl = `https://wa.me/${noHpFormatted}?text=${encodedPesan}`;
 
-        // 8. Buka WhatsApp setelah jeda singkat untuk memastikan download dimulai
-      setTimeout(() => {
-        window.open(whatsappUrl, '_blank');
-      }, 500);
+        setTimeout(() => {
+            window.open(whatsappUrl, '_blank');
+        }, 500);
 
     } catch (error) {
-      console.error('Gagal membuat gambar:', error);
-      alert('Maaf, terjadi kesalahan saat membuat kartu pelanggan.');
+        console.error('Gagal membuat gambar:', error);
+        alert('Maaf, terjadi kesalahan saat membuat kartu pelanggan.');
     } finally {
-        // 9. Bersihkan elemen sementara & kembalikan tombol ke normal
-      document.body.removeChild(tempContainer);
-      notifButton.disabled = false;
-      notifButton.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Kirim Notifikasi ke Pelanggan';
+        document.body.removeChild(tempContainer);
+        notifButton.disabled = false;
+        notifButton.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Kirim Notifikasi ke Pelanggan';
     }
-  });
+});
     }
 
     document.addEventListener('DOMContentLoaded', loadCustomerDetail);
   </script>
 </body>
 </html>
+
