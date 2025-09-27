@@ -424,11 +424,11 @@ notifButton.addEventListener('click', async () => {
         Terimakasih telah memilih MyRepublic untuk layanan internet Anda sekeluarga. Semoga layanan kami terus memberikan kenyamanan
         dalam aktivitas digital Anda sekeluarga sehari-hari\n]n
         Hormat kami,\n
-        MyRepublic;
+        MyRepublic`;
         
         const noHpFormatted = noHpWa.startsWith('0') ? '62' + noHpWa.substring(1) : noHpWa;
         const encodedPesan = encodeURIComponent(pesanWa);
-        const whatsappUrl = 'https://wa.me/' + noHpFormatted + '?text=' + encodedPesan;
+        const whatsappUrl = `https://wa.me/${noHpFormatted}?text=${encodedPesan}`;
 
         setTimeout(() => {
             window.open(whatsappUrl, '_blank');
@@ -449,5 +449,6 @@ notifButton.addEventListener('click', async () => {
   </script>
 </body>
 </html>
+
 
 
