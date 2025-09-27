@@ -262,7 +262,7 @@
     }
     async function loadPaketInternet() {
         const listContainer = document.getElementById('paket-internet-list');
-        const { data, error } = await client.from('paket_internet').select('*').order('id');
+        const { data, error } = await client.from('paket_internet').select('*').order('harga', { ascending: true });
         if (error) {
             listContainer.innerHTML = '<p style="color: red;">Gagal memuat paket.</p>';
             return;
@@ -559,3 +559,4 @@
 </script>
 </body>
 </html>
+
