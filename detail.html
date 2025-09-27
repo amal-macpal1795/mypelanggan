@@ -406,7 +406,10 @@ notifButton.addEventListener('click', async () => {
 
         const link = document.createElement('a');
         link.href = imageUrl;
-        link.download = `kartu-pelanggan-${namaLengkap.replace(/\s/g, '-')}.jpg`;
+      
+        const timestamp = Date.now(); // Membuat angka unik berdasarkan waktu saat ini
+      link.download = `kartu-pelanggan-${namaLengkap.replace(/\s/g, '-')}-${timestamp}.jpg`;
+      
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -436,6 +439,7 @@ notifButton.addEventListener('click', async () => {
   </script>
 </body>
 </html>
+
 
 
 
