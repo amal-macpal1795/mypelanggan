@@ -25,7 +25,7 @@
             width: 560px;
             height: 350px; 
             font-family: 'Poppins', sans-serif;
-            border-radius: 18px;
+            
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             overflow: hidden; /* Penting agar semua elemen mengikuti border-radius */
             display: flex;
@@ -54,15 +54,27 @@
 
         /* Wrapper untuk Baris Kedua dan Ketiga agar background menyatu */
         .main-content {
-            flex: 1; /* Mengisi sisa ruang kartu */
-            background-color: #1a092a;
-            background-image: radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%), 
-                              radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
-            background-attachment: fixed;
-            color: #ffffff;
-            padding: 25px;
-            display: flex;
-            flex-direction: column; /* Menyusun baris 2 & 3 */
+            flex: 1;
+    color: #ffffff; /* Pastikan warna teks kontras dengan gambar Anda */
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+
+    /* --- GANTI BAGIAN BACKGROUND DENGAN INI --- */
+
+    /* 1. Atur gambar Anda (ganti URL-nya) */
+    background-image: url('bg_kartu.png');
+
+    /* 2. Atur agar gambar menutupi seluruh area (ini yang paling penting) */
+    background-size: cover;
+
+    /* 3. Atur posisi gambar agar selalu di tengah */
+    background-position: center;
+
+    /* 4. Pastikan gambar tidak diulang-ulang */
+    background-repeat: no-repeat;
         }
 
         /* Baris Kedua (Body) */
