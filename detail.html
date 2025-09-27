@@ -428,7 +428,7 @@ notifButton.addEventListener('click', async () => {
         
         const noHpFormatted = noHpWa.startsWith('0') ? '62' + noHpWa.substring(1) : noHpWa;
         const encodedPesan = encodeURIComponent(pesanWa);
-        const whatsappUrl = `https://wa.me/${noHpFormatted}?text=${encodedPesan}`;
+        const whatsappUrl = 'https://wa.me/' + noHpFormatted + '?text=' + encodedPesan;
 
         setTimeout(() => {
             window.open(whatsappUrl, '_blank');
@@ -449,4 +449,5 @@ notifButton.addEventListener('click', async () => {
   </script>
 </body>
 </html>
+
 
