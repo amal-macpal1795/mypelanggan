@@ -409,7 +409,7 @@ notifButton.addEventListener('click', async () => {
         link.click();
         document.body.removeChild(link);
 
-        let pesanWa = `Yth. Bapak/Ibu ${namaLengkap},\n\nKami informasikan bahwa tagihan layanan internet Anda akan jatuh tempo:\n\n📅 ${jatuhTempoText}\n\nMohon untuk melakukan pembayaran sebelum atau pada tanggal tersebut agar layanan tetap aktif ya.Pembayaran dapat dilakukan dengan mudah melalu:\n\n🏪 Indomaret\n🏪 Alfamart\n🟣 OVO\n🔵 DANA\n🟢 GoPay\n📱 Mobile Banking\n🌐 Aplikasi MyRepublic\n⚡ Kios yang menyediahkan layanan pembayaran digital\n\nTerimakasih telah memilih MyRepublic untuk layanan internet Anda sekeluarga. Semoga layanan kami terus memberikan kenyamanandalam aktivitas digital Anda sekeluarga sehari-hari. ☺️\n\nHormat kami,\nMyRepublic 🫡`;
+        let pesanWa = `Yth. Bapak/Ibu ${namaLengkap},\n\nKami informasikan bahwa tagihan layanan internet Anda akan jatuh tempo:\n\n🗓️ ${jatuhTempoText}\n\nMohon untuk melakukan pembayaran sebelum atau pada tanggal tersebut agar layanan tetap aktif ya.Pembayaran dapat dilakukan dengan mudah melalu:\n\n🏪 Indomaret\n🏪 Alfamart\n🟣 OVO\n🔵 DANA\n🟢 GoPay\n📱 Mobile Banking\n🌐 Aplikasi MyRepublic\n⚡ Kios yang menyediahkan layanan pembayaran digital\n\nTerimakasih telah memilih MyRepublic untuk layanan internet Anda sekeluarga. Semoga layanan kami terus memberikan kenyamanandalam aktivitas digital Anda sekeluarga sehari-hari. ☺️\n\nHormat kami,\nMyRepublic 🫡`;
         
         const noHpFormatted = noHpWa.startsWith('0') ? '62' + noHpWa.substring(1) : noHpWa;
         const encodedPesan = encodeURIComponent(pesanWa);
@@ -434,6 +434,7 @@ notifButton.addEventListener('click', async () => {
   </script>
 </body>
 </html>
+
 
 
 
