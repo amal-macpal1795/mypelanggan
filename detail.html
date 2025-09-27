@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/b6fe4d3ab8.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -220,8 +221,8 @@
     <div class="divider"></div>
     
     <button id="kirimNotifBtn" class="action-btn">
-        <i class="fa-brands fa-whatsapp"></i>
-        Kirim Notifikasi ke Pelanggan
+      <i class="fa-brands fa-whatsapp"></i>
+      Kirim Notifikasi ke Pelanggan
     </button>
   </div>
 
@@ -271,16 +272,16 @@
       }
 
       const { data, error } = await client
-        .from('pelanggan')
-        .select(`
+      .from('pelanggan')
+      .select(`
           *,
           latitude, 
           longitude,
           kota:kota_id ( nama ),
           cluster:cluster_id ( nama )
-        `)
-        .eq('id', customerId)
-        .single();
+      `)
+      .eq('id', customerId)
+      .single();
 
       if (error) {
         console.error("Gagal mengambil data:", error);
@@ -335,23 +336,87 @@
         }
       }
 
+      // --- GANTI DENGAN BLOK BARU INI ---
       const notifButton = document.getElementById('kirimNotifBtn');
-      notifButton.addEventListener('click', () => {
-        console.log("Tombol Kirim Notifikasi diklik!");
-        console.log("Data yang akan dikirim:", {
-            id: data.id_pelanggan,
-            nama: data.nama_lengkap,
-            jatuhTempo: new Date(data.tanggal_jatuh_tempo).getUTCDate(),
-            nominal: data.nominal_pembayaran,
-            hp: data.hp_wa
-        });
-        alert("Fungsi notifikasi akan kita buat selanjutnya!");
-      });
+      notifButton.addEventListener('click', async () => {
+    // 1. Ambil semua data yang diperlukan dari halaman
+        const namaLengkap = document.getElementById('nama_lengkap').textContent;
+        const idPelanggan = document.getElementById('id_pelanggan').textContent;
+        const jatuhTempoText = document.getElementById('jatuh_tempo').textContent;
+        const nominalPembayaran = document.getElementById('nominal_pembayaran').textContent;
+        const noHpWa = document.getElementById('hp_wa').textContent;
+
+    // Cek jika data penting belum ada
+        if (!idPelanggan || idPelanggan === 'Belum Ada' || !noHpWa) {
+          alert('ID Pelanggan atau Nomor WA belum lengkap. Harap isi terlebih dahulu.');
+          return;
+        }
+
+    // Ubah "Setiap tanggal 26" menjadi "26"
+        const tanggalJatuhTempo = jatuhTempoText.replace(/\D/g, '');
+
+    // Tampilkan status loading di tombol
+        notifButton.disabled = true;
+        notifButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Membuat Kartu...';
+
+    // 2. Ambil template kartu.html
+        const response = await fetch('kartu.html');
+        let kartuHtml = await response.text();
+
+    // 3. Ganti placeholder di template dengan data asli
+        kartuHtml = kartuHtml.replace('---NAMA_LENGKAP---', namaLengkap)
+        .replace('---ID_PELANGGAN---', idPelanggan)
+        .replace('---TANGGAL_JATUH_TEMPO---', tanggalJatuhTempo)
+        .replace('---NOMINAL_PEMBAYARAN---', nominalPembayaran);
+        
+    // 4. Buat elemen sementara untuk dirender menjadi gambar
+        const tempContainer = document.createElement('div');
+        tempContainer.style.position = 'absolute';
+    tempContainer.style.left = '-9999px'; // Sembunyikan di luar layar
+    tempContainer.innerHTML = kartuHtml;
+    document.body.appendChild(tempContainer);
+
+    // 5. Gunakan html2canvas untuk "screenshot" elemen kartu
+    try {
+      const canvas = await html2canvas(tempContainer.querySelector('#kartu-container'));
+      const imageUrl = canvas.toDataURL('image/jpeg', 0.9);
+
+        // 6. Buat link untuk men-download gambar
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = `kartu-pelanggan-${namaLengkap.replace(/\s/g, '-')}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+        // 7. Siapkan pesan WhatsApp
+      let pesanWa = `Halo Kak ${namaLengkap},\n\nTerima kasih telah menjadi pelanggan setia MyRepublic. Berikut kami kirimkan detail informasi akun Anda dalam bentuk kartu pelanggan.\n\nMohon untuk melakukan pembayaran sebelum tanggal jatuh tempo ya. Terima kasih! 🙏`;
+      
+        // Format nomor HP (ganti 0 di depan dengan 62)
+      const noHpFormatted = noHpWa.startsWith('0') ? '62' + noHpWa.substring(1) : noHpWa;
+      
+        // Encode pesan untuk URL
+      const encodedPesan = encodeURIComponent(pesanWa);
+      const whatsappUrl = `https://wa.me/${noHpFormatted}?text=${encodedPesan}`;
+
+        // 8. Buka WhatsApp setelah jeda singkat untuk memastikan download dimulai
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+      }, 500);
+
+    } catch (error) {
+      console.error('Gagal membuat gambar:', error);
+      alert('Maaf, terjadi kesalahan saat membuat kartu pelanggan.');
+    } finally {
+        // 9. Bersihkan elemen sementara & kembalikan tombol ke normal
+      document.body.removeChild(tempContainer);
+      notifButton.disabled = false;
+      notifButton.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Kirim Notifikasi ke Pelanggan';
+    }
+  });
     }
 
     document.addEventListener('DOMContentLoaded', loadCustomerDetail);
   </script>
 </body>
 </html>
-
-
