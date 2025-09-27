@@ -3,80 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
+        body { margin: 0; font-family: 'Poppins', sans-serif; }
+        .kartu-pelanggan {
+            width: 560px; height: 350px; font-family: 'Poppins', sans-serif; border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); overflow: hidden; display: flex; flex-direction: column;
         }
-        #kartu-container {
-            width: 450px; /* Lebar gambar yang akan dihasilkan */
-            padding: 25px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        .kartu-header {
+            flex: 0 0 18%; background: #ffffff; color: #333; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 25px;
         }
-        .header {
-            text-align: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+        .header-title { font-size: 16px; font-weight: 600; }
+        .header-logo { height: 30px; }
+        .main-content {
+            flex: 1;
+            background-color: #1a092a;
+            background-image: radial-gradient(circle at 20% 20%, #d88efa55, transparent 40%), 
+                              radial-gradient(circle at 80% 90%, #ab48d966, transparent 50%);
+            background-attachment: fixed; color: #ffffff; padding: 25px;
+            display: flex; flex-direction: column;
         }
-        .header h2 {
-            margin: 0;
-            font-weight: 600;
-            font-size: 24px;
+        .kartu-body { display: flex; flex: 1; }
+        .monogram-container {
+            flex: 0 0 30%; display: flex; justify-content: center; align-items: center;
         }
-        .header p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            opacity: 0.9;
+        .monogram-text {
+            font-family: 'Times New Roman', Times, serif; font-size: 80px; font-weight: bold;
+            line-height: 1; border: 3px solid rgba(255, 255, 255, 0.7); border-radius: 50%;
+            width: 120px; height: 120px; display: flex; justify-content: center;
+            align-items: center; background: rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
-        .content .item {
-            margin-bottom: 18px;
+        .detail-pelanggan {
+            flex: 1; padding-left: 25px; border-left: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex; flex-direction: column; justify-content: center;
         }
-        .content .label {
-            font-size: 12px;
-            font-weight: 400;
-            opacity: 0.8;
-            margin-bottom: 4px;
-        }
-        .content .value {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .id-pelanggan {
-            font-family: 'Courier New', Courier, monospace;
-            letter-spacing: 1px;
-        }
-        .nominal {
-            font-size: 22px;
-            font-weight: 700;
+        .nama-pelanggan { font-size: 24px; font-weight: 700; text-transform: uppercase; margin: 0 0 15px 0; }
+        .info-list p { font-size: 13px; margin: 8px 0; font-weight: 400; opacity: 0.9; }
+        .info-list .label-info { font-weight: 600; opacity: 0.8; }
+        .kartu-footer {
+            font-size: 10px; text-align: center; opacity: 0.7; padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2); margin-top: auto;
         }
     </style>
 </head>
 <body>
-    <div id="kartu-container">
-        <div class="header">
-            <h2>MyRepublic</h2>
-            <p>Informasi Pelanggan Anda</p>
+    <div id="kartu-container" class="kartu-pelanggan">
+        <div class="kartu-header">
+            <span class="header-title">Kartu Pelanggan Setia</span>
+            <img src="---URL_LOGO---" alt="Logo MyRepublic" class="header-logo">
         </div>
-        <div class="content">
-            <div class="item">
-                <div class="label">Nama Pelanggan</div>
-                <div class="value">---NAMA_LENGKAP---</div>
+        <div class="main-content">
+            <div class="kartu-body">
+                <div class="monogram-container">
+                    <div class="monogram-text">---MONOGRAM---</div>
+                </div>
+                <div class="detail-pelanggan">
+                    <h3 class="nama-pelanggan">---NAMA_LENGKAP---</h3>
+                    <div class="info-list">
+                        <p><span class="label-info">ID Pelanggan:</span> ---ID_PELANGGAN---</p>
+                        <p><span class="label-info">Jatuh Tempo Pembayaran:</span> ---TANGGAL_JATUH_TEMPO---</p>
+                        <p><span class="label-info">Total Tagihan Bulanan:</span> ---NOMINAL_PEMBAYARAN---</p>
+                        <p><span class="label-info">Alamat:</span> ---ALAMAT---</p>
+                    </div>
+                </div>
             </div>
-            <div class="item">
-                <div class="label">ID Pelanggan</div>
-                <div class="value id-pelanggan">---ID_PELANGGAN---</div>
-            </div>
-            <div class="item">
-                <div class="label">Jatuh Tempo Pembayaran</div>
-                <div class="value">Setiap Tanggal ---TANGGAL_JATUH_TEMPO---</div>
-            </div>
-            <div class="item">
-                <div class="label">Total Tagihan Bulanan</div>
-                <div class="value nominal">---NOMINAL_PEMBAYARAN---</div>
+            <div class="kartu-footer">
+                Terima kasih atas kepercayaan Anda telah memilih MyRepublic sebagai partner internet Anda. Selamat menikmati koneksi internet yang cepat dan stabil untuk mendukung semua aktivitas digital Anda.
             </div>
         </div>
     </div>
