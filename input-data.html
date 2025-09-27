@@ -269,9 +269,21 @@
         }
         listContainer.innerHTML = '';
         data.forEach((paket, index) => {
-            daftarHarga[paket.nama_paket] = paket.harga; // PENTING: Menyimpan harga
+            daftarHarga[paket.nama_paket] = paket.harga;
+          
             const label = document.createElement('label');
             const isChecked = index === 0 ? 'checked' : '';
+          
+    const hargaFormatted = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(paket.harga);
+
+    // 2. Buat teks label yang baru, gabungkan nama paket dan harganya
+    // Format: "Value30 Mbps - Rp277.550"
+    const labelText = `${paket.nama_paket} - ${hargaFormatted}`;
+          
             label.innerHTML = `<input type="radio" name="paket_internet" value="${paket.nama_paket}" ${isChecked}> ${paket.nama_paket}`;
             listContainer.appendChild(label);
         });
@@ -559,4 +571,5 @@
 </script>
 </body>
 </html>
+
 
