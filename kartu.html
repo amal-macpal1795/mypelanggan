@@ -162,5 +162,12 @@
             </div>
         </div>
     </div>
+    <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then((reg) => console.log('Service worker terdaftar', reg))
+      .catch((err) => console.log('Gagal mendaftar service worker', err));
+  }
+</script>
 </body>
 </html>
