@@ -37,6 +37,32 @@
     .auto-info-label { font-size: 13px; font-weight: 500; color: #555; }
     .auto-info-value, .auto-info-value-placeholder { font-size: 14px; font-weight: 600; }
     .auto-info-value-placeholder { color: #999; font-style: italic; }
+
+    /* --- PERBAIKAN TAMPILAN RADIO & CHECKBOX --- */
+    .radio-group label, .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    input[type="radio"], input[type="checkbox"] {
+        -webkit-appearance: none; appearance: none; background-color: #fff; margin: 0; font: inherit; color: currentColor;
+        width: 1.15em; height: 1.15em; border: 1px solid #ddd; border-radius: 50%;
+        transform: translateY(-0.075em); display: grid; place-content: center; transition: all 0.1s ease-in-out;
+    }
+    input[type="checkbox"] { border-radius: 4px; }
+    input[type="radio"]::before, input[type="checkbox"]::before {
+        content: ""; width: 0.65em; height: 0.65em; border-radius: 50%; transform: scale(0);
+        transition: 120ms transform ease-in-out; box-shadow: inset 1em 1em #8119b5;
+    }
+    input[type="checkbox"]::before {
+        border-radius: 2px;
+        clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+    input[type="radio"]:checked::before, input[type="checkbox"]:checked::before { transform: scale(1); }
+    input[type="radio"]:checked, input[type="checkbox"]:checked { border-color: #8119b5; background-color: #f4e8ff; }
+    .custom-radio, .custom-checkbox { display: none; }
+    /* --- AKHIR PERBAIKAN --- */
   </style>
 </head>
 <body>
@@ -117,9 +143,9 @@
         <fieldset class="form-group">
             <legend>Paket TV</legend>
             <div class="radio-group">
-                <label><input type="radio" name="paket_tv" value="Tanpa paket TV" checked><span class="custom-radio"></span> Tanpa paket TV</label>
-                <label><input type="radio" name="paket_tv" value="Basic TV"><span class="custom-radio"></span> Basic TV</label>
-                <label><input type="radio" name="paket_tv" value="Premium TV"><span class="custom-radio"></span> Premium TV</label>
+                <label><input type="radio" name="paket_tv" value="Tanpa paket TV" checked> Tanpa paket TV</label>
+                <label><input type="radio" name="paket_tv" value="Basic TV"> Basic TV</label>
+                <label><input type="radio" name="paket_tv" value="Premium TV"> Premium TV</label>
             </div>
         </fieldset>
         <fieldset class="form-group">
@@ -131,12 +157,12 @@
         <fieldset class="form-group">
             <legend>Metode Pembayaran</legend>
             <div class="radio-group">
-                <label><input type="radio" name="metode_bayar" value="Tunai Bulanan" checked><span class="custom-radio"></span> Tunai Bulanan</label>
-                <label><input type="radio" name="metode_bayar" value="Kartu Kredit (Auto Debit)"><span class="custom-radio"></span> Kartu Kredit</label>
+                <label><input type="radio" name="metode_bayar" value="Tunai Bulanan" checked> Tunai Bulanan</label>
+                <label><input type="radio" name="metode_bayar" value="Kartu Kredit (Auto Debit)"> Kartu Kredit</label>
             </div>
         </fieldset>
         <div class="form-group">
-          <label style="display:inline-flex; align-items:center; gap:8px;"><input type="checkbox" id="promo"> Ikut Promo</label>
+          <label><input type="checkbox" id="promo"> Ikut Promo</label>
         </div>
         <div class="divider"></div>
         <div class="section-title">Detail Pemasangan & Pembayaran</div>
@@ -158,6 +184,7 @@
         <div class="form-group auto-info">
           <span class="auto-info-label">Nominal Pembayaran:</span>
           <span id="nominal-display" class="auto-info-value-placeholder">Pilih paket internet</span>
+          <input type="hidden" id="nominal_pembayaran">
         </div>
 
         <button type="submit" class="submit-btn" id="submit-btn">Simpan Data</button>
@@ -221,7 +248,7 @@
       });
     }
     function updateLink(lat, lng) {
-      const link = `https://www.google.com/maps?q=$0{lat},${lng}`;
+      const link = `https://www.google.com/maps?q=${lat},${lng}`;
       document.getElementById('map-link').value = link;
       selectedLat = lat;
       selectedLng = lng;
@@ -234,33 +261,35 @@
       return date.toLocaleDateString('id-ID', options);
     }
     async function loadPaketInternet() {
-      const listContainer = document.getElementById('paket-internet-list');
-      const { data, error } = await client.from('paket_internet').select('*').order('id');
-      if (error) {
-        listContainer.innerHTML = '<p style="color: red;">Gagal memuat paket.</p>';
-        return;
+        const listContainer = document.getElementById('paket-internet-list');
+        const { data, error } = await client.from('paket_internet').select('*').order('id');
+        if (error) {
+            listContainer.innerHTML = '<p style="color: red;">Gagal memuat paket.</p>';
+            return;
         }
-      listContainer.innerHTML = '';
-      data.forEach((paket, index) => {
-        const label = document.createElement('label');
-        const isChecked = index === 0 ? 'checked' : '';
-        label.innerHTML = `<input type="radio" name="paket_internet" value="${paket.nama_paket}" ${isChecked}> <span class="custom-radio"></span> ${paket.nama_paket}`;
-        listContainer.appendChild(label);
-      });
+        listContainer.innerHTML = '';
+        data.forEach((paket, index) => {
+            daftarHarga[paket.nama_paket] = paket.harga; // PENTING: Menyimpan harga
+            const label = document.createElement('label');
+            const isChecked = index === 0 ? 'checked' : '';
+            label.innerHTML = `<input type="radio" name="paket_internet" value="${paket.nama_paket}" ${isChecked}> ${paket.nama_paket}`;
+            listContainer.appendChild(label);
+        });
+        updateNominalDisplay(); // Panggil agar harga default tampil
     }
     async function loadAddons() {
-      const listContainer = document.getElementById('addon-list');
-      const { data, error } = await client.from('addon').select('*').order('id');
-      if (error) {
-        listContainer.innerHTML = '<p style="color: red;">Gagal memuat add-on.</p>';
-        return;
-      }
-      listContainer.innerHTML = '';
-      data.forEach(addon => {
-        const label = document.createElement('label');
-        label.innerHTML = `<input type="checkbox" name="addon" value="${addon.nama_addon}"> <span class="custom-checkbox"></span> ${addon.nama_addon}`;
-        listContainer.appendChild(label);
-      });
+        const listContainer = document.getElementById('addon-list');
+        const { data, error } = await client.from('addon').select('*').order('id');
+        if (error) {
+            listContainer.innerHTML = '<p style="color: red;">Gagal memuat add-on.</p>';
+            return;
+        }
+        listContainer.innerHTML = '';
+        data.forEach(addon => {
+            const label = document.createElement('label');
+            label.innerHTML = `<input type="checkbox" name="addon" value="${addon.nama_addon}"> ${addon.nama_addon}`;
+            listContainer.appendChild(label);
+        });
     }
     async function populateForm(id) {
       await Promise.all([loadPaketInternet(), loadAddons(), loadKota()]);
@@ -271,13 +300,7 @@
         errorDiv.textContent = "Gagal memuat data pelanggan.";
         return;
       }
-      // Memilih radio button Paket Internet yang sesuai
-        if (data.paket_internet) {
-            const radioPaket = document.querySelector(`input[name="paket_internet"][value="${data.paket_internet}"]`);
-            if (radioPaket) radioPaket.checked = true;
-        }
-      updateNominalDisplay();
-
+      
       document.getElementById("tanggal_pasang").value = data.tanggal;
       document.getElementById("tanggal_pasang_display").value = formatDate(data.tanggal);
       document.getElementById("nik").value = data.nik;
@@ -288,15 +311,22 @@
       document.getElementById("homepass").value = data.homepass;
       document.getElementById("alamat").value = data.alamat;
       document.getElementById("promo").checked = data.promo;
-        // Kolom tambahan
       document.getElementById("id_pelanggan").value = data.id_pelanggan || '';
-      document.getElementById("tanggal_jatuh_tempo").value = data.tanggal_jatuh_tempo || '';
-      document.getElementById("nominal_pembayaran").value = data.nominal_pembayaran || '';
+      
+      const tanggalPemasangan = data.tanggal_jatuh_tempo || '';
+      document.getElementById("tanggal_pemasangan_wifi").value = tanggalPemasangan;
+      if (tanggalPemasangan) {
+        document.getElementById("tanggal_pemasangan_wifi_display").value = formatDate(tanggalPemasangan);
+        document.getElementById('jatuh-tempo-display').textContent = new Date(tanggalPemasangan).getUTCDate();
+        document.getElementById('jatuh-tempo-display').className = 'auto-info-value';
+      }
 
       if (data.paket_internet) {
         const radioPaket = document.querySelector(`input[name="paket_internet"][value="${data.paket_internet}"]`);
         if (radioPaket) radioPaket.checked = true;
       }
+      updateNominalDisplay(); // Panggil setelah memilih radio button
+
       if (data.paket_tv) {
         const radioTv = document.querySelector(`input[name="paket_tv"][value="${data.paket_tv}"]`);
         if(radioTv) radioTv.checked = true;
@@ -348,20 +378,21 @@
     }
     function updateNominalDisplay() {
       const nominalDisplay = document.getElementById('nominal-display');
-        const selectedPaket = document.querySelector('input[name="paket_internet"]:checked');
-        if (selectedPaket && daftarHarga[selectedPaket.value]) {
-            const harga = daftarHarga[selectedPaket.value];
-            nominalDisplay.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(harga);
-            nominalDisplay.className = 'auto-info-value';
-        } else {
-            nominalDisplay.textContent = "Pilih paket internet";
-            nominalDisplay.className = 'auto-info-value-placeholder';
-        }
+      const nominalInput = document.getElementById('nominal_pembayaran');
+      const selectedPaket = document.querySelector('input[name="paket_internet"]:checked');
+      if (selectedPaket && daftarHarga[selectedPaket.value]) {
+          const harga = daftarHarga[selectedPaket.value];
+          nominalDisplay.textContent = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(harga);
+          nominalDisplay.className = 'auto-info-value';
+          nominalInput.value = harga;
+      } else {
+          nominalDisplay.textContent = "Pilih paket internet";
+          nominalDisplay.className = 'auto-info-value-placeholder';
+          nominalInput.value = '';
+      }
     }
     
-    // --- EVENT LISTENERS DENGAN PERBAIKAN ---
-
-    // (No. 1) Event listener untuk memunculkan kalender
+    // --- EVENT LISTENERS ---
     document.getElementById('tanggal_pasang_display').addEventListener('click', () => { document.getElementById('tanggal_pasang').showPicker(); });
     document.getElementById('tanggal_pemasangan_wifi_display').addEventListener('click', () => { document.getElementById('tanggal_pemasangan_wifi').showPicker(); });
     
@@ -373,7 +404,7 @@
         const jatuhTempoDisplay = document.getElementById('jatuh-tempo-display');
         display.value = formatDate(this.value);
         if(this.value) {
-            jatuhTempoDisplay.textContent = new Date(this.value).getDate();
+            jatuhTempoDisplay.textContent = new Date(this.value).getUTCDate();
             jatuhTempoDisplay.className = 'auto-info-value';
         } else {
             jatuhTempoDisplay.textContent = "Pilih tanggal pemasangan WiFi";
@@ -381,7 +412,6 @@
         }
     });
 
-    // (No. 2) Validasi NIK Real-time
     const nikInput = document.getElementById('nik');
     nikInput.addEventListener('input', () => {
         const nikError = document.getElementById('nik-error');
@@ -410,7 +440,6 @@
         }
     });
 
-    // (No. 3) Validasi Telepon Real-time
     function validatePhoneNumber(inputId, errorId) {
         const input = document.getElementById(inputId);
         const error = document.getElementById(errorId);
@@ -453,7 +482,6 @@
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
       
-        // (No. 4) Validasi saat submit DIHAPUS
         let hasRealtimeError = false;
         document.querySelectorAll('.validation-error').forEach(el => {
             if (el.style.display === 'block' && el.textContent !== '') {
@@ -465,7 +493,7 @@
             return; 
         }
         
-        successDiv.textContent = "";
+      successDiv.textContent = "";
       errorDiv.textContent = "";
       submitBtn.disabled = true;
       submitBtn.textContent = "Menyimpan...";
@@ -503,9 +531,9 @@
         latitude: selectedLat,
         longitude: selectedLng,
         id_pelanggan: document.getElementById("id_pelanggan").value.trim(),
-        tanggal_jatuh_tempo: document.getElementById("tanggal_pemasangan_wifi").value.trim(),
-        nominal_pembayaran: document.getElementById("nominal_pembayaran").value.trim(),
-        is_complete: document.getElementById("id_pelanggan").value.trim() !== '' && document.getElementById("tanggal_jatuh_tempo").value.trim() !== '' && document.getElementById("nominal_pembayaran").value.trim() !== ''
+        tanggal_jatuh_tempo: document.getElementById("tanggal_pemasangan_wifi").value.trim() || null,
+        nominal_pembayaran: document.getElementById("nominal_pembayaran").value.trim() || null,
+        is_complete: document.getElementById("id_pelanggan").value.trim() !== '' && document.getElementById("tanggal_pemasangan_wifi").value.trim() !== '' && document.getElementById("nominal_pembayaran").value.trim() !== ''
       };
       
       let error;
@@ -531,4 +559,3 @@
 </script>
 </body>
 </html>
-
